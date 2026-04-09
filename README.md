@@ -54,6 +54,8 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
 - `npm run linear:pm-organize -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + DeedWise-style per-role assignment markdown
+- `npm run linear:plan-deps` — generate dependency + file-scope plan for non-overlapping lanes
+- `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` — force-start first role issue (Todo first, otherwise Backlog) for build testing
 - `npm run worktrees:sync` — merge `origin/main` into each `wt-*` under the agent root
 - `tools/tasks/daily.ps1` quick health/status checks
 - `tools/tasks/build.ps1` local build/export workflow

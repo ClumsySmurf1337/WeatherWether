@@ -3,6 +3,7 @@ import { LinearClient } from "@linear/sdk";
 import { loadLinearEnv } from "./load-env.js";
 import { isOnboardingTitle } from "./linear-queries.js";
 import { loadPmPhasePlan, resolvePhaseForIssue } from "./pm-phase-types.js";
+import { withLinearRetry } from "./retry-linear.js";
 import {
   assigneeEnvVarForRole,
   inferRoleFromLabels
@@ -167,7 +168,10 @@ async function main(): Promise<void> {
     }
 
     if (Object.keys(patch).length > 0) {
-      await entity.update(patch);
+      await withLinearRetry(
+        () => entity.update(patch),
+        `issue.update.organize:${issue.identifier}`
+      );
       if (patch.priority !== undefined) {
         priorityUpdates += 1;
       }

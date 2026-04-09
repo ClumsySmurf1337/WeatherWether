@@ -2,6 +2,7 @@ import { LinearClient } from "@linear/sdk";
 import { assigneeEnvVarForRole, inferRoleFromLabels, parseDispatchRoleFilter } from "./role-map.js";
 import { loadLinearEnv } from "./load-env.js";
 import { countIssuesInState, isOnboardingTitle } from "./linear-queries.js";
+import { withLinearRetry } from "./retry-linear.js";
 
 loadLinearEnv();
 
@@ -133,7 +134,10 @@ async function main(): Promise<void> {
     if (assigneeId) {
       updateInput.assigneeId = assigneeId;
     }
-    await issueEntity.update(updateInput);
+    await withLinearRetry(
+      () => issueEntity.update(updateInput),
+      `issue.update.dispatch:${issue.identifier}`
+    );
     console.log(`  [updated] moved to In Progress`);
     dispatched += 1;
     wipSlots -= 1;

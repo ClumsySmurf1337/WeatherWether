@@ -1,0 +1,36 @@
+{
+  "gameplay-programmer": [
+    "scripts/grid/**",
+    "scripts/weather/**",
+    "scripts/puzzle/**",
+    "scripts/level_loader.gd",
+    "test/**"
+  ],
+  "ui-developer": [
+    "scripts/ui/**",
+    "scenes/ui/**",
+    "assets/ui/**"
+  ],
+  "level-designer": [
+    "levels/**",
+    "scripts/validate_all_levels.gd",
+    "scripts/level_loader.gd"
+  ],
+  "qa-agent": [
+    "test/**",
+    "scripts/validate_all_levels.gd",
+    ".github/workflows/ci.yml"
+  ],
+  "art-pipeline": [
+    "assets/styleguide/**",
+    "assets/**",
+    "docs/ART_DIRECTION.md",
+    "docs/ASSET_PROMPTS_GEMINI.md"
+  ],
+  "producer": [
+    "docs/**",
+    ".claude/agents/**",
+    "tools/linear/**",
+    "tools/tasks/**"
+  ]
+}

@@ -2,6 +2,7 @@ import { LinearClient } from "@linear/sdk";
 
 import { loadLinearEnv } from "./load-env.js";
 import { isOnboardingTitle } from "./linear-queries.js";
+import { withLinearRetry } from "./retry-linear.js";
 import { inferRoleFromLabels, type AgentRole } from "./role-map.js";
 
 loadLinearEnv();
@@ -92,7 +93,10 @@ async function main(): Promise<void> {
     }
     console.log(`[missing-label] ${labelName}`);
     if (apply) {
-      await client.createIssueLabel({ teamId, name: labelName });
+      await withLinearRetry(
+        () => client.createIssueLabel({ teamId, name: labelName }),
+        `createIssueLabel:${labelName}`
+      );
       console.log(`  [created-label] ${labelName}`);
     }
   }
@@ -139,7 +143,10 @@ async function main(): Promise<void> {
       continue;
     }
     const entity = await client.issue(issue.id);
-    await entity.update({ labelIds: [targetLabelId] });
+    await withLinearRetry(
+      () => entity.update({ labelIds: [targetLabelId] }),
+      `issue.update.labels:${issue.identifier}`
+    );
     updates += 1;
   }
 
