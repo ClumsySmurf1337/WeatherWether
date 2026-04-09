@@ -1,0 +1,22 @@
+# Cursor Cloud Agent Setup
+
+Reference: [Cursor Cloud Agents](https://cursor.com/docs/cloud-agent#cloud-agents)
+
+## Goals
+
+- Keep cloud agent behavior equivalent to local workflows.
+- Preserve script-based entry points so any runtime can execute same tasks.
+
+## Setup Checklist
+
+- Ensure `.cursor/mcp.json` is present and valid.
+- Confirm `.cursor/rules/*.mdc` are loaded in workspace.
+- Ensure `tools/tasks/*.ps1` are the command entry points.
+- Validate fallback scripts in `tools/dev/`.
+
+## Parity Test
+
+1. Run local: `pwsh ./tools/tasks/daily.ps1`
+2. Run cloud equivalent task.
+3. Compare outputs for command parity and path policy compliance.
+

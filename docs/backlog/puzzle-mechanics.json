@@ -1,0 +1,22 @@
+[
+  {
+    "title": "[MECH] Weather card sequencing rules",
+    "priority": 1,
+    "labels": ["Puzzle-Design", "Core-Engine"],
+    "acceptance": [
+      "Order-dependent weather effects are deterministic",
+      "Card usage history captured for undo",
+      "Tests cover positive and invalid placement paths"
+    ]
+  },
+  {
+    "title": "[MECH] Solver integration baseline",
+    "priority": 2,
+    "labels": ["Puzzle-Design", "QA-Testing"],
+    "acceptance": [
+      "BFS solver validates sample levels",
+      "Result structure includes solvable/min_moves/path",
+      "Validation command integrated into daily workflow"
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+---
+description: Puzzle design and validation constraints
+globs: ["levels/**/*.json", "scripts/puzzle/**/*.gd", "scripts/validate_all_levels.gd"]
+alwaysApply: true
+---
+
+# Puzzle Rules
+
+- Every level must be solver-valid before merge.
+- Prefer one clear insight per puzzle over complexity stacking.
+- Avoid hidden guesswork in baseline campaign levels.
+- Track solution length and branching metrics for difficulty shaping.
+

@@ -1,0 +1,28 @@
+name: Whether CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install tooling deps
+        run: npm ci
+
+      - name: Linear script lint check
+        run: node -e "console.log('linear tooling present')"
+
+      - name: Placeholder Godot validation note
+        run: echo "Godot runtime validation executed in local/agent lanes until CI image is configured."

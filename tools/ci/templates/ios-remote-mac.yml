@@ -1,0 +1,11 @@
+name: iOS Remote Mac Build (Disabled Template)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  disabled-template:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Template only. Activate after remote macOS lane is approved."
+

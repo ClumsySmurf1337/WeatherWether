@@ -1,0 +1,22 @@
+[
+  {
+    "title": "[LEVEL] World 1 batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design"],
+    "acceptance": [
+      "All levels solver-valid",
+      "Difficulty easy to medium",
+      "Cards limited to rain/sun"
+    ]
+  },
+  {
+    "title": "[LEVEL] World 1 batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design"],
+    "acceptance": [
+      "All levels solver-valid",
+      "No duplicate puzzle patterns",
+      "Playtest notes attached"
+    ]
+  }
+]

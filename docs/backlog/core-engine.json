@@ -1,0 +1,22 @@
+[
+  {
+    "title": "[CORE] Grid manager foundation",
+    "priority": 1,
+    "labels": ["Core-Engine"],
+    "acceptance": [
+      "Typed grid representation exists",
+      "Neighbor lookup and bounds checks pass tests",
+      "Rain/Sun/Frost basic transitions implemented"
+    ]
+  },
+  {
+    "title": "[CORE] Save and progression baseline",
+    "priority": 1,
+    "labels": ["Core-Engine", "QA-Testing"],
+    "acceptance": [
+      "Local save/load works",
+      "World/level unlock persisted",
+      "Regression test added"
+    ]
+  }
+]

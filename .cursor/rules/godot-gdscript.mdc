@@ -1,0 +1,15 @@
+---
+description: Godot 4.6 strict typed GDScript standards
+globs: ["*.gd", "*.tscn", "*.tres"]
+alwaysApply: true
+---
+
+# Whether Godot Rules
+
+- Use strict type annotations for variables, params, and returns.
+- Keep imports and declarations at file top.
+- Use `class_name` in all core scripts.
+- Prefer `@onready` references over repeated `get_node` calls.
+- Avoid inline imports or dynamic loading in gameplay hot paths.
+- Use `await` instead of legacy `yield`.
+

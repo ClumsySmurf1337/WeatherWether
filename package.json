@@ -1,0 +1,15 @@
+{
+  "name": "weatherwether-tooling",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tooling and automation scripts for Whether",
+  "scripts": {
+    "linear:seed": "tsx tools/linear/seed-backlog.ts",
+    "linear:standup": "tsx tools/linear/daily-standup.ts"
+  },
+  "devDependencies": {
+    "@linear/sdk": "^41.0.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2"
+  }
+}

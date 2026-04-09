@@ -1,0 +1,17 @@
+.godot/
+.import/
+.cursor/cache/
+.env
+.env.local
+node_modules/
+dist/
+coverage/
+build/
+tmp/
+logs/
+*.log
+*.tmp
+*.user
+*.swp
+.DS_Store
+Thumbs.db

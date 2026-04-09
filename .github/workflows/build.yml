@@ -1,0 +1,21 @@
+name: Whether Build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build placeholder
+        shell: pwsh
+        run: |
+          Write-Host "This workflow is a scaffold."
+          Write-Host "Configure Godot export templates and presets to enable full automated packaging."
+

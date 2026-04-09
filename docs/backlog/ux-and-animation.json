@@ -1,0 +1,22 @@
+[
+  {
+    "title": "[UX] Mobile-first HUD and card hand layout",
+    "priority": 2,
+    "labels": ["UI-UX", "Mobile"],
+    "acceptance": [
+      "Comfortable thumb reach zones",
+      "Readable on 16:9 and tall phone ratios",
+      "Desktop layout variant retained"
+    ]
+  },
+  {
+    "title": "[VFX] Core 2D animation quality pass",
+    "priority": 3,
+    "labels": ["Art-Visual", "UI-UX"],
+    "acceptance": [
+      "Card play animation timings defined",
+      "Weather transition animations documented",
+      "Fallback low-fx mode specified"
+    ]
+  }
+]

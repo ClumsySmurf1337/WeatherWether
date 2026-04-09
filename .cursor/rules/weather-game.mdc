@@ -1,0 +1,14 @@
+---
+description: Whether-specific architecture and scope controls
+globs: ["scripts/**/*.gd", "scenes/**/*.tscn", "levels/**/*.json"]
+alwaysApply: true
+---
+
+# Whether Architecture Rules
+
+- Mobile-first interactions are mandatory (touch-safe targets and layout).
+- Windows/Steam is current release lane; do not block it on deferred iOS work.
+- Keep weather rules deterministic and testable.
+- Use signal-based communication between systems.
+- Do not place temporary caches or outputs on non-D drives.
+
