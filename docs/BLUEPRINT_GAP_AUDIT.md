@@ -1,6 +1,6 @@
 # Blueprint Gap Audit
 
-**Revalidated:** 2026-04-10 · **GitHub:** Whether CI **passing** on `main` / PRs (Node 22 + Godot 4.6.2 Linux: import, GUT, level validation).
+**Revalidated:** 2026-04-09 · **GitHub:** Whether CI on **`ci.yml`** — `npm ci`, Godot **4.6.2** Linux headless (`/usr/local/bin/godot`), import, GUT, level validation (PR + `main`). **No** GitHub auto-merge or Linear Done in Actions (local **`qa:pr`** only).
 
 Source blueprint:
 
@@ -17,12 +17,14 @@ Companion specs:
 
 | Area | Status |
 |------|--------|
-| **Linear PM** | Bootstrap, seed (dedupe + caps), promote, dispatch, pickup, producer cycle — **in repo**. |
-| **Local validation** | `validate.ps1` — import + GUT + `validate_all_levels.gd`. |
-| **GitHub Actions** | **`ci.yml` green** — mirrors core Godot checks; `npm ci` with Node **22**, `engines >=22`. |
+| **Linear PM** | Bootstrap, seed (dedupe + caps), promote, dispatch (**WIP + role filter**), pickup, producer, standup, status, close-loop, **complete-from-pr** (local), **`linear:label-backfill`** (missing labels + unlabeled issue backfill), **`linear:pm-organize`** + **`linear:pm-assignments`** (phase plan + DeedWise-style handoffs) — **in repo**. |
+| **Local validation** | `validate.ps1` — **`GODOT_PATH` / PATH / `D:\Godot` fallback**; import + GUT + `validate_all_levels.gd`. |
+| **GitHub Actions** | **`ci.yml`** — mirrors core Godot checks; Node **22**, `engines >=22`. |
 | **GUT** | **Installed** (bitwes/Gut in `addons/gut/`). |
-| **Godot MCP** | **Primary: `godot-full`** (tugcantopaloglu; `setup-godot-mcp-full.ps1`). **Optional:** `godot` (Coding-Solo `npx`) for lightweight use. |
+| **Godot MCP** | **Primary: `godot-full`** (tugcantopaloglu; `setup-godot-mcp-full.ps1`). **Optional:** `godot` (Coding-Solo `npx`). |
 | **Godot API docs** | **No docs MCP** — official [4.6 docs](https://docs.godotengine.org/en/4.6/) + `docs/GODOT_DOCS_ACCESS.md` + optional Cursor doc index. |
+| **Parallel agents** | **`new-agent-worktree.ps1`**, **`sync-agent-worktrees.ps1`**, **`cursor-autonomous-session.ps1`**, **`run-cursor-chat.ps1`** (`cursor chat`), **`cursor-cli.ps1`** (prefers `cursor` CLI). |
+| **QA / merge** | **`qa-pr-handoff-local.ps1`** (`npm run qa:pr`), **`qa-merge-conflicts.ps1`** (`npm run qa:repair-merge`) — **local**; merge + **Linear Done** via **`.env.local`**. |
 | **Export / release EXE in CI** | **Not done** — `build.yml` scaffold only; no `export_presets.cfg`. |
 | **LDtk → runtime** | **`levels/whether.ldtk` exists**; **no** `level_loader.gd` / **no** godot-ldtk-importer addon yet. |
 | **Docker** | **Not used** for CI or local docs (GitHub-hosted Ubuntu runners only). |
@@ -35,8 +37,8 @@ Companion specs:
 |------|--------|
 | **Remote `godot-docs` MCP** (`mcp-remote` → workers.dev) | **Removed** — unreliable; replaced by official doc URLs + `GODOT_DOCS_ACCESS.md`. |
 | **Docker-based CI or local doc server** | Unnecessary; Actions use vanilla Ubuntu + downloaded Godot binary. |
-| **Self-hosted Cursor Cloud** | Not a product option; **local parallel** = `new-agent-worktree.ps1` + multiple Cursor windows (`docs/CURSOR_PARALLEL_AGENTS.md`). |
-| **Merge every PR automatically** | Safety / game-asset risk; see `GITHUB_AUTOMERGE.md` (label + green CI when ready). |
+| **Self-hosted Cursor Cloud** | Not a product option; **local parallel** = worktrees + Cursor CLI / IDE (`docs/CURSOR_PARALLEL_AGENTS.md`, `docs/CURSOR_CLI_AND_WORKTREES.md`). |
+| **GitHub Actions auto-merge + Linear Done** | **By design** — merge and issue completion are **local** (`docs/GITHUB_AUTOMERGE.md`) so **`LINEAR_API_KEY`** stays off GitHub for that path. |
 | **Gemini / image MCP in-repo** | Keys and UX stay outside git; prompts in `ASSET_PROMPTS_GEMINI.md` / Stitch workflow. |
 | **godot-mcp-pro (paid)** | Optional later; not purchased or wired by default. |
 
@@ -45,12 +47,28 @@ Companion specs:
 ## Cursor MCP (`.cursor/mcp.json`) — current
 
 | Server | Status | Notes |
-|--------|--------|--------|
+|--------|--------|-------|
 | `linear` | **Active** | `npx -y mcp-remote` → Linear; auth in Cursor. |
 | `godot-full` | **Primary (intended)** | [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp); run `tools/install/setup-godot-mcp-full.ps1` (output **gitignored**). Disable in MCP UI if `build/index.js` missing. |
 | `godot` | **Optional / fallback** | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) — quick `npx` without local build. |
 | `github` | **Active** | `npx -y @modelcontextprotocol/server-github`; needs `GITHUB_TOKEN` in env. |
 | ~~`godot-docs`~~ | **Removed** | Use `docs/GODOT_DOCS_ACCESS.md` and browser / indexed docs. |
+
+---
+
+## npm / PowerShell entry points (inventory)
+
+| Script | Purpose |
+|--------|---------|
+| `npm run daily:full` | Prerequisites, `npm ci`, Linear producer preview/apply, `validate.ps1` |
+| `npm run cursor:session` / `cursor:session:apply` | Producer + validate + lanes; **`-SpawnAgentCli`** → `cursor chat` per worktree |
+| `npm run linear:*` | status, standup, promote, dispatch, pickup, producer, seed, bootstrap, close, complete-from-pr, **pm-organize**, **pm-assignments** |
+| `npm run qa:pr` | Local merge handoff + Linear Done (`gh` + `.env.local`) |
+| `npm run qa:repair-merge` | `git merge origin/main` + **`cursor chat`** conflict repair prompt |
+| `npm run worktrees:sync` | `git fetch` + merge `origin/main` into each `wt-*` |
+| `pwsh ./tools/tasks/new-agent-worktree.ps1` | Add lane under `WHETHER_AGENT_ROOT` |
+
+Env: **`LINEAR_MAX_IN_PROGRESS`**, **`LINEAR_DISPATCH_ROLES`**, **`CURSOR_CLI_BIN`** — see `docs/LINEAR_ENV_VARS.md`.
 
 ---
 
@@ -66,16 +84,16 @@ Details: `docs/AGENT_CATALOG.md`.
 
 ---
 
-## Testing and CI (post–revalidation)
+## Testing and CI
 
 | Check | Local | GitHub Actions |
 |-------|--------|----------------|
 | `npm ci` / Linear tooling sanity | Yes | **Yes** (Node 22) |
 | Godot `--import` | `validate.ps1` | **Yes** |
 | GUT `res://test` | `validate.ps1` | **Yes** |
-| `validate_all_levels.gd` | `validate.ps1` | **Yes** (placeholder still reports 0 failures if no level JSON yet) |
+| `validate_all_levels.gd` | `validate.ps1` | **Yes** |
 
-**Follow-ups (quality, not “CI red/green” yet):** GUT **orphan** warnings in tests; tighten `validate_all_levels.gd` once LDtk JSON + solver are wired.
+**Follow-ups (quality):** GUT **orphan** warnings in tests; tighten `validate_all_levels.gd` once LDtk JSON + solver are wired.
 
 ---
 
@@ -84,11 +102,11 @@ Details: `docs/AGENT_CATALOG.md`.
 | Layer | Status |
 |-------|--------|
 | Role files + catalog | **Done** — `.claude/agents/*.md`, `docs/AGENT_CATALOG.md`. |
-| Linear lanes | **Done** — pickup/dispatch/producer/promote/seed. |
-| Scope / parallel doc | `docs/CURSOR_PARALLEL_AGENTS.md`. |
-| **Local parallel worktrees** | **`tools/tasks/new-agent-worktree.ps1`** — creates `D:\Agents\WeatherWether\wt-*` (or `WHETHER_AGENT_ROOT`). |
+| Linear lanes | **Done** — pickup/dispatch (**WIP + role filter**)/producer/promote/seed. |
+| Scope / parallel doc | `docs/CURSOR_PARALLEL_AGENTS.md`, **`docs/CURSOR_CLI_AND_WORKTREES.md`**. |
+| **Local parallel worktrees** | **`tools/tasks/new-agent-worktree.ps1`** — `D:\Agents\WeatherWether\wt-*` (or `WHETHER_AGENT_ROOT`). |
 | Cursor Cloud + API | Hosted by Cursor only; dashboard + API links in `CURSOR_PARALLEL_AGENTS.md`. |
-| Merge queue / N-agent auto-merge | **Not automated** — human or label-gated PR flow. |
+| **PR merge + Linear Done** | **Local** — `npm run qa:pr` (not Actions). |
 
 ---
 
@@ -104,9 +122,9 @@ Details: `docs/AGENT_CATALOG.md`.
 1. **`export_presets.cfg`** + **`build.yml`** real export + artifact upload (Windows/Steam first).
 2. **`scripts/level_loader.gd`** (or agreed name) + **godot-ldtk-importer** addon — see `OPEN_SOURCE_AND_PIPELINE.md`.
 3. **Puzzle solver** hooked to real level data; **validate_all_levels** fails CI on bad levels.
-4. **Branch protection** on `main` requiring **Whether CI** (+ optional local `npm run qa:pr` merge flow).
+4. **Branch protection** on `main` requiring **Whether CI** + local **`qa:pr`** discipline.
 5. **PR ↔ Linear** auto-comment / link (optional).
-6. **Visual/screenshot QA** loop (optional; godogen-style).
+6. **Visual/screenshot QA** loop (optional).
 
 ---
 
@@ -114,14 +132,14 @@ Details: `docs/AGENT_CATALOG.md`.
 
 1. Export preset + **`build.yml`** artifact job.
 2. LDtk importer + level loader MVP.
-3. PR-link automation in `linear:close` (optional).
+3. Optional: GitHub Action **comment-only** linking PR ↔ Linear (no secrets for Done).
 4. Per-role SLA / stalled issues in Linear tooling (optional).
 
 ---
 
 ## Historical note (fixes already applied)
 
-Earlier iterations added: producer agent, Linear scripts (dispatch, pickup, producer, bootstrap, seed, promote), GUT, Godot-in-CI, `godot-full` optional path, removal of flaky docs MCP, Node 22 + `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`, canonical rules (`whether-development.mdc`, `godot-engine-docs.mdc`), `OPEN_SOURCE_AND_PIPELINE.md`, `GODOT_DOCS_ACCESS.md`, Stitch UX doc, Nodist/multi-Node notes in `SETUP_WIN11.md`.
+Earlier iterations added: producer agent, Linear scripts (dispatch with WIP, pickup, producer, bootstrap, seed, promote, complete-from-pr), GUT, Godot-in-CI, `godot-full` optional path, removal of flaky docs MCP, Node 22 + `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`, canonical rules, `OPEN_SOURCE_AND_PIPELINE.md`, `GODOT_DOCS_ACCESS.md`, **`cursor` CLI orchestration**, **`qa:pr` / `qa:repair-merge`**, `new-agent-worktree` **git show-ref** fix.
 
 ---
 
@@ -133,9 +151,10 @@ Earlier iterations added: producer agent, Linear scripts (dispatch, pickup, prod
 | Open-source + LDtk gaps | `docs/OPEN_SOURCE_AND_PIPELINE.md` |
 | Daily loop | `docs/DAILY.md` |
 | PM + fallbacks | `docs/AUTONOMOUS_ORCHESTRATION.md` |
-| Parallel / Cloud agents | `docs/CURSOR_PARALLEL_AGENTS.md`, `CURSOR_CLOUD_AGENT_SETUP.md` |
-| Linear | `LINEAR_SETUP.md`, `LINEAR_ENV_VARS.md` |
-| PR merge | `GITHUB_AUTOMERGE.md` |
-| Roles / MCP | `AGENT_CATALOG.md` |
+| Parallel / Cloud / CLI | `docs/CURSOR_PARALLEL_AGENTS.md`, `docs/CURSOR_CLI_AND_WORKTREES.md`, `CURSOR_CLOUD_AGENT_SETUP.md` |
+| Linear | `LINEAR_SETUP.md`, `LINEAR_ENV_VARS.md`, **`PM_AGENT_LINEAR.md`** |
+| PR merge (local) | `GITHUB_AUTOMERGE.md` |
+| Roles / MCP | `AGENT_CATALOG.md`, `TOOL_AGENT_MATRIX.md` |
 | Win setup / Node | `SETUP_WIN11.md` |
 | Paths | `PATHS_AND_STORAGE_POLICY.md` |
+| This audit | `BLUEPRINT_GAP_AUDIT.md` |

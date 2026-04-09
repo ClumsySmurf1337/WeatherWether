@@ -4,11 +4,11 @@ This matrix maps the same role model across tools so handoff is predictable.
 
 | Role | Cursor Cloud/IDE | Claude Code | Copilot Chat | Codex CLI |
 |---|---|---|---|---|
-| Producer/PM | `linear:producer` cycle commands | `.claude/agents/producer.md` | PM checklist prompt in docs | use linear scripts |
+| Producer/PM | `linear:producer`, **`linear:pm-organize`**, **`linear:pm-assignments`** | `.claude/agents/producer.md` | `docs/PM_AGENT_LINEAR.md` | use linear scripts |
 | Gameplay | Cursor rules + scope constraints | `.claude/agents/gameplay-programmer.md` | assisted review/fixes | use task scripts |
 | UI | Cursor rules + mobile-first prompts | `.claude/agents/ui-developer.md` | UI pass support | use task scripts |
 | Levels | level validation scripts | `.claude/agents/level-designer.md` | support only | use task scripts |
-| QA | `validate.ps1` and CI checks | `.claude/agents/qa-agent.md` | bug triage | use task scripts |
+| QA | `validate.ps1`, CI, **`npm run qa:pr`**, **`npm run qa:repair-merge`**, `linear:complete-from-pr` | `.claude/agents/qa-agent.md` | bug triage | use task scripts |
 | Art | prompt packs + style docs | `.claude/agents/art-pipeline.md` | asset review | n/a |
 | Release Ops | workflow + checklist docs | `.claude/agents/release-ops.md` | release notes assistance | use CI templates |
 

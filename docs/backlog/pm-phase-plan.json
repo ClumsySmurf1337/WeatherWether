@@ -1,0 +1,56 @@
+{
+  "description": "PM phase ordering for Whether — foundation before content, mechanics before levels/UI. Tune labels/title prefixes to match your Linear taxonomy. See docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md.",
+  "defaultOrder": 50,
+  "defaultLinearPriority": 3,
+  "phases": [
+    {
+      "id": "p0-core-grid",
+      "order": 0,
+      "linearPriority": 1,
+      "matchLabels": ["core-engine"],
+      "matchTitlePrefixes": ["[core]", "[mech]"]
+    },
+    {
+      "id": "p1-puzzle-mechanics",
+      "order": 1,
+      "linearPriority": 2,
+      "matchLabels": ["puzzle mechanics", "puzzle-mechanics"],
+      "matchTitlePrefixes": ["[level-implement]", "[level-design]"]
+    },
+    {
+      "id": "p2-levels-content",
+      "order": 2,
+      "linearPriority": 2,
+      "matchLabels": ["level-design"],
+      "matchTitlePrefixes": ["[level", "world 1", "world 2", "w1-", "w2-"]
+    },
+    {
+      "id": "p3-ui-ux",
+      "order": 3,
+      "linearPriority": 3,
+      "matchLabels": ["ui-ux", "ui/ux"],
+      "matchTitlePrefixes": ["[ui]"]
+    },
+    {
+      "id": "p4-qa",
+      "order": 4,
+      "linearPriority": 3,
+      "matchLabels": ["qa-testing", "qa & validation"],
+      "matchTitlePrefixes": ["[qa]", "[level-playtest]", "[level-validate]"]
+    },
+    {
+      "id": "p5-art-audio",
+      "order": 5,
+      "linearPriority": 4,
+      "matchLabels": ["art-visual", "audio music", "audio-music", "art & visual"],
+      "matchTitlePrefixes": ["[art-audio]", "[art]"]
+    },
+    {
+      "id": "p6-release-ops",
+      "order": 6,
+      "linearPriority": 4,
+      "matchLabels": ["release", "release ops"],
+      "matchTitlePrefixes": ["[release]"]
+    }
+  ]
+}

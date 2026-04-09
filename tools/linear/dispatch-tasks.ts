@@ -50,6 +50,24 @@ async function main(): Promise<void> {
   const client = new LinearClient({ apiKey });
   const team = await client.team(teamId);
   const allowedRoles = parseDispatchRoleFilter();
+  const fallbackViewerEnabled =
+    (process.env.LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER ?? "true").toLowerCase() !== "false";
+  let cachedViewerId: string | undefined;
+  async function resolveViewerId(): Promise<string | undefined> {
+    if (!fallbackViewerEnabled) {
+      return undefined;
+    }
+    if (cachedViewerId) {
+      return cachedViewerId;
+    }
+    try {
+      const viewer = await client.viewer;
+      cachedViewerId = viewer?.id;
+      return cachedViewerId;
+    } catch {
+      return undefined;
+    }
+  }
 
   const inProgressCount = await countIssuesInState(client, teamId, inProgressStateId);
   let wipSlots = Math.max(0, maxInProgress - inProgressCount);
@@ -87,10 +105,19 @@ async function main(): Promise<void> {
       continue;
     }
     const assigneeEnv = assigneeEnvVarForRole(role);
+    const assigneeSource = process.env[assigneeEnv]
+      ? assigneeEnv
+      : process.env.LINEAR_DEFAULT_ASSIGNEE_ID
+        ? "LINEAR_DEFAULT_ASSIGNEE_ID"
+        : fallbackViewerEnabled
+          ? "viewer"
+          : "";
     const assigneeId =
-      process.env[assigneeEnv] ?? process.env.LINEAR_DEFAULT_ASSIGNEE_ID;
+      process.env[assigneeEnv] ??
+      process.env.LINEAR_DEFAULT_ASSIGNEE_ID ??
+      (await resolveViewerId());
     console.log(
-      `- ${issue.identifier} ${issue.title} => ${role}${assigneeId ? ` (${assigneeEnv} or LINEAR_DEFAULT_ASSIGNEE_ID)` : " (no assignee id)"}`
+      `- ${issue.identifier} ${issue.title} => ${role}${assigneeId ? ` (${assigneeSource})` : " (no assignee id)"}`
     );
 
     if (!apply) {

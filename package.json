@@ -22,7 +22,11 @@
     "linear:producer": "tsx tools/linear/producer-cycle.ts",
     "linear:close": "tsx tools/linear/close-loop.ts",
     "linear:promote": "tsx tools/linear/promote-backlog.ts",
-    "linear:status": "tsx tools/linear/workspace-status.ts"
+    "linear:status": "tsx tools/linear/workspace-status.ts",
+    "linear:pm-organize": "tsx tools/linear/pm-organize.ts",
+    "linear:pm-assignments": "tsx tools/linear/write-pm-assignments.ts",
+    "linear:label-backfill": "tsx tools/linear/backfill-role-labels.ts",
+    "linear:pm-prepare": "npm run linear:bootstrap -- --apply && npm run linear:label-backfill -- --apply && npm run linear:pm-organize -- --apply && npm run linear:pm-assignments"
   },
   "devDependencies": {
     "@linear/sdk": "^41.0.0",

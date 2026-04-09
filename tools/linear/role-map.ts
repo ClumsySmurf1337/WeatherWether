@@ -55,6 +55,21 @@ export function inferRoleFromLabels(labels: string[], title?: string): AgentRole
   if (t.startsWith("[level-playtest]") || t.startsWith("[level-validate]")) {
     return "qa-agent";
   }
+  if (t.startsWith("[core]") || t.startsWith("[mech]")) {
+    return "gameplay-programmer";
+  }
+  if (t.startsWith("[ui]")) {
+    return "ui-developer";
+  }
+  if (t.startsWith("[qa]")) {
+    return "qa-agent";
+  }
+  if (t.startsWith("[art-audio]") || t.startsWith("[art]")) {
+    return "art-pipeline";
+  }
+  if (t.startsWith("[release]")) {
+    return "producer";
+  }
 
   const normalized = labels.map((label) => label.toLowerCase());
 
@@ -77,6 +92,52 @@ export function inferRoleFromLabels(labels: string[], title?: string): AgentRole
     )
   ) {
     return "art-pipeline";
+  }
+  if (
+    t.includes("ui") ||
+    t.includes("hud") ||
+    t.includes("menu") ||
+    t.includes("layout") ||
+    t.includes("ux")
+  ) {
+    return "ui-developer";
+  }
+  if (
+    t.includes("level") ||
+    t.includes("ldtk") ||
+    t.includes("world") ||
+    t.includes("puzzle layout")
+  ) {
+    return "level-designer";
+  }
+  if (
+    t.includes("qa") ||
+    t.includes("test") ||
+    t.includes("validate") ||
+    t.includes("regression")
+  ) {
+    return "qa-agent";
+  }
+  if (
+    t.includes("art") ||
+    t.includes("sprite") ||
+    t.includes("vfx") ||
+    t.includes("sfx") ||
+    t.includes("audio") ||
+    t.includes("music")
+  ) {
+    return "art-pipeline";
+  }
+  if (
+    t.includes("grid") ||
+    t.includes("weather") ||
+    t.includes("card") ||
+    t.includes("system") ||
+    t.includes("solver") ||
+    t.includes("save") ||
+    t.includes("input")
+  ) {
+    return "gameplay-programmer";
   }
   return "producer";
 }

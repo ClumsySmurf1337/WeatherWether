@@ -41,6 +41,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/AGENT_CATALOG.md`
 - `docs/TOOL_AGENT_MATRIX.md`
 - `docs/BLUEPRINT_GAP_AUDIT.md`
+- `docs/PM_AGENT_LINEAR.md`
 - `docs/OPEN_SOURCE_AND_PIPELINE.md`
 - `docs/GODOT_DOCS_ACCESS.md`
 - `docs/STITCH_UX_WORKFLOW.md`
@@ -51,6 +52,8 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor chat`** per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
 - `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor chat`**)
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
+- `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
+- `npm run linear:pm-organize -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + DeedWise-style per-role assignment markdown
 - `npm run worktrees:sync` — merge `origin/main` into each `wt-*` under the agent root
 - `tools/tasks/daily.ps1` quick health/status checks
 - `tools/tasks/build.ps1` local build/export workflow

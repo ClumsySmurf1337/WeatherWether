@@ -29,6 +29,17 @@ async function main(): Promise<void> {
 
   const client = new LinearClient({ apiKey });
   const team = await client.team(teamId);
+  const fallbackViewerEnabled =
+    (process.env.LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER ?? "true").toLowerCase() !== "false";
+  let viewerId: string | undefined;
+  if (fallbackViewerEnabled) {
+    try {
+      const viewer = await client.viewer;
+      viewerId = viewer?.id;
+    } catch {
+      viewerId = undefined;
+    }
+  }
   const todoConnection = await team.issues({
     first: 30,
     filter: { state: { id: { eq: todoStateId } } }
@@ -48,7 +59,9 @@ async function main(): Promise<void> {
   }
 
   const assigneeId =
-    process.env[assigneeEnvVarForRole(role)] ?? process.env.LINEAR_DEFAULT_ASSIGNEE_ID;
+    process.env[assigneeEnvVarForRole(role)] ??
+    process.env.LINEAR_DEFAULT_ASSIGNEE_ID ??
+    viewerId;
   console.log(`Selected ${issue.identifier} ${issue.title} for ${role}`);
 
   if (!apply) {

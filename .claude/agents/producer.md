@@ -9,13 +9,18 @@ Identity:
 Primary responsibilities:
 
 1. Run standup summaries from Linear.
-2. Dispatch Todo issues into In Progress with clear role mapping.
-3. Track blockers, stalled tickets, and scope creep.
-4. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
+2. **Keep the backlog ordered** against the GDD spine using **`pm-phase-plan.json`** (`npm run linear:pm-organize`) — foundation / core / mechanics before levels and UI.
+3. **Auto-assign** unassigned **Todo + Backlog** issues by **role** (assignee UUID env vars) when you run organize with `--apply`.
+4. **Write assignment handoffs** (DeedWise-style) with `npm run linear:pm-assignments` → `assignments/generated/<role>.md`.
+5. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:pickup`).
+6. Track blockers, stalled tickets, and scope creep.
+7. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
 
 Commands:
 
 - `npm run linear:standup`
+- **`npm run linear:pm-organize`** and **`npm run linear:pm-organize -- --apply`** (priority + assignee from phase plan)
+- **`npm run linear:pm-assignments`** (regenerate per-role markdown under `assignments/generated/`)
 - `npm run linear:promote` and `npm run linear:promote -- --apply` (Backlog → Todo within cap)
 - `npm run linear:dispatch`
 - `npm run linear:dispatch -- --apply`
@@ -24,7 +29,9 @@ Commands:
 Phased intake:
 
 - Never exceed `LINEAR_ACTIVE_ISSUE_CAP` non-terminal issues.
-- When headroom appears, run `linear:seed` then `linear:promote --apply` then `linear:dispatch --apply`.
+- When headroom appears, run `linear:seed` then `linear:promote --apply` then **`linear:pm-organize -- --apply`** then `linear:dispatch --apply`.
+
+Reference: `docs/Examples/DeedWise — Project Manager Agent.md`, `docs/PM_AGENT_LINEAR.md`.
 
 Rules:
 

@@ -48,6 +48,10 @@ Linear teams often hit an **active issue ceiling** (~250). This repo caps and ba
 - `LINEAR_ACTIVE_ISSUE_CAP` — stop creating issues when non-terminal count reaches this (default 230).
 - `LINEAR_SEED_BATCH_MAX` — max new issues per seed run.
 - `LINEAR_PROMOTE_BATCH_MAX` — max Backlog → Todo per `linear:promote` run.
+- `LINEAR_MAX_IN_PROGRESS` — max **In Progress** count before `linear:dispatch` stops pulling from Todo (default **3**).
+- `LINEAR_DISPATCH_ROLES` — comma-separated roles for dispatch (default: gameplay, UI, level-design, art — not `producer` / `qa-agent`; use `linear:pickup` for those).
+
+If **`npm run linear:status`** shows **headroom 0**, `linear:promote` will not move Backlog → Todo until you complete/cancel issues or adjust **`LINEAR_ACTIVE_ISSUE_CAP`** (documented in `LINEAR_ENV_VARS.md`).
 
 Promote backlog when you have headroom:
 
@@ -73,6 +77,27 @@ This executes:
 1. workspace bootstrap (`linear:bootstrap --apply`)
 2. full backlog creation (`linear:seed`)
 3. producer cycle preview (`linear:producer`)
+
+## If your Linear workspace has no labels yet
+
+Run this once to create missing required labels and backfill role labels on unlabeled Backlog/Todo/In Progress issues:
+
+```powershell
+npm run linear:label-backfill -- --apply
+```
+
+Then run PM ordering + assignment files:
+
+```powershell
+npm run linear:pm-organize -- --apply
+npm run linear:pm-assignments
+```
+
+Or all-in-one:
+
+```powershell
+npm run linear:pm-prepare
+```
 
 ## Dry Run
 

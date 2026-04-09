@@ -50,6 +50,8 @@ npm run cursor:session:apply -- -CreateWorktrees
 
 See `.cursor/commands/cursor-session.md`, `docs/CURSOR_CLI_AND_WORKTREES.md`, and `docs/GITHUB_AUTOMERGE.md` (local **`npm run qa:pr`** after CI green).
 
+**`daily-full.ps1`** runs:
+
 - Prerequisites, D-drive check (lenient unless you pass **`-StrictDdrive`**), **`npm ci`**, Linear **status** + producer **dry-run** (if `.env.local` exists), **Godot import + GUT + level validation**.
 
 **Apply** PM moves in Linear (promote + dispatch) when you are happy with the dry-run:
@@ -130,8 +132,15 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | Full workspace audit (prereqs + optional Linear + seed dry-run) | `pwsh ./tools/tasks/validate-workspace.ps1` |
 | Godot tests + levels only | `pwsh ./tools/tasks/validate.ps1` |
 | Linear snapshot | `npm run linear:status` |
+| PM phase order + auto-assign preview/apply | `npm run linear:pm-organize` / `npm run linear:pm-organize -- --apply` |
+| PM label generation + backfill | `npm run linear:label-backfill -- --apply` |
+| PM assignment markdown (per role) | `npm run linear:pm-assignments` → `assignments/generated/` |
+| PM all-in-one prep (bootstrap + labels + organize + assignments) | `npm run linear:pm-prepare` |
 | Promote backlog only | `npm run linear:promote -- --apply` |
 | Dispatch only | `npm run linear:dispatch -- --apply` |
+| Merge conflicts → Cursor QA prompt | `npm run qa:repair-merge` (see `.cursor/commands/qa-repair-merge.md`) |
+| PR merge + Linear Done (local) | `npm run qa:pr -- -PullRequestNumber <N>` |
+| Sync all agent worktrees with `main` | `npm run worktrees:sync` |
 | Play game | `pwsh ./tools/tasks/launch.ps1` |
 | Mobile preview posture | `pwsh ./tools/tasks/mobile-preview.ps1` |
 

@@ -62,6 +62,9 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 | `GITHUB_TOKEN` | For GitHub MCP / future PR automation (repo `contents` + `pull_requests` if auto-merge) |
 | `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (parallel lanes + `qa:repair-merge`) |
 | `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable |
+| `LINEAR_PM_AUTO_ASSIGN` | If `false`, `linear:pm-organize -- --apply` skips setting assignees (priorities still update unless `--assign-only`) |
+| `LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER` | Default `true`. If role/default assignee IDs are missing, assign to the API-key user for `linear:dispatch`, `linear:pickup`, and `linear:pm-organize` |
+| `LINEAR_PM_LABEL_BACKFILL_STATE_IDS` | Optional comma-separated extra state IDs for `linear:label-backfill` scan (Todo/Backlog/In Progress are included by default) |
 
 ## Setup helpers
 

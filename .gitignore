@@ -18,3 +18,7 @@ Thumbs.db
 
 # Built locally: full Godot MCP (tugcantopaloglu fork) — run tools/install/setup-godot-mcp-full.ps1
 tools/godot-mcp-full/
+
+# PM agent — regenerated from Linear (keep README)
+assignments/generated/*.md
+!assignments/generated/README.md
