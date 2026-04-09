@@ -104,7 +104,7 @@ Details: `docs/AGENT_CATALOG.md`.
 1. **`export_presets.cfg`** + **`build.yml`** real export + artifact upload (Windows/Steam first).
 2. **`scripts/level_loader.gd`** (or agreed name) + **godot-ldtk-importer** addon — see `OPEN_SOURCE_AND_PIPELINE.md`.
 3. **Puzzle solver** hooked to real level data; **validate_all_levels** fails CI on bad levels.
-4. **Branch protection** on `main` requiring **Whether CI** (+ optional automerge workflow).
+4. **Branch protection** on `main` requiring **Whether CI** (+ optional local `npm run qa:pr` merge flow).
 5. **PR ↔ Linear** auto-comment / link (optional).
 6. **Visual/screenshot QA** loop (optional; godogen-style).
 

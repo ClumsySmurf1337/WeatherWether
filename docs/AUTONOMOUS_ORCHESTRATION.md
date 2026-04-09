@@ -24,14 +24,9 @@ There is no official Conductor.app for Windows today. Practical replacements:
 - **Git worktrees:** one folder per agent, merge via PR.
 - **Scheduled Task:** run `daily-autonomous.ps1` on a schedule.
 
-## Fully autonomous PR merge (roadmap)
+## PR merge + Linear Done (local QA)
 
-True **auto-merge on green** requires:
-
-- Branch protection with **required checks** passing.
-- GitHub **auto-merge** or a carefully scoped workflow using `GITHUB_TOKEN` / bot PAT.
-
-See [GITHUB_AUTOMERGE.md](GITHUB_AUTOMERGE.md). The repo does **not** enable silent merge-by-default (safety); use an `automerge` label + green CI when you intentionally want hands-off merges.
+**GitHub Actions** only run **Whether CI**. Merge and **Linear → Done** are **local**: `npm run qa:pr -- -PullRequestNumber <N>` after checks are green ([GITHUB_AUTOMERGE.md](GITHUB_AUTOMERGE.md)). Uses **`gh`** + **`.env.local`** Linear key.
 
 ## QA and bugs on each PR
 
@@ -40,7 +35,7 @@ Target workflow:
 1. Author opens PR referencing Linear issue id in title/body.
 2. CI runs `npm ci`, **Godot import + GUT + level validation** on Ubuntu (see `.github/workflows/ci.yml`); **export artifacts** are still local / future `build.yml`.
 3. Human or **QA agent** runs `tools/tasks/validate.ps1` locally for gameplay changes (levels + GUT when installed).
-4. Optional: add **automerge** label after review.
+4. Local QA runs **`npm run qa:pr -- -PullRequestNumber <N>`** when ready to merge and complete Linear.
 
 ## Linear PM automation (this repo)
 

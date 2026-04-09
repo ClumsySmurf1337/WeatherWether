@@ -41,6 +41,15 @@ From repo root (PowerShell):
 pwsh ./tools/tasks/daily-full.ps1
 ```
 
+**Cursor session** (producer preview or apply + local validate + printed parallel-lane / optional worktrees):
+
+```powershell
+npm run cursor:session
+npm run cursor:session:apply -- -CreateWorktrees
+```
+
+See `.cursor/commands/cursor-session.md`, `docs/CURSOR_CLI_AND_WORKTREES.md`, and `docs/GITHUB_AUTOMERGE.md` (local **`npm run qa:pr`** after CI green).
+
 - Prerequisites, D-drive check (lenient unless you pass **`-StrictDdrive`**), **`npm ci`**, Linear **status** + producer **dry-run** (if `.env.local` exists), **Godot import + GUT + level validation**.
 
 **Apply** PM moves in Linear (promote + dispatch) when you are happy with the dry-run:

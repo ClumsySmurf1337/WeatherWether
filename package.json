@@ -8,6 +8,12 @@
   },
   "scripts": {
     "daily:full": "pwsh -NoProfile -File tools/tasks/daily-full.ps1",
+    "cursor:session": "pwsh -NoProfile -File tools/tasks/cursor-autonomous-session.ps1",
+    "cursor:session:apply": "pwsh -NoProfile -File tools/tasks/cursor-autonomous-session.ps1 -ApplyProducer",
+    "linear:complete-from-pr": "tsx tools/linear/complete-linear-from-pr.ts",
+    "qa:pr": "pwsh -NoProfile -File tools/tasks/qa-pr-handoff-local.ps1",
+    "qa:repair-merge": "pwsh -NoProfile -File tools/tasks/qa-merge-conflicts.ps1",
+    "worktrees:sync": "pwsh -NoProfile -File tools/tasks/sync-agent-worktrees.ps1",
     "linear:seed": "tsx tools/linear/seed-backlog.ts",
     "linear:standup": "tsx tools/linear/daily-standup.ts",
     "linear:bootstrap": "tsx tools/linear/bootstrap-workspace.ts",

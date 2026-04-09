@@ -35,6 +35,26 @@ export async function countTeamActiveIssues(client: LinearClient, teamId: string
   return total;
 }
 
+/** Count issues in a specific workflow state (e.g. In Progress) for WIP limits. */
+export async function countIssuesInState(
+  client: LinearClient,
+  teamId: string,
+  stateId: string
+): Promise<number> {
+  let total = 0;
+  let after: string | undefined;
+  const filter = {
+    team: { id: { eq: teamId } },
+    state: { id: { eq: stateId } }
+  };
+  do {
+    const conn = await client.issues({ first: PAGE, after, filter });
+    total += conn.nodes.length;
+    after = conn.pageInfo.hasNextPage ? conn.pageInfo.endCursor : undefined;
+  } while (after);
+  return total;
+}
+
 export async function buildTeamLabelNameToId(team: Team): Promise<Map<string, string>> {
   const map = new Map<string, string>();
   let after: string | undefined;

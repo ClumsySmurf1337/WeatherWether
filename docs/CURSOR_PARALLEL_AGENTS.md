@@ -41,6 +41,18 @@ Use Cursor’s **Cloud Agents** UI (dashboard above) or **multiple local** chats
 
 Above **3–4 parallel implementation agents**, integration tax rises. Keep a **Producer** pass (`linear:producer`) to serialize merges.
 
+`LINEAR_MAX_IN_PROGRESS` (default **3**) and `LINEAR_DISPATCH_ROLES` limit how many **Todo** issues `linear:dispatch` moves to **In Progress** per cycle; **producer** and **qa-agent** work is usually claimed with `linear:pickup` instead.
+
+## PR → CI → local QA → merge → Linear Done
+
+1. Implementer opens a PR with **`WEA-###`** (or your `LINEAR_TEAM_KEY`) in the **title or body**.
+2. **Whether CI** must pass on GitHub.
+3. **QA / you** run **`npm run qa:pr -- -PullRequestNumber <N>`** locally (`gh` + `validate.ps1` + merge + `linear:complete-from-pr`). See **`docs/GITHUB_AUTOMERGE.md`**.
+
+**Cursor CLI:** install the **`cursor`** CLI ([Cursor CLI docs](https://cursor.com/docs/cli/installation)), then **`npm run cursor:session:apply -- -CreateWorktrees -SpawnAgentCli`** to open one terminal per lane running **`cursor chat`** (via **`run-cursor-chat.ps1`**) — no copy-paste into the IDE chat. Details: **`docs/CURSOR_CLI_AND_WORKTREES.md`** and [DEV: worktrees + parallel agents](https://dev.to/arifszn/git-worktrees-the-power-behind-cursors-parallel-agents-19j1).
+
+**Not automated:** conflict resolution — fix in the branch/worktree before **`qa:pr`** can merge.
+
 ## Reference
 
 - [Cursor Cloud Agents](https://cursor.com/docs/cloud-agent#cloud-agents)

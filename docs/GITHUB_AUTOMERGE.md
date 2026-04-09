@@ -1,28 +1,34 @@
-# GitHub auto-merge (optional, opinionated)
+# GitHub CI + local QA merge (default for Whether)
 
-Fully unsupervised merge is risky (game builds, asset PRs, surprise conflicts). Recommended pattern:
+This repo **does not** auto-merge PRs or move Linear issues to Done from GitHub Actions. **Whether CI** only validates (Godot headless on Ubuntu, GUT, levels). Merge and Linear completion are **local** so your **QA agent / you** stay in control and use **`.env.local`** (no `LINEAR_API_KEY` in GitHub required for that path).
 
-## Safe pattern
+## What runs on GitHub
 
-1. **Branch protection** on `main`: require PR, require status **Whether CI**, require up-to-date.
-2. Enable **Allow auto-merge** in repo settings.
-3. Authors (or PM agent) click **Enable auto-merge** on the PR, or add label `automerge` only after self-review.
+- **`.github/workflows/ci.yml`** — `npm ci`, install Godot to `/usr/local/bin/godot`, import, GUT, level validation on **pull requests and `main`**.
 
-## What this repo does not do by default
+## Local QA handoff (merge + Linear Done)
 
-- No always-on workflow that merges **every** PR without labels and without human review.
+After the PR’s checks are green:
 
-## If you want automation
+```powershell
+npm run qa:pr -- -PullRequestNumber 42
+```
 
-Add a workflow that:
+This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 
-- Triggers on `pull_request` (labeled `automerge`) **after** `Whether CI` is green, using `workflow_run` or a merge queue.
+1. **`gh pr checks --watch`** — waits for remote CI.
+2. **`gh pr checkout`** — your tree matches the PR.
+3. **`tools/tasks/validate.ps1`** — local Godot validation.
+4. **`gh pr merge --squash --delete-branch`** — merge from your machine (needs `gh` auth + branch rules).
+5. **`npm run linear:complete-from-pr`** — reads PR title/body for **`WEA-###`**, moves issue(s) to **Done** via **local** Linear API key.
 
-Use a **PAT** with `repo` scope if `GITHUB_TOKEN` permissions are insufficient for your org rules.
+Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor chat`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done).
 
-## Copilot / agent PRs
+## Optional: GitHub-side automation later
 
-Require each agent PR to:
+If you later want Actions to merge on a label, add a **separate** workflow and secrets; keep branch protection strict. The default documented path here remains **local QA**.
 
-- Link `WEA-###` in title or body.
-- Pass `tools/tasks/validate.ps1` locally when Godot logic changes.
+## Agent PR checklist
+
+- Include **`LINEAR_TEAM_KEY-###`** in PR title or body.
+- Run **`validate.ps1`** before opening the PR when you touch gameplay, tests, or levels.

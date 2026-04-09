@@ -6,6 +6,44 @@ export type AgentRole =
   | "qa-agent"
   | "art-pipeline";
 
+/** Roles `linear:dispatch` may move Todo → In Progress (excludes producer/QA by default). */
+export const DEFAULT_DISPATCH_ROLES: readonly AgentRole[] = [
+  "gameplay-programmer",
+  "ui-developer",
+  "level-designer",
+  "art-pipeline"
+] as const;
+
+const ALL_ROLES: readonly AgentRole[] = [
+  "producer",
+  "gameplay-programmer",
+  "ui-developer",
+  "level-designer",
+  "qa-agent",
+  "art-pipeline"
+] as const;
+
+/** Comma-separated override: `LINEAR_DISPATCH_ROLES=gameplay-programmer,ui-developer` */
+export function parseDispatchRoleFilter(): Set<AgentRole> {
+  const raw = process.env.LINEAR_DISPATCH_ROLES?.trim();
+  if (!raw) {
+    return new Set(DEFAULT_DISPATCH_ROLES);
+  }
+  const set = new Set<AgentRole>();
+  for (const part of raw.split(",")) {
+    const p = part.trim() as AgentRole;
+    if ((ALL_ROLES as readonly string[]).includes(p)) {
+      set.add(p);
+    } else {
+      console.warn(`Unknown role in LINEAR_DISPATCH_ROLES (ignored): ${part.trim()}`);
+    }
+  }
+  if (set.size === 0) {
+    return new Set(DEFAULT_DISPATCH_ROLES);
+  }
+  return set;
+}
+
 export function inferRoleFromLabels(labels: string[], title?: string): AgentRole {
   const t = (title ?? "").trim().toLowerCase();
   if (t.startsWith("[level-design]")) {

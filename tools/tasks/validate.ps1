@@ -5,14 +5,26 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$godotCandidates = @(
-    "D:\Godot\Godot_v4.6.2-stable_win64_console.exe",
-    "D:\Godot\Godot_v4.6.2-stable_win64.exe",
-    "D:\Godot\Godot.exe"
-)
-$godotPath = $godotCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+$godotPath = $null
+if ($env:GODOT_PATH -and (Test-Path -LiteralPath $env:GODOT_PATH)) {
+    $godotPath = $env:GODOT_PATH
+}
 if (-not $godotPath) {
-    throw "Godot executable not found under D:\Godot."
+    $cmd = Get-Command godot -ErrorAction SilentlyContinue
+    if ($cmd -and $cmd.Source) {
+        $godotPath = $cmd.Source
+    }
+}
+if (-not $godotPath) {
+    $godotCandidates = @(
+        "D:\Godot\Godot_v4.6.2-stable_win64_console.exe",
+        "D:\Godot\Godot_v4.6.2-stable_win64.exe",
+        "D:\Godot\Godot.exe"
+    )
+    $godotPath = $godotCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+if (-not $godotPath) {
+    throw "Godot not found. Set GODOT_PATH, add godot to PATH, or install under D:\Godot (see docs/PATHS_AND_STORAGE_POLICY.md)."
 }
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)

@@ -1,0 +1,87 @@
+param(
+    [Parameter(Mandatory = $true)]
+    [int]$PullRequestNumber,
+    [switch]$SkipChecksWatch,
+    [switch]$SkipLocalValidate,
+    [switch]$SyncMainBeforeValidate,
+    [switch]$NoMerge,
+    [ValidateSet("squash", "merge", "rebase")]
+    [string]$MergeMode = "squash"
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+Set-Location $repoRoot
+. "$repoRoot\tools\tasks\load-repo-env.ps1"
+
+function Test-GhCli {
+    $gh = Get-Command gh -ErrorAction SilentlyContinue
+    if (-not $gh) {
+        throw "GitHub CLI (gh) not found. Install: https://cli.github.com/"
+    }
+}
+
+Write-Host "=== Local QA handoff: PR #$PullRequestNumber ===`n"
+Test-GhCli
+
+if (-not $SkipChecksWatch) {
+    Write-Host "[1] Waiting for GitHub checks on PR #$PullRequestNumber (remote CI)..."
+    gh pr checks $PullRequestNumber --watch
+    if ($LASTEXITCODE -ne 0) {
+        throw "PR checks failed or gh pr checks exited non-zero."
+    }
+} else {
+    Write-Host "[1] Skipped gh pr checks --watch (-SkipChecksWatch)"
+}
+
+if (-not $SkipLocalValidate) {
+    Write-Host "`n[2] Checkout PR branch and run local validate.ps1"
+    gh pr checkout $PullRequestNumber
+    if ($LASTEXITCODE -ne 0) {
+        throw "gh pr checkout failed."
+    }
+    if ($SyncMainBeforeValidate) {
+        Write-Host "  Merging origin/main into PR branch (conflicts → Cursor repair window)..."
+        $here = (Get-Location).Path
+        & "$repoRoot\tools\tasks\qa-merge-conflicts.ps1" -RepoPath $here -BaseRef "origin/main"
+        if ($LASTEXITCODE -eq 2) {
+            throw "Merge conflicts with origin/main — fix in the Cursor window that opened, push, then re-run: npm run qa:pr -- -PullRequestNumber $PullRequestNumber -SkipChecksWatch -SyncMainBeforeValidate"
+        }
+        if ($LASTEXITCODE -ne 0) {
+            throw "qa-merge-conflicts.ps1 failed (exit $LASTEXITCODE)."
+        }
+    }
+    & "$repoRoot\tools\tasks\validate.ps1"
+} else {
+    Write-Host "`n[2] Skipped local validate (-SkipLocalValidate)"
+}
+
+if (-not $NoMerge) {
+    Write-Host "`n[3] Merge PR (--$MergeMode, delete branch)"
+    gh pr merge $PullRequestNumber --$MergeMode --delete-branch
+    if ($LASTEXITCODE -ne 0) {
+        throw "gh pr merge failed (branch protection, conflicts, or not mergeable)."
+    }
+} else {
+    Write-Host "`n[3] Skipped merge (-NoMerge) — Linear Done step skipped (merge first, then run linear:complete-from-pr with PR text)."
+}
+
+if (-not $NoMerge) {
+    Write-Host "`n[4] Move Linear issue(s) to Done from PR title/body (local .env.local API key)"
+    $raw = gh pr view $PullRequestNumber --json title, body
+    if ($LASTEXITCODE -ne 0) {
+        throw "gh pr view failed."
+    }
+    $pr = $raw | ConvertFrom-Json
+    $env:PR_TITLE = [string]$pr.title
+    $env:PR_BODY = if ($null -eq $pr.body) { "" } else { [string]$pr.body }
+    Set-Location $repoRoot
+    npm run linear:complete-from-pr
+    if ($LASTEXITCODE -ne 0) {
+        throw "linear:complete-from-pr failed."
+    }
+}
+
+Write-Host "`n=== QA handoff complete ==="

@@ -33,6 +33,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/FALLBACK_PLAYBOOK.md`
 - `docs/CURSOR_CLOUD_AGENT_SETUP.md`
 - `docs/DAILY.md`
+- `docs/CURSOR_CLI_AND_WORKTREES.md`
 - `docs/LINEAR_ENV_VARS.md`
 - `docs/AUTONOMOUS_ORCHESTRATION.md`
 - `docs/CURSOR_PARALLEL_AGENTS.md`
@@ -47,6 +48,10 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 ## Daily Commands
 
 - `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
+- `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor chat`** per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
+- `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor chat`**)
+- `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
+- `npm run worktrees:sync` — merge `origin/main` into each `wt-*` under the agent root
 - `tools/tasks/daily.ps1` quick health/status checks
 - `tools/tasks/build.ps1` local build/export workflow
 - `tools/tasks/validate.ps1` tests and level validation

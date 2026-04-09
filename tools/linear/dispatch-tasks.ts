@@ -1,7 +1,7 @@
 import { LinearClient } from "@linear/sdk";
-import { assigneeEnvVarForRole, inferRoleFromLabels } from "./role-map.js";
+import { assigneeEnvVarForRole, inferRoleFromLabels, parseDispatchRoleFilter } from "./role-map.js";
 import { loadLinearEnv } from "./load-env.js";
-import { isOnboardingTitle } from "./linear-queries.js";
+import { countIssuesInState, isOnboardingTitle } from "./linear-queries.js";
 
 loadLinearEnv();
 
@@ -22,13 +22,24 @@ function getArgValue(flag: string, fallback: string): string {
   return full.slice(flag.length + 1);
 }
 
+function parseIntEnv(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (raw == null || raw === "") {
+    return fallback;
+  }
+  const n = Number.parseInt(raw, 10);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 async function main(): Promise<void> {
   const apiKey = process.env.LINEAR_API_KEY;
   const teamId = process.env.LINEAR_TEAM_ID;
   const todoStateId = process.env.LINEAR_STATE_TODO_ID;
   const inProgressStateId = process.env.LINEAR_STATE_IN_PROGRESS_ID;
   const apply = process.argv.includes("--apply");
-  const limit = Number.parseInt(getArgValue("--limit", "8"), 10);
+  const perRunMax = Number.parseInt(getArgValue("--limit", "8"), 10);
+  const maxInProgress = parseIntEnv("LINEAR_MAX_IN_PROGRESS", 3);
+  const todoFetchFirst = Number.parseInt(getArgValue("--todo-fetch", "80"), 10);
 
   if (!apiKey || !teamId || !todoStateId || !inProgressStateId) {
     throw new Error(
@@ -38,8 +49,17 @@ async function main(): Promise<void> {
 
   const client = new LinearClient({ apiKey });
   const team = await client.team(teamId);
+  const allowedRoles = parseDispatchRoleFilter();
+
+  const inProgressCount = await countIssuesInState(client, teamId, inProgressStateId);
+  let wipSlots = Math.max(0, maxInProgress - inProgressCount);
+  console.log(
+    `In Progress ${inProgressCount} / max ${maxInProgress} (LINEAR_MAX_IN_PROGRESS); dispatch slots this cycle: ${wipSlots}`
+  );
+  console.log(`Dispatch role filter: ${[...allowedRoles].join(", ")} (LINEAR_DISPATCH_ROLES)`);
+
   const todoConnection = await team.issues({
-    first: limit,
+    first: Math.min(250, Math.max(20, todoFetchFirst)),
     filter: { state: { id: { eq: todoStateId } } }
   });
 
@@ -49,14 +69,23 @@ async function main(): Promise<void> {
     return;
   }
 
-  console.log(`Dispatch candidates: ${issues.length}`);
+  console.log(`Todo scan: ${issues.length} issue(s) (fetch first ${todoFetchFirst})`);
+  let dispatched = 0;
+
   for (const issue of issues) {
+    if (wipSlots <= 0 || dispatched >= perRunMax) {
+      break;
+    }
     if (isOnboardingTitle(issue.title)) {
       console.log(`- skip onboarding: ${issue.identifier} ${issue.title}`);
       continue;
     }
     const labelNames = (issue.labels?.nodes ?? []).map((label) => label.name);
     const role = inferRoleFromLabels(labelNames, issue.title);
+    if (!allowedRoles.has(role)) {
+      console.log(`- skip role (not in dispatch filter): ${issue.identifier} => ${role}`);
+      continue;
+    }
     const assigneeEnv = assigneeEnvVarForRole(role);
     const assigneeId =
       process.env[assigneeEnv] ?? process.env.LINEAR_DEFAULT_ASSIGNEE_ID;
@@ -65,6 +94,8 @@ async function main(): Promise<void> {
     );
 
     if (!apply) {
+      dispatched += 1;
+      wipSlots -= 1;
       continue;
     }
 
@@ -77,6 +108,8 @@ async function main(): Promise<void> {
     }
     await issueEntity.update(updateInput);
     console.log(`  [updated] moved to In Progress`);
+    dispatched += 1;
+    wipSlots -= 1;
   }
 
   if (!apply) {

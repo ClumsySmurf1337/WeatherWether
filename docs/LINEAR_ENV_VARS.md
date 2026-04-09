@@ -49,6 +49,10 @@ Linear enforces a **maximum number of open/active issues** on many plans (often 
 | `LINEAR_ACTIVE_ISSUE_CAP` | `230` | Stop creating/promoting when this many non-terminal issues exist (buffer under 250) |
 | `LINEAR_SEED_BATCH_MAX` | `40` | Max **new** issues per `linear:seed` run |
 | `LINEAR_PROMOTE_BATCH_MAX` | `25` | Max issues moved **Backlog → Todo** per `linear:promote` run |
+| `LINEAR_MAX_IN_PROGRESS` | `3` | Max issues in **In Progress** before `linear:dispatch` stops moving **Todo → In Progress** (implementation WIP) |
+| `LINEAR_DISPATCH_ROLES` | (see below) | Comma-separated roles auto-dispatched. Default: `gameplay-programmer,ui-developer,level-designer,art-pipeline` (**excludes** `producer` and `qa-agent`; use `linear:pickup` for those) |
+
+Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGRESS` to `4` if you routinely run four dev lanes.
 
 ## Optional
 
@@ -56,6 +60,8 @@ Linear enforces a **maximum number of open/active issues** on many plans (often 
 |----------|---------|
 | `LINEAR_WORKSPACE_ID` | Workspace/org UUID — rarely needed for our scripts; reserve for future org-level API |
 | `GITHUB_TOKEN` | For GitHub MCP / future PR automation (repo `contents` + `pull_requests` if auto-merge) |
+| `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (parallel lanes + `qa:repair-merge`) |
+| `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable |
 
 ## Setup helpers
 
