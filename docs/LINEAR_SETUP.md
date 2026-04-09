@@ -35,6 +35,18 @@ This writes `.env.linear.generated` with discovered IDs for:
 - `LINEAR_STATE_IN_PROGRESS_ID`
 - `LINEAR_STATE_IN_REVIEW_ID`
 
+## One-command full setup
+
+```powershell
+pwsh ./tools/tasks/linear-full-setup.ps1 -LinearApiKey "<your key>" -TeamKey "WEA"
+```
+
+This executes:
+
+1. workspace bootstrap (`linear:bootstrap --apply`)
+2. full backlog creation (`linear:seed`)
+3. producer cycle preview (`linear:producer`)
+
 ## Dry Run
 
 ```powershell

@@ -52,4 +52,5 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `tools/linear/pickup-task.ts`
 - `tools/linear/producer-cycle.ts`
 - `docs/LINEAR_SETUP.md`
+- `tools/tasks/linear-full-setup.ps1`
 
