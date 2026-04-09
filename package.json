@@ -7,6 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "daily:full": "pwsh -NoProfile -File tools/tasks/daily-full.ps1",
     "linear:seed": "tsx tools/linear/seed-backlog.ts",
     "linear:standup": "tsx tools/linear/daily-standup.ts",
     "linear:bootstrap": "tsx tools/linear/bootstrap-workspace.ts",

@@ -46,6 +46,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 
 ## Daily Commands
 
+- `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
 - `tools/tasks/daily.ps1` quick health/status checks
 - `tools/tasks/build.ps1` local build/export workflow
 - `tools/tasks/validate.ps1` tests and level validation

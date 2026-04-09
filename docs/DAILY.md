@@ -1,38 +1,108 @@
-# Daily autonomous lane (Whether)
+# DAILY — autonomous lane, PM (Linear), and parallel agents
 
-Goal: one predictable loop for **build health**, **Linear hygiene**, and **validation** — with fallbacks when Cursor Cloud is down.
+This doc is the **single operator contract**: what runs once a day, how **PM** uses **Linear**, and how **agents** work **in parallel**.
 
-## Morning (5–10 min)
+## How the pieces fit together
 
-1. **Install / load env**
-   - Ensure `.env.local` exists (`tools/tasks/init-linear-env.ps1` once).
-   - Confirm `.env.linear.generated` is current (re-run `npm run linear:bootstrap -- --apply` if you changed Linear workflow states).
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│  DAILY FULL (you or Task Scheduler)                              │
+│  validate repo + tooling + (optional) Linear PM preview/apply      │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  LINEAR = PM system of record                                      │
+│  Producer: standup → promote (Backlog→Todo) → dispatch (Todo→     │
+│  In Progress + assignee). Issues list what “done” means.          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PARALLEL BUILD (local by default)                               │
+│  One Cursor window per lane = git worktree + `linear:pickup`      │
+│  Cursor Cloud is optional; not self-hosted.                      │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-2. **Autonomous script (Windows)**
+1. **DAILY** does **not** replace humans entirely: it **aligns** health checks and surfaces **what** Linear says is ready.  
+2. **PM in Linear** (producer automation + your judgment) **moves** issues and **assigns** work so the board matches capacity.  
+3. **Agents** (you + AI in Cursor) **build in parallel** by using **separate folders** (worktrees) and **non-overlapping scopes** — each lane runs `linear:pickup -- --role=... --apply` in its own window so different issues go **In Progress** without editing the same files.
 
-   ```powershell
-   pwsh ./tools/tasks/daily-autonomous.ps1
-   ```
+Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes: [CURSOR_PARALLEL_AGENTS.md](CURSOR_PARALLEL_AGENTS.md).
 
-   This runs prerequisites, optional Linear status + producer **dry-run**, and `tools/tasks/validate.ps1`.
+---
 
-3. **Apply PM automation (optional)**
+## One command — run almost everything
 
-   ```powershell
-   npm run linear:producer -- --apply
-   ```
+From repo root (PowerShell):
 
-   This runs **promote** (Backlog → Todo within cap) then **dispatch** (Todo → In Progress + assignee).
+```powershell
+pwsh ./tools/tasks/daily-full.ps1
+```
 
-4. **Godot**
+- Prerequisites, D-drive check (lenient unless you pass **`-StrictDdrive`**), **`npm ci`**, Linear **status** + producer **dry-run** (if `.env.local` exists), **Godot import + GUT + level validation**.
 
-   ```powershell
-   pwsh ./tools/tasks/launch.ps1
-   ```
+**Apply** PM moves in Linear (promote + dispatch) when you are happy with the dry-run:
 
-## Worker agents
+```powershell
+pwsh ./tools/tasks/daily-full.ps1 -ApplyProducer
+```
 
-Pick a role and claim one issue:
+npm alias (Windows):
+
+```bash
+npm run daily:full
+```
+
+(`package.json` maps this to the same script.)
+
+---
+
+## Lighter lane (no `npm ci` every time)
+
+```powershell
+pwsh ./tools/tasks/daily-autonomous.ps1
+```
+
+Then, when ready:
+
+```powershell
+npm run linear:producer -- --apply
+```
+
+---
+
+## First-time setup (once per machine / repo)
+
+Do these **before** relying on DAILY + Linear automation:
+
+| Step | Command / action |
+|------|-------------------|
+| 1. Bootstrap Win + D paths | `pwsh ./tools/install/bootstrap-win11.ps1` |
+| 2. Node 22+ | See [SETUP_WIN11.md](SETUP_WIN11.md) |
+| 3. `npm ci` | In repo root |
+| 4. Linear API + generated IDs | `npm run linear:bootstrap -- --apply` then `pwsh ./tools/tasks/init-linear-env.ps1` |
+| 5. Optional: full Linear seed | `pwsh ./tools/tasks/linear-full-setup.ps1` or `npm run linear:seed` |
+| 6. Optional: **godot-full** MCP | `pwsh ./tools/install/setup-godot-mcp-full.ps1` |
+| 7. Git: at least one commit on **main** | Required for `new-agent-worktree.ps1` |
+
+---
+
+## Parallel agents (after PM has Todo / In Progress work)
+
+**1. Create a second checkout** (per lane — use a **new** branch name each time):
+
+```powershell
+pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/test-lane
+```
+
+- Auto-detects **main** / **master** / `origin/HEAD` if you omit `-BaseBranch`.  
+- Needs a **real git history** (initial commit + remote optional). If you see “No commits yet”, commit and push first.
+
+**2. Open** `D:\Agents\WeatherWether\wt-agent-test-lane` (or your `WHETHER_AGENT_ROOT`) **in another Cursor window**.
+
+**3. In each window**, claim **one** issue for that lane’s role:
 
 ```powershell
 npm run linear:pickup -- --role=gameplay-programmer --apply
@@ -40,32 +110,38 @@ npm run linear:pickup -- --role=gameplay-programmer --apply
 
 Roles: `producer`, `gameplay-programmer`, `ui-developer`, `level-designer`, `qa-agent`, `art-pipeline`.
 
-## Phased backlog (stay under 250 active)
+That is how **multiple agents build in parallel** without stomping the same tree: **different worktrees**, **different branches**, **different Linear issues**, **scoped directories** in [CURSOR_PARALLEL_AGENTS.md](CURSOR_PARALLEL_AGENTS.md).
 
-- New work is created in **Backlog** (not Todo) when `LINEAR_STATE_BACKLOG_ID` is set.
-- Run **`npm run linear:seed`** repeatedly; it **dedupes by title** and only creates up to `LINEAR_SEED_BATCH_MAX` per run while under `LINEAR_ACTIVE_ISSUE_CAP`.
-- When you have capacity, **`npm run linear:promote -- --apply`** moves the next batch **Backlog → Todo**.
+---
 
-## D-drive policy
+## Other one-off tasks (audit / ops)
 
-If temp/cache vars still point at `C:` and `verify-d-drive-usage` fails, run:
+| Task | Command |
+|------|---------|
+| Full workspace audit (prereqs + optional Linear + seed dry-run) | `pwsh ./tools/tasks/validate-workspace.ps1` |
+| Godot tests + levels only | `pwsh ./tools/tasks/validate.ps1` |
+| Linear snapshot | `npm run linear:status` |
+| Promote backlog only | `npm run linear:promote -- --apply` |
+| Dispatch only | `npm run linear:dispatch -- --apply` |
+| Play game | `pwsh ./tools/tasks/launch.ps1` |
+| Mobile preview posture | `pwsh ./tools/tasks/mobile-preview.ps1` |
 
-```powershell
-pwsh ./tools/install/configure-d-drive-caches.ps1
-```
+---
 
-Open a **new** terminal, or use `daily.ps1 -SkipDdriveCheck` (already used inside `daily-autonomous.ps1`).
+## Phased backlog (Linear ~250 cap)
 
-## Full workspace audit
+- Seed: `npm run linear:seed` (dedupe + batch caps).  
+- Promote: `npm run linear:promote -- --apply`.  
+- Details: [LINEAR_SETUP.md](LINEAR_SETUP.md), [LINEAR_ENV_VARS.md](LINEAR_ENV_VARS.md).
 
-```powershell
-pwsh ./tools/tasks/validate-workspace.ps1
-```
+---
 
-## If Cursor Cloud is down
+## Design spine (PM + agents)
 
-See [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md): use local Cursor agents + Copilot + CLI in parallel, same git task boundaries.
+All work should stay aligned with **Building Whether** (grid, weather **cards**, six weathers, fog layer). See `.cursor/rules/weather-game.mdc` and `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`.
 
-## Security note
+---
 
-Never commit `.env.local`. Rotate any leaked Linear keys.
+## Security
+
+Never commit `.env.local`. Rotate leaked Linear keys.
