@@ -22,5 +22,5 @@
 - Respect file-scope boundaries for parallel agents.
 - Keep all generated caches/builds on D drive.
 - Use producer workflow for backlog orchestration (`linear:producer`, `linear:dispatch`, `linear:pickup`).
-- Use both Godot MCP and godot-docs MCP for implementation + API reference lookups.
+- Use **Godot MCP** (`godot` / `godot-full`) for editor/runtime; use **official docs** (`docs/GODOT_DOCS_ACCESS.md`) for API reference.
 

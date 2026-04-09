@@ -30,3 +30,4 @@ Rules:
 - Do not assign outside role scope unless no matching worker exists.
 - Keep high-risk and ship-blocking issues visible first.
 - Never skip validation/testing acceptance criteria in issue descriptions.
+- When a lane changes **CI, MCP, LDtk, or validation**, ensure assignees update `docs/OPEN_SOURCE_AND_PIPELINE.md`, `docs/BLUEPRINT_GAP_AUDIT.md`, and `README.md` as appropriate (see `.cursor/rules/whether-development.mdc`).

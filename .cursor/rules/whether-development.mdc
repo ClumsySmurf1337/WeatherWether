@@ -1,0 +1,40 @@
+---
+description: Canonical Whether dev bible — docs, pipelines, open-source patterns, agent doc duty
+alwaysApply: true
+---
+
+# Whether — Godot 4.6 / GDScript development rules
+
+## Canonical docs (read before large changes)
+
+- **Game vision, mechanics, LDtk, Sokoban references:** `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- **Multi-agent ops, CI, backlog, tooling:** `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`
+- **Gaps + autonomous build roadmap:** `docs/BLUEPRINT_GAP_AUDIT.md`
+- **Open-source study targets + LDtk pipeline status:** `docs/OPEN_SOURCE_AND_PIPELINE.md`
+- **Godot API / doc URLs (no docs MCP):** `docs/GODOT_DOCS_ACCESS.md`
+
+## Stack and code style
+
+- **Godot 4.6 + strict typed GDScript** — follow `.cursor/rules/godot-gdscript.mdc` and `.cursor/rules/weather-game.mdc`.
+- **Deterministic, testable** weather rules; **signal-based** systems; **mobile-first** UI; **Windows/Steam-first** shipping (do not block on deferred iOS).
+
+## Pipelines to align with
+
+- **Grid / data-driven levels:** Study patterns from [zurkon/sokoban](https://github.com/zurkon/sokoban) (JSON levels, grid state — compare to `scripts/grid/grid_manager.gd`). Not a drop-in; adapt types to weather terrain.
+- **100+ levels without scene duplication:** Study [dobsondev/godot-sokoban](https://github.com/dobsondev/godot-sokoban) (inherited scene / template patterns).
+- **LDtk:** Master file `levels/whether.ldtk` — design in [LDtk](https://ldtk.io); target importer [heygleeson/godot-ldtk-importer](https://github.com/heygleeson/godot-ldtk-importer) and a dedicated `level_loader` (see pipeline doc for current gaps).
+- **Validation:** `tools/tasks/validate.ps1`; CI mirrors this in `.github/workflows/ci.yml` (Ubuntu Godot — **no Docker required** locally or in CI).
+
+## Godot MCP (Cursor)
+
+- **`godot`** — [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp): light editor/run/scene tools (`npx`).
+- **`godot-full`** — [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp): deep runtime/UI/scene/export tools; run `pwsh ./tools/install/setup-godot-mcp-full.ps1` once so `tools/godot-mcp-full/build/index.js` exists (gitignored clone).
+
+Prefer **godot-full** for heavy **UI/Control** work, runtime inspection, and export-preset manipulation; keep **godot** for quick iterations.
+
+## Agent pass — documentation duty
+
+When you change **build/CI**, **MCP**, **LDtk import path**, **level format**, or **validation**:
+
+- Update the **smallest set** of: `README.md`, `docs/AGENT_CATALOG.md`, `docs/OPEN_SOURCE_AND_PIPELINE.md`, `docs/BLUEPRINT_GAP_AUDIT.md`, `.claude/CLAUDE.md`, and any touched `.claude/agents/*.md`.
+- Refresh **`docs/AGENT_SYNC_CHECKLIST.md`** if workspace conventions change.

@@ -46,7 +46,7 @@ This section is the **single checklist** for “where we are”: agents, MCP, CI
 |--------|---------|--------|
 | `linear` | Issue CRUD, PM tooling | `mcp-remote` → `https://mcp.linear.app/mcp` (needs Linear auth in Cursor). |
 | `godot` | Editor/run project/debug/scene ops | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) via `npx @coding-solo/godot-mcp`; `GODOT_PATH` set to `D:\Godot\...`. |
-| `godot-docs` | API/class lookup | Remote MCP at `https://godot-docs-mcp.j2d.workers.dev/mcp`. |
+| Godot API/docs | Official URLs + Cursor doc index | See `docs/GODOT_DOCS_ACCESS.md` (remote `godot-docs` MCP removed — was unreliable). |
 | `github` | Repo/PR integration | `@modelcontextprotocol/server-github` with `GITHUB_TOKEN` from env. |
 
 **Not configured in-repo:** Gemini image MCP, Playwright MCP (optional for future UI capture). UI references today are **prompt-led** (see below).
@@ -97,6 +97,8 @@ There is **no** in-repo Gemini API key wiring for agents. The intended workflow 
 
 | Topic | Doc |
 |-------|-----|
+| Godot API/docs (no docs MCP) | `docs/GODOT_DOCS_ACCESS.md` |
+| Open-source + LDtk pipeline gaps | `docs/OPEN_SOURCE_AND_PIPELINE.md` |
 | Daily loop | `docs/DAILY.md` |
 | PM + fallbacks | `docs/AUTONOMOUS_ORCHESTRATION.md` |
 | Parallel agents | `docs/CURSOR_PARALLEL_AGENTS.md` |

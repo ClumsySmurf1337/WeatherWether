@@ -8,6 +8,8 @@ on:
 
 env:
   GODOT_VERSION: "4.6.2"
+  # GitHub Actions: opt into Node 24 for built-in actions before the default switch (see GH changelog 2025-09-19).
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   validate:
@@ -20,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install tooling deps
         run: npm ci

@@ -1,0 +1,10 @@
+---
+description: Official Godot documentation access (replaces flaky godot-docs MCP)
+alwaysApply: true
+---
+
+# Godot engine documentation
+
+- Do **not** rely on a `godot-docs` MCP server; it is not configured in this repo (previous remote MCP was unreliable).
+- Use **official docs**: base URL **https://docs.godotengine.org/en/stable/** — see `docs/GODOT_DOCS_ACCESS.md` for class URL patterns and Cursor indexing steps.
+- For API truth, prefer **stable class reference** pages over third-party summaries.

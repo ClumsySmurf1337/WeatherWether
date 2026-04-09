@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "Tooling and automation scripts for Whether",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "linear:seed": "tsx tools/linear/seed-backlog.ts",
     "linear:standup": "tsx tools/linear/daily-standup.ts",

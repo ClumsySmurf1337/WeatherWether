@@ -8,6 +8,7 @@ Whether is a mobile-first weather puzzle game built with Godot 4.6 and GDScript,
 2. Run `tools/install/bootstrap-win11.ps1` in PowerShell.
 3. Run `tools/tasks/daily.ps1`.
 4. Launch the game with `tools/tasks/launch.ps1`.
+5. Optional — **full Godot MCP** for agents (UI/scene/runtime tools): `pwsh ./tools/install/setup-godot-mcp-full.ps1`, then restart Cursor (`godot-full` in `.cursor/mcp.json`).
 
 ## Current Delivery Order
 
@@ -39,6 +40,8 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/AGENT_CATALOG.md`
 - `docs/TOOL_AGENT_MATRIX.md`
 - `docs/BLUEPRINT_GAP_AUDIT.md`
+- `docs/OPEN_SOURCE_AND_PIPELINE.md`
+- `docs/GODOT_DOCS_ACCESS.md`
 - `docs/STITCH_UX_WORKFLOW.md`
 
 ## Daily Commands

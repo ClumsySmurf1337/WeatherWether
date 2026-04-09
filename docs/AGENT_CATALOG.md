@@ -30,7 +30,7 @@ This catalog aligns agent roles across Cursor cloud/local and Claude-style role 
 Cursor MCP includes:
 
 - `godot` server for project/editor operations ([Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp), configured in `.cursor/mcp.json`).
-- `godot-docs` server for API/class reference lookups.
+- Godot API reference: **official docs** — `docs/GODOT_DOCS_ACCESS.md` (no `godot-docs` MCP; index `https://docs.godotengine.org/en/stable/` in Cursor if desired).
 
 Optional upgrade for heavier scene/animation automation: [youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) (paid, larger toolset) — swap or add as a second MCP server if needed.
 
@@ -42,5 +42,7 @@ Optional upgrade for heavier scene/animation automation: [youichi-uda/godot-mcp-
 | **Install** | `npx @coding-solo/godot-mcp` | **Clone + `npm install` + `npm run build`**, then `node …/build/index.js` in MCP config ([their README](https://github.com/tugcantopaloglu/godot-mcp)) |
 | **Tradeoff** | Simple, npm-updatable, less to misconfigure | Much more agent power; larger attack surface; more moving parts and Godot-version coupling |
 
-**Recommendation:** keep **Coding-Solo** as default. Consider **tugcantopaloglu** when you need headless **export** or heavy **runtime inspection** from agents; use a **separate MCP server name** (e.g. `godot-full`) if you run both.
+**Recommendation:** keep **Coding-Solo** as default. **`godot-full`** in `.cursor/mcp.json` runs the tugcantopaloglu fork from `tools/godot-mcp-full/build/index.js` after `pwsh ./tools/install/setup-godot-mcp-full.ps1` (clone is gitignored). Use **godot-full** for UI/scene/runtime/export-heavy agent work; use **godot** for lightweight tasks.
+
+Study links and pipeline gaps: [OPEN_SOURCE_AND_PIPELINE.md](OPEN_SOURCE_AND_PIPELINE.md).
 
