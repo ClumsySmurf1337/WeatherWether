@@ -5,13 +5,13 @@
 - Run **several agents in parallel** without stomping the same files.
 - Keep **merge conflicts near zero** via strict directory scopes (see `.claude/CLAUDE.md`).
 
-## Cursor Cloud agents (simplest mental model)
+## Cursor Cloud vs local (Whether default)
 
-- **Dashboard:** [cursor.com/dashboard/cloud-agents](https://cursor.com/dashboard/cloud-agents) — see and manage cloud runs.
-- **API:** [Cloud Agent API endpoints](https://cursor.com/docs/cloud-agent/api/endpoints) — automate spawning/status if you outgrow clicking in the UI.
-- **Local:** Multiple **local** agent sessions or **git worktrees** in Cursor — same task boundaries, no cloud minutes.
-
-Use **cloud** for long unattended runs; use **local** for Godot/editor-tight loops. You do not need the API until you are scripting agents from outside Cursor.
+- **There is no self-hosted Cursor Cloud.** Cloud agents run on **Cursor-managed** infrastructure only ([dashboard](https://cursor.com/dashboard/cloud-agents), [API](https://cursor.com/docs/cloud-agent/api/endpoints)).
+- **Default for this repo:** **local parallel agents** — several Cursor windows, each on a **separate git worktree**, with non-overlapping directory scopes. **Scripted worktree:**  
+  `pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/your-lane`  
+  Worktrees live under `D:\Agents\WeatherWether\wt-*` (or `WHETHER_AGENT_ROOT`). See `docs/PATHS_AND_STORAGE_POLICY.md`.
+- **Cloud agents:** optional for long unattended tasks; use **local** for Godot/editor-tight loops and to avoid extra cloud minutes.
 
 ## Workspace setup
 

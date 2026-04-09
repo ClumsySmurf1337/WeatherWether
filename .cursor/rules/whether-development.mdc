@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Canonical docs (read before large changes)
 
-- **Game vision, mechanics, LDtk, Sokoban references:** `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- **Game vision, core concept (grid + weather cards + six weathers + fog “whether” layer), LDtk, Sokoban references:** `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
 - **Multi-agent ops, CI, backlog, tooling:** `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`
 - **Gaps + autonomous build roadmap:** `docs/BLUEPRINT_GAP_AUDIT.md`
 - **Open-source study targets + LDtk pipeline status:** `docs/OPEN_SOURCE_AND_PIPELINE.md`

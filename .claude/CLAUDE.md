@@ -5,6 +5,7 @@
 - Godot 4.6 + strict typed GDScript.
 - Mobile-first UX and controls.
 - Windows/Steam shipping lane is current priority.
+- **Design spine:** grid + weather **cards** (order + placement) + **six weathers** + **fog/uncertainty** later — `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`.
 
 ## Path Policy
 
@@ -17,7 +18,8 @@
 - Use repo task scripts in `tools/tasks/` as entry points.
 - Do not bypass validation (`tools/tasks/validate.ps1`) before handoff.
 - Use Linear orchestration scripts for PM loops (`linear:producer`, `linear:dispatch`, `linear:pickup`).
-- Prefer MCP-backed Godot workflows: **`godot`** (Coding-Solo, `npx -y`), **`godot-full`** ([tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp) — run `tools/install/setup-godot-mcp-full.ps1` first). For API docs use **https://docs.godotengine.org/en/stable/** (`docs/GODOT_DOCS_ACCESS.md`).
+- Prefer **`godot-full`** ([tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp)) after `tools/install/setup-godot-mcp-full.ps1`; optional **`godot`** (Coding-Solo, `npx -y`). API docs: **https://docs.godotengine.org/en/4.6/** (`docs/GODOT_DOCS_ACCESS.md`).
+- **Parallel agents:** Cursor Cloud is **not** self-hosted. Use **local** git worktrees: `pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/lane` + `docs/CURSOR_PARALLEL_AGENTS.md`.
 
 ## Parallel Scope Boundaries
 

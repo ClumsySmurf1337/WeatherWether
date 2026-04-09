@@ -51,6 +51,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `tools/tasks/validate.ps1` tests and level validation
 - `tools/tasks/launch.ps1` open game in Godot
 - `tools/tasks/mobile-preview.ps1` mobile-oriented preview settings
+- `tools/tasks/new-agent-worktree.ps1 -BranchName agent/your-lane` second checkout under `D:\Agents\WeatherWether` for **parallel local** Cursor agents
 
 ## Backlog and PM Automation
 

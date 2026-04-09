@@ -8,6 +8,7 @@ Focus on:
 
 Rules:
 
+- Levels must teach and stress the **core mechanic**: weather **card order/placement** and **six weathers** on a grid; reserve **fog** for appropriate world progression per Building Whether.
 - Preserve solvability.
 - Follow world progression constraints in Building Whether / blueprint docs.
 - Keep mobile session lengths in mind (2-4 minute average).

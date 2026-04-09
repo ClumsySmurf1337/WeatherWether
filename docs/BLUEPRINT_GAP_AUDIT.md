@@ -1,143 +1,141 @@
 # Blueprint Gap Audit
 
-Source audited:
+**Revalidated:** 2026-04-10 · **GitHub:** Whether CI **passing** on `main` / PRs (Node 22 + Godot 4.6.2 Linux: import, GUT, level validation).
+
+Source blueprint:
 
 - `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`
 
-## Audit Summary
+Companion specs:
 
-### Previously Missing
-
-1. Producer/PM role file and explicit PM loop.
-2. Automated dispatch/pickup scripts for Linear task flow.
-3. Godot docs MCP server in Cursor MCP config.
-4. Complete cross-tool agent catalog beyond initial four role files.
-
-### Fixes Applied
-
-1. Added producer and expanded role definitions:
-   - `.claude/agents/producer.md`
-   - `.claude/agents/ui-developer.md`
-   - `.claude/agents/release-ops.md`
-2. Added Linear orchestration scripts:
-   - `tools/linear/dispatch-tasks.ts`
-   - `tools/linear/pickup-task.ts`
-   - `tools/linear/producer-cycle.ts`
-   - `tools/linear/role-map.ts`
-   - `tools/linear/bootstrap-workspace.ts`, `seed-backlog.ts`, `promote-backlog.ts`, etc.
-3. Added `godot-docs` MCP server to `.cursor/mcp.json`.
-4. Added operator docs/commands:
-   - `docs/AGENT_CATALOG.md`
-   - `docs/LINEAR_SETUP.md`, `LINEAR_ENV_VARS.md`, `DAILY.md`
-   - `.cursor/commands/linear-*.md`
-5. Expanded outline-driven backlog templates:
-   - `docs/backlog/outline-master.json`
-   - included in `tools/linear/seed-backlog.ts`
+- `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- `docs/OPEN_SOURCE_AND_PIPELINE.md`
 
 ---
 
-## Autonomous build and connection audit (snapshot: 2026-04)
+## Where we are (executive snapshot)
 
-This section is the **single checklist** for “where we are”: agents, MCP, CI, tests, and UI reference flow.
+| Area | Status |
+|------|--------|
+| **Linear PM** | Bootstrap, seed (dedupe + caps), promote, dispatch, pickup, producer cycle — **in repo**. |
+| **Local validation** | `validate.ps1` — import + GUT + `validate_all_levels.gd`. |
+| **GitHub Actions** | **`ci.yml` green** — mirrors core Godot checks; `npm ci` with Node **22**, `engines >=22`. |
+| **GUT** | **Installed** (bitwes/Gut in `addons/gut/`). |
+| **Godot MCP** | **Primary: `godot-full`** (tugcantopaloglu; `setup-godot-mcp-full.ps1`). **Optional:** `godot` (Coding-Solo `npx`) for lightweight use. |
+| **Godot API docs** | **No docs MCP** — official [4.6 docs](https://docs.godotengine.org/en/4.6/) + `docs/GODOT_DOCS_ACCESS.md` + optional Cursor doc index. |
+| **Export / release EXE in CI** | **Not done** — `build.yml` scaffold only; no `export_presets.cfg`. |
+| **LDtk → runtime** | **`levels/whether.ldtk` exists**; **no** `level_loader.gd` / **no** godot-ldtk-importer addon yet. |
+| **Docker** | **Not used** for CI or local docs (GitHub-hosted Ubuntu runners only). |
 
-### Cursor MCP (`.cursor/mcp.json`)
+---
 
-| Server | Purpose | Notes |
-|--------|---------|--------|
-| `linear` | Issue CRUD, PM tooling | `mcp-remote` → `https://mcp.linear.app/mcp` (needs Linear auth in Cursor). |
-| `godot` | Editor/run project/debug/scene ops | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) via `npx @coding-solo/godot-mcp`; `GODOT_PATH` set to `D:\Godot\...`. |
-| Godot API/docs | Official URLs + Cursor doc index | See `docs/GODOT_DOCS_ACCESS.md` (remote `godot-docs` MCP removed — was unreliable). |
-| `github` | Repo/PR integration | `@modelcontextprotocol/server-github` with `GITHUB_TOKEN` from env. |
+## What we are **not** doing (intentional)
 
-**Not configured in-repo:** Gemini image MCP, Playwright MCP (optional for future UI capture). UI references today are **prompt-led** (see below).
+| Item | Reason |
+|------|--------|
+| **Remote `godot-docs` MCP** (`mcp-remote` → workers.dev) | **Removed** — unreliable; replaced by official doc URLs + `GODOT_DOCS_ACCESS.md`. |
+| **Docker-based CI or local doc server** | Unnecessary; Actions use vanilla Ubuntu + downloaded Godot binary. |
+| **Self-hosted Cursor Cloud** | Not a product option; **local parallel** = `new-agent-worktree.ps1` + multiple Cursor windows (`docs/CURSOR_PARALLEL_AGENTS.md`). |
+| **Merge every PR automatically** | Safety / game-asset risk; see `GITHUB_AUTOMERGE.md` (label + green CI when ready). |
+| **Gemini / image MCP in-repo** | Keys and UX stay outside git; prompts in `ASSET_PROMPTS_GEMINI.md` / Stitch workflow. |
+| **godot-mcp-pro (paid)** | Optional later; not purchased or wired by default. |
 
-### Godot MCP: open-source vs “pro”
+---
 
-| Option | Link | Fit for Whether |
-|--------|------|------------------|
-| **Coding-Solo/godot-mcp** | [github.com/Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) | **Already wired.** Editor launch, run/stop project, debug output, scene/node helpers — enough for agents to iterate and see errors. |
-| **youichi-uda/godot-mcp-pro** | [github.com/youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) | Paid add-on with a **large** tool surface (animation, 3D, particles, shaders, testing hooks, etc.). Consider if agents need richer **scene/animation** automation; not required for baseline 2D puzzle iteration. |
+## Cursor MCP (`.cursor/mcp.json`) — current
 
-**Recommendation:** stay on Coding-Solo until you hit limits (e.g. bulk animation rigging); then evaluate godot-mcp-pro for a **level-builder / art** lane only.
+| Server | Status | Notes |
+|--------|--------|--------|
+| `linear` | **Active** | `npx -y mcp-remote` → Linear; auth in Cursor. |
+| `godot-full` | **Primary (intended)** | [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp); run `tools/install/setup-godot-mcp-full.ps1` (output **gitignored**). Disable in MCP UI if `build/index.js` missing. |
+| `godot` | **Optional / fallback** | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) — quick `npx` without local build. |
+| `github` | **Active** | `npx -y @modelcontextprotocol/server-github`; needs `GITHUB_TOKEN` in env. |
+| ~~`godot-docs`~~ | **Removed** | Use `docs/GODOT_DOCS_ACCESS.md` and browser / indexed docs. |
 
-### Parallel agents — what exists vs what is manual
+---
+
+## Godot MCP options (reference only)
+
+| Option | Link | In this repo |
+|--------|------|----------------|
+| tugcantopaloglu fork | [github.com/tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp) | **`godot-full`** — **primary** (local build). |
+| Coding-Solo | [github.com/Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) | **`godot`** — optional lightweight `npx`. |
+| youichi-uda pro | [github.com/youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) | **Not installed** — evaluate only if `godot-full` is insufficient. |
+
+Details: `docs/AGENT_CATALOG.md`.
+
+---
+
+## Testing and CI (post–revalidation)
+
+| Check | Local | GitHub Actions |
+|-------|--------|----------------|
+| `npm ci` / Linear tooling sanity | Yes | **Yes** (Node 22) |
+| Godot `--import` | `validate.ps1` | **Yes** |
+| GUT `res://test` | `validate.ps1` | **Yes** |
+| `validate_all_levels.gd` | `validate.ps1` | **Yes** (placeholder still reports 0 failures if no level JSON yet) |
+
+**Follow-ups (quality, not “CI red/green” yet):** GUT **orphan** warnings in tests; tighten `validate_all_levels.gd` once LDtk JSON + solver are wired.
+
+---
+
+## Parallel agents and orchestration
 
 | Layer | Status |
 |-------|--------|
-| **Role docs** | `.claude/agents/*.md` + `docs/AGENT_CATALOG.md`. |
-| **Linear lanes** | `linear:pickup -- --role=...`, `linear:producer -- --apply`, phased seed/promote — **implemented.** |
-| **Scope rules** | `docs/CURSOR_PARALLEL_AGENTS.md` (directory boundaries). |
-| **Cursor Cloud** | Documented in `docs/CURSOR_CLOUD_AGENT_SETUP.md`; not self-hosted; parity checked via `daily.ps1` vs cloud. |
-| **Windows orchestrator** | Scripts only: `daily-autonomous.ps1`, Task Scheduler — no Conductor-style GUI. |
-
-**Gap:** No automated “merge queue for N agents”; Producer + human PR review still expected.
-
-### Testing and validation
-
-| Check | Where | Status |
-|-------|-------|--------|
-| **Level validation** | `tools/tasks/validate.ps1` → `scripts/validate_all_levels.gd` | **Runs locally** in autonomous lane. |
-| **GUT unit tests** | `addons/gut/` ([bitwes/Gut](https://github.com/bitwes/Gut)) + `gut_cmdln.gd` | **Installed** (v9.6.0). `validate.ps1` runs `godot --headless --import` then GUT on `res://test`. |
-| **CI** | `.github/workflows/ci.yml` | **Node + Godot 4.6.2 Linux:** `--import`, GUT (`res://test`), `validate_all_levels.gd`. |
-| **Visual / screenshot QA** | Not automated | Optional future: capture + vision model (similar in spirit to [godogen](https://github.com/htdt/godogen)) or MCP-driven run + manual screenshot checklist. |
-
-**Priority to “make it test for real”:** (1) Install GUT properly and commit `gut_cmdln.gd` path, (2) add CI job with Godot 4.6 headless + `validate.ps1` equivalent on Linux or Windows runner.
-
-### UI/UX + Gemini (and related)
-
-There is **no** in-repo Gemini API key wiring for agents. The intended workflow is:
-
-1. **Specs in-repo:** `docs/ART_DIRECTION.md` (palette, readability, mobile-first).
-2. **Reference generation:** `docs/ASSET_PROMPTS_GEMINI.md` — paste prompts into **Google AI Studio / Gemini** (or any image model) for mood boards, tile concepts, UI concepts.
-3. **Implementation:** `ui-developer` / `art-pipeline` agents import **PNG references** into Godot (`assets/`, themes); use `tools/tasks/mobile-preview.ps1` for mobile-oriented preview.
-
-**Console + mobile:** treat Steam deck / controller and phone as **touch-safe targets** and **readable at small scale** (already in workspace rules); validate in editor with stretch/aspect presets, not only desktop window.
-
-### Doc map (autonomous path)
-
-| Topic | Doc |
-|-------|-----|
-| Godot API/docs (no docs MCP) | `docs/GODOT_DOCS_ACCESS.md` |
-| Open-source + LDtk pipeline gaps | `docs/OPEN_SOURCE_AND_PIPELINE.md` |
-| Daily loop | `docs/DAILY.md` |
-| PM + fallbacks | `docs/AUTONOMOUS_ORCHESTRATION.md` |
-| Parallel agents | `docs/CURSOR_PARALLEL_AGENTS.md` |
-| Cloud agents | `docs/CURSOR_CLOUD_AGENT_SETUP.md` |
-| Linear | `docs/LINEAR_SETUP.md`, `LINEAR_ENV_VARS.md` |
-| PR merge policy | `docs/GITHUB_AUTOMERGE.md` |
-| Roles | `docs/AGENT_CATALOG.md` |
-| Path policy | `docs/PATHS_AND_STORAGE_POLICY.md` |
+| Role files + catalog | **Done** — `.claude/agents/*.md`, `docs/AGENT_CATALOG.md`. |
+| Linear lanes | **Done** — pickup/dispatch/producer/promote/seed. |
+| Scope / parallel doc | `docs/CURSOR_PARALLEL_AGENTS.md`. |
+| **Local parallel worktrees** | **`tools/tasks/new-agent-worktree.ps1`** — creates `D:\Agents\WeatherWether\wt-*` (or `WHETHER_AGENT_ROOT`). |
+| Cursor Cloud + API | Hosted by Cursor only; dashboard + API links in `CURSOR_PARALLEL_AGENTS.md`. |
+| Merge queue / N-agent auto-merge | **Not automated** — human or label-gated PR flow. |
 
 ---
 
-## Remaining intentional deferments
+## UI/UX + Gemini
 
-- Automatic PR ↔ Linear comment linking is not fully auto-wired.
-- Godot **export** / release binaries are not built in CI yet (`build.yml` still a scaffold).
-- Full screenshot / vision QA loop is not implemented (documented as optional).
-- Silent merge-all PRs remains off by design (`GITHUB_AUTOMERGE.md`).
+- **No** in-repo Gemini API keys.
+- **Flows:** `ART_DIRECTION.md`, `ASSET_PROMPTS_GEMINI.md`, `STITCH_UX_WORKFLOW.md`, `mobile-preview.ps1`.
+
+---
+
+## Remaining gaps (prioritized)
+
+1. **`export_presets.cfg`** + **`build.yml`** real export + artifact upload (Windows/Steam first).
+2. **`scripts/level_loader.gd`** (or agreed name) + **godot-ldtk-importer** addon — see `OPEN_SOURCE_AND_PIPELINE.md`.
+3. **Puzzle solver** hooked to real level data; **validate_all_levels** fails CI on bad levels.
+4. **Branch protection** on `main` requiring **Whether CI** (+ optional automerge workflow).
+5. **PR ↔ Linear** auto-comment / link (optional).
+6. **Visual/screenshot QA** loop (optional; godogen-style).
+
+---
 
 ## Recommended next expansion
 
-1. **Export CI:** `export_presets.cfg` + workflow job to `godot --export-release` and upload artifacts (see autonomous build table above).
-2. Optional **godot-mcp-pro** for heavy level/animation lanes if Coding-Solo tools are limiting.
-3. PR-link auto-comment in close-loop (`linear:close`) when issue id is in branch/PR.
-4. Per-role SLA / stalled-issue report in Linear tooling.
+1. Export preset + **`build.yml`** artifact job.
+2. LDtk importer + level loader MVP.
+3. PR-link automation in `linear:close` (optional).
+4. Per-role SLA / stalled issues in Linear tooling (optional).
 
 ---
 
-## Next steps toward autonomous build (ordered)
+## Historical note (fixes already applied)
 
-**Definition of “auto building” here:** every meaningful change is **validated in CI**, and **release tags** (or main) produce a **downloadable Windows build** without manual Godot clicks.
+Earlier iterations added: producer agent, Linear scripts (dispatch, pickup, producer, bootstrap, seed, promote), GUT, Godot-in-CI, `godot-full` optional path, removal of flaky docs MCP, Node 22 + `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`, canonical rules (`whether-development.mdc`, `godot-engine-docs.mdc`), `OPEN_SOURCE_AND_PIPELINE.md`, `GODOT_DOCS_ACCESS.md`, Stitch UX doc, Nodist/multi-Node notes in `SETUP_WIN11.md`.
 
-| Priority | Step | Why it matters | Current state |
-|----------|------|----------------|---------------|
-| **1** | **Godot in CI** — install Godot 4.6.x on the runner, run the same sequence as `validate.ps1` (`--import`, GUT, `validate_all_levels.gd`). | Agents and PRs get a **hard gate**; “autonomous” merges are not safe without this. | **Done** in `.github/workflows/ci.yml` (Ubuntu + Godot 4.6.2). |
-| **2** | **Export presets in repo** — create `export_presets.cfg` (Windows/Steam first) via Editor → Export once, commit file. | Headless **`--export-release`** needs named presets; without them, `build.ps1` / Actions cannot emit binaries. | No `export_presets.cfg` in tree. |
-| **3** | **Real `build.yml`** — on `workflow_dispatch` + `v*` tags: checkout, install Godot + export templates, `godot --headless --export-release "Windows Desktop" path.exe`, upload **artifact**. | Closes the loop from **green main** to **artifact**; agents can target “fix until CI + export green”. | `build.yml` is a placeholder message only. |
-| **4** | **Branch protection** — require **Whether CI** (and future build job if split) on `main`; optional `automerge` label workflow. | Lets you trust **auto-merge** or bot merges after validation. | Documented in `GITHUB_AUTOMERGE.md`; not enforced in-repo. |
-| **5** | **Windows Task Scheduler** — daily: `daily-autonomous.ps1` then optional `linear:producer -- --apply`. | **Ops** automation; does not replace CI but keeps Linear + local health fresh. | Scripts exist; scheduling is on your machine. |
+---
 
-**Next move after validation CI:** **priority 2 + 3** — commit `export_presets.cfg` and teach `build.yml` to export and upload artifacts.
+## Doc map
 
-Local and CI should stay on the **same Godot minor** (4.6.x) to avoid import drift.
+| Topic | Doc |
+|-------|-----|
+| Godot API/docs | `docs/GODOT_DOCS_ACCESS.md` |
+| Open-source + LDtk gaps | `docs/OPEN_SOURCE_AND_PIPELINE.md` |
+| Daily loop | `docs/DAILY.md` |
+| PM + fallbacks | `docs/AUTONOMOUS_ORCHESTRATION.md` |
+| Parallel / Cloud agents | `docs/CURSOR_PARALLEL_AGENTS.md`, `CURSOR_CLOUD_AGENT_SETUP.md` |
+| Linear | `LINEAR_SETUP.md`, `LINEAR_ENV_VARS.md` |
+| PR merge | `GITHUB_AUTOMERGE.md` |
+| Roles / MCP | `AGENT_CATALOG.md` |
+| Win setup / Node | `SETUP_WIN11.md` |
+| Paths | `PATHS_AND_STORAGE_POLICY.md` |

@@ -2,10 +2,12 @@
 
 This catalog aligns agent roles across Cursor cloud/local and Claude-style role files.
 
+**Design spine:** PM and every agent keep work aligned with the **core concept** in `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` — grid + weather **cards** (order + placement) + **six weathers** + later **fog / uncertainty**.
+
 ## PM/Orchestration
 
 - `producer` (`.claude/agents/producer.md`)
-  - Runs standup, dispatches Todo work, monitors risk.
+  - Runs standup, dispatches Todo work, monitors risk; guards scope against the GDD spine.
 
 ## Implementation Roles
 
@@ -25,24 +27,24 @@ This catalog aligns agent roles across Cursor cloud/local and Claude-style role 
 5. Worker agents claim by role using `linear:pickup -- --role=<role> --apply`.
 6. Workers execute implementation and validation scripts.
 
-## Godot Documentation Access
+## Godot MCP (what is wired)
 
-Cursor MCP includes:
+| Server | Role |
+|--------|------|
+| **`godot-full`** | **Primary** — [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp). Run `pwsh ./tools/install/setup-godot-mcp-full.ps1`; MCP runs `node tools/godot-mcp-full/build/index.js`. Best for **UI/Control**, runtime inspection, exports, broad tool surface. |
+| **`godot`** | **Optional** — [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) via `npx -y` when you want a quick tool without the local build. |
+| **Paid (not installed)** | [youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) — evaluate only if `godot-full` is still limiting. |
 
-- `godot` server for project/editor operations ([Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp), configured in `.cursor/mcp.json`).
-- Godot API reference: **official docs** — `docs/GODOT_DOCS_ACCESS.md` (no `godot-docs` MCP; index `https://docs.godotengine.org/en/stable/` in Cursor if desired).
+## Godot API documentation
 
-Optional upgrade for heavier scene/animation automation: [youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) (paid, larger toolset) — swap or add as a second MCP server if needed.
+No `godot-docs` MCP. Use **official** [Godot 4.6 docs](https://docs.godotengine.org/en/4.6/) and `docs/GODOT_DOCS_ACCESS.md`; index in Cursor if you want @-Docs style lookup.
 
-### Godot MCP: Coding-Solo vs tugcantopaloglu fork
+## Local parallel agents (no self-hosted cloud)
 
-| | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) (current) | [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp) |
-|---|----------------|---------------|
-| **Scope** | ~20 tools: editor/run/stop, debug output, scene CRUD, sprites, UIDs | **149 tools**: extends Coding-Solo with runtime `game_eval`, property/method calls, signals, input simulation, `export_project`, scene-file JSON ops, TileMap, HTTP/WS, etc. |
-| **Install** | `npx @coding-solo/godot-mcp` | **Clone + `npm install` + `npm run build`**, then `node …/build/index.js` in MCP config ([their README](https://github.com/tugcantopaloglu/godot-mcp)) |
-| **Tradeoff** | Simple, npm-updatable, less to misconfigure | Much more agent power; larger attack surface; more moving parts and Godot-version coupling |
+**Cursor Cloud is hosted by Cursor only.** For parallel lanes on Windows, use **git worktrees** + multiple Cursor windows:
 
-**Recommendation:** keep **Coding-Solo** as default. **`godot-full`** in `.cursor/mcp.json` runs the tugcantopaloglu fork from `tools/godot-mcp-full/build/index.js` after `pwsh ./tools/install/setup-godot-mcp-full.ps1` (clone is gitignored). Use **godot-full** for UI/scene/runtime/export-heavy agent work; use **godot** for lightweight tasks.
+`pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/your-lane`
 
-Study links and pipeline gaps: [OPEN_SOURCE_AND_PIPELINE.md](OPEN_SOURCE_AND_PIPELINE.md).
+Scopes: `docs/CURSOR_PARALLEL_AGENTS.md`, `.claude/CLAUDE.md`.
 
+Study links and LDtk pipeline gaps: [OPEN_SOURCE_AND_PIPELINE.md](OPEN_SOURCE_AND_PIPELINE.md).

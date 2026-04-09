@@ -2,6 +2,8 @@ The complete AI multi-agent blueprint for shipping “Whether”
 
 Build fresh. Don’t fork godogen. That’s the bottom line after deep analysis of the entire AI game dev toolkit landscape as of April 2026\. Godogen is a brilliant autonomous game generator tightly coupled to Claude Code and C\# — but you need an interactive, multi-agent development system built around Cursor, GDScript, and parallel workflows. The toolkit described below — “whether-kit” — gives you a purpose-built development system with Claude Code worktrees for parallel agents, Conductor for orchestration, Linear MCP for automated project management, a BFS puzzle solver for level validation, and a complete CI/CD pipeline. A solo developer following this blueprint can realistically run 3–4 AI agents simultaneously on different game systems, with a producer agent tracking all 250+ tasks across code, art, audio, level design, QA, and marketing. Everything here is executable on Monday morning. 
 
+**Core design contract (Whether).** The PM and every agent must align implementation, tasks, and reviews with the product spine in `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`: a **grid** puzzle with **terrain and objects**, a **hand of weather cards** where players choose **order and grid placement**, and **six weathers**—Rain, Sun, Frost, Wind, Lightning, Fog—each **physically transforming** the board through teachable state rules (water/ice/steam, push, fog reveal, chains through water, etc.). Early levels favor **perfect information**; later levels use **fog** and hidden tiles so players commit under uncertainty—the “whether” in “whether weather.” Do not add orthogonal mechanics without an explicit GDD change and producer sign-off.
+
 1\. Godogen is impressive but wrong for this project 
 
 Godogen (github.com/htdt/godogen, \~2,400 stars) is a set of Claude Code skills that generates complete, playable Godot games from natural language descriptions. skillsllm Created by htdt (Alex Ermakov), it operates through two skills: an orchestrator ( /godogen ) that decomposes game descriptions into tasks, and a task executor ( /godot-task ) that implements each piece in a forked context window. GitHub Its most innovative feature is a visual QA loop — it runs the game headlessly, captures screenshots, and feeds them to Gemini Flash for automated visual bug detection. SkillsLLM 
@@ -40,7 +42,7 @@ whether-kit/
 ├── .cursor/  
 │ ├── rules/ 
 
-│ │ ├── godot-gdscript.mdc \# Always-on GDScript coding standards │ │ ├── weather-game.mdc \# Whether-specific patterns and architecture │ │ └── puzzle-design.mdc \# Puzzle mechanic rules and constraints │ ├── skills/ 
+│ │ ├── godot-gdscript.mdc \# Always-on GDScript coding standards │ │ ├── weather-game.mdc \# Whether-specific patterns and architecture │ │ ├── whether-development.mdc \# GDD/core concept alignment, pipelines, agent doc duty │ │ ├── godot-engine-docs.mdc \# Official Godot doc URLs (no remote docs MCP) │ │ └── puzzle-design.mdc \# Puzzle mechanic rules and constraints │ ├── skills/ 
 
 │ │ ├── weather-puzzle-design/ 
 
@@ -227,7 +229,7 @@ When working in a worktree, ONLY modify files within your assigned system scope.
 
 Run before committing: godot \--headless \-s addons/gut/gut\_cmdln.gd \-gexit Run level validation: godot \--headless \-s scripts/validate\_all\_levels.gd \--quit
 
-MCP server configuration: **.cursor/mcp.json** 
+MCP server configuration: **.cursor/mcp.json** (copy from the repo; excerpt below reflects the **Whether** Windows layout as of 2026-04)
 
 { 
 
@@ -239,31 +241,39 @@ MCP server configuration: **.cursor/mcp.json**
 
  "args": \["-y", "mcp-remote", "https://mcp.linear.app/mcp"\]  }, 
 
- "godot": { 
+ "godot-full": { 
 
- "command": "npx", 
+ "command": "node", 
 
- "args": \["@coding-solo/godot-mcp"\], 
+ "args": \["tools/godot-mcp-full/build/index.js"\], 
 
  "env": { 
 
- "GODOT\_PATH": "/usr/local/bin/godot" 
+ "GODOT\_PATH": "D:/Godot/Godot\_v4.6.2-stable\_win64.exe" 
 
  } 
 
  }, 
 
- "godot-docs": { 
+ "godot": { 
 
  "command": "npx", 
 
- "args": \["mcp-remote", "https://godot-docs-mcp.j2d.workers.dev/mcp"\]  }, 
+ "args": \["-y", "@coding-solo/godot-mcp"\], 
+
+ "env": { 
+
+ "GODOT\_PATH": "D:/Godot/Godot\_v4.6.2-stable\_win64.exe" 
+
+ } 
+
+ }, 
 
  "github": { 
 
  "command": "npx", 
 
- "args": \["@modelcontextprotocol/server-github"\], 
+ "args": \["-y", "@modelcontextprotocol/server-github"\], 
 
  "env": { 
 
@@ -275,6 +285,8 @@ MCP server configuration: **.cursor/mcp.json**
 
  }   
 } 
+
+**Whether repo MCP notes:** \- **Primary Godot MCP:** `godot-full` — [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp) (149 tools, runtime/UI/export). Run `pwsh ./tools/install/setup-godot-mcp-full.ps1`; `tools/godot-mcp-full/` is gitignored. \- **Optional:** `godot` — [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) for lightweight `npx` without a local build. \- **Not used:** remote `godot-docs` MCP (flaky). Use [Godot 4.6 docs](https://docs.godotengine.org/en/4.6/) and `docs/GODOT_DOCS_ACCESS.md`. \- **Paid:** [godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) — not wired by default. \- **Parallel agents:** **Cursor Cloud is not self-hosted**—cloud agents run on Cursor’s infrastructure. For **local** parallelism (default for Godot-tight work), use **multiple Cursor windows on git worktrees:** `pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/your-lane` with scopes in `docs/CURSOR_PARALLEL_AGENTS.md` and `.claude/CLAUDE.md`.
 
 3\. Multi-agent orchestration: the realistic 3-agent workflow 
 
@@ -947,7 +959,7 @@ What’s uncertain and what to watch
 GDScript vs C\# is a real tradeoff. Godogen’s shift to C\# reflects genuine LLM performance differences — Claude and GPT produce fewer hallucinations with C\#. However, for a solo dev who’s already committed to GDScript, the switching cost (learning .NET  
 Godot, C\# Godot API differences, potential plugin compatibility issues) likely outweighs the LLM accuracy gains. Mitigate by using strict typing everywhere and comprehensive .cursorrules that encode GDScript-specific patterns. Monitor agent error rates in the first week; if GDScript hallucinations exceed 30% of generated code, consider switching. 
 
-Cursor’s background agents are brand new (February–April 2026). They work but are still maturing. Have a fallback plan to run Claude Code in tmux sessions if Cursor cloud agents prove unreliable for your workflows. 
+Cursor’s background agents are brand new (February–April 2026). They work but are still maturing. **Whether repo default:** **local** parallelism — multiple Cursor windows on **git worktrees** (`pwsh ./tools/tasks/new-agent-worktree.ps1`); Cursor Cloud is **not** self-hosted. If cloud agents are throttled, rely on local worktrees and/or Claude Code with worktrees — same scope rules in `.claude/CLAUDE.md`. 
 
 130 levels is genuinely massive for a solo dev. The producer agent’s most important job is tracking levels/week velocity and flagging burnout risk early. Consider reducing to 80–100 levels if the pace isn’t sustainable — a polished 80-level game ships better than an exhausted 130-level game. 
 

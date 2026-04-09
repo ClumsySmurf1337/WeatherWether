@@ -2,7 +2,7 @@
 
 ## Cursor Cloud agents
 
-- **Hosting:** Cursor Cloud agents run on **Cursor-managed infrastructure**, not on your Windows PC. There is **no supported “self-hosted Cursor Cloud”** mode to reduce spend; local work uses **Cursor IDE agents** (your machine) instead.
+- **Hosting:** Cursor Cloud agents run on **Cursor-managed infrastructure**, not on your Windows PC. There is **no supported “self-hosted Cursor Cloud.”** For parallel lanes without cloud cost, use **local** Cursor sessions on **git worktrees** (`tools/tasks/new-agent-worktree.ps1`, `docs/CURSOR_PARALLEL_AGENTS.md`).
 - **Cost control:** Prefer **local parallel agents / worktrees** for bulk edits, and reserve Cloud for long-running branches you are OK paying for.
 - **Parallel agents:** Cursor allows multiple agents (up to workspace limits). See [CURSOR_PARALLEL_AGENTS.md](CURSOR_PARALLEL_AGENTS.md).
 

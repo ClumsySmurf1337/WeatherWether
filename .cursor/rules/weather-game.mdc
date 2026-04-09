@@ -6,6 +6,10 @@ alwaysApply: true
 
 # Whether Architecture Rules
 
+## Core concept (align all features)
+
+Grid puzzle: **terrain + objects**, **hand of weather cards** (player picks **order** and **grid placement**). Weathers—**Rain, Sun, Frost, Wind, Lightning, Fog**—apply **physical, deterministic** board changes (water/ice/steam, push, fog reveal, chains, etc.). Early levels: **perfect information**; later: **fog / hidden tiles** for real commitment under uncertainty. Full spine: `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` (core concept section).
+
 - Mobile-first interactions are mandatory (touch-safe targets and layout).
 - Windows/Steam is current release lane; do not block it on deferred iOS work.
 - Keep weather rules deterministic and testable.
