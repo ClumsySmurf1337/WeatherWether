@@ -32,6 +32,9 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/FALLBACK_PLAYBOOK.md`
 - `docs/CURSOR_CLOUD_AGENT_SETUP.md`
 - `docs/MOBILE_RELEASE_PATHS.md`
+- `docs/AGENT_CATALOG.md`
+- `docs/TOOL_AGENT_MATRIX.md`
+- `docs/BLUEPRINT_GAP_AUDIT.md`
 
 ## Daily Commands
 
@@ -45,5 +48,8 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 
 - `tools/linear/seed-backlog.ts`
 - `tools/linear/daily-standup.ts`
+- `tools/linear/dispatch-tasks.ts`
+- `tools/linear/pickup-task.ts`
+- `tools/linear/producer-cycle.ts`
 - `docs/LINEAR_SETUP.md`
 

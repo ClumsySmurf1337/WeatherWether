@@ -10,6 +10,7 @@ Reference: [Cursor Cloud Agents](https://cursor.com/docs/cloud-agent#cloud-agent
 ## Setup Checklist
 
 - Ensure `.cursor/mcp.json` is present and valid.
+- Ensure MCP contains `linear`, `godot`, `godot-docs`, and `github` entries.
 - Confirm `.cursor/rules/*.mdc` are loaded in workspace.
 - Ensure `tools/tasks/*.ps1` are the command entry points.
 - Validate fallback scripts in `tools/dev/`.

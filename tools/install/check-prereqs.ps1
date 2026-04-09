@@ -30,8 +30,8 @@ foreach ($check in $checks) {
 }
 
 $godotCandidates = @(
-    "D:\Godot\Godot_v4.6-stable_win64.exe",
-    "D:\Godot\Godot_v4.6-stable_win64_console.exe",
+    "D:\Godot\Godot_v4.6.2-stable_win64.exe",
+    "D:\Godot\Godot_v4.6.2-stable_win64_console.exe",
     "D:\Godot\Godot.exe"
 )
 $godotPath = $godotCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1

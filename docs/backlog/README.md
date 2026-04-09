@@ -6,4 +6,5 @@ This folder contains generated or hand-maintained backlog templates used by `too
 - `puzzle-mechanics.json`
 - `world-batches.json`
 - `ux-and-animation.json`
+- `outline-master.json`
 

@@ -1,0 +1,292 @@
+[
+  {
+    "title": "[PM] Producer setup and weekly sprint cadence",
+    "priority": 1,
+    "labels": ["Release-Ops"],
+    "acceptance": [
+      "Producer cycle runs daily",
+      "Weekly sprint plan generated",
+      "Stalled issue check performed"
+    ]
+  },
+  {
+    "title": "[CORE] Weather interaction matrix v1",
+    "priority": 1,
+    "labels": ["Core-Engine", "Puzzle-Design"],
+    "acceptance": [
+      "Rain/Sun/Frost/Wind/Lightning/Fog baseline interactions implemented",
+      "Unit tests cover deterministic transitions",
+      "Rules documented in weather design docs"
+    ]
+  },
+  {
+    "title": "[UI] Mobile-first HUD baseline",
+    "priority": 1,
+    "labels": ["UI-UX"],
+    "acceptance": [
+      "Card tray touch ergonomics validated",
+      "Undo/reset actions are thumb-friendly",
+      "Desktop adaptation notes documented"
+    ]
+  },
+  {
+    "title": "[WORLD1] Downpour batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design"],
+    "acceptance": [
+      "Rain-only mechanics",
+      "All levels solver-valid",
+      "Difficulty smooth for tutorial opening"
+    ]
+  },
+  {
+    "title": "[WORLD1] Downpour batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design"],
+    "acceptance": [
+      "Rain-only mechanics",
+      "All levels solver-valid",
+      "No duplicate dominant pattern"
+    ]
+  },
+  {
+    "title": "[WORLD1] Downpour batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design"],
+    "acceptance": [
+      "Rain-only mechanics",
+      "All levels solver-valid",
+      "Onboarding complete for world gate"
+    ]
+  },
+  {
+    "title": "[WORLD2] Heatwave batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun ordering puzzles",
+      "All levels solver-valid",
+      "At least one clear aha moment per level set"
+    ]
+  },
+  {
+    "title": "[WORLD2] Heatwave batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun ordering puzzles",
+      "All levels solver-valid",
+      "Difficulty rises from easy to medium"
+    ]
+  },
+  {
+    "title": "[WORLD2] Heatwave batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun ordering puzzles",
+      "All levels solver-valid",
+      "Bridge to frost-era complexity"
+    ]
+  },
+  {
+    "title": "[WORLD3] Cold Snap batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun + Frost interactions",
+      "All levels solver-valid",
+      "Ice bridge creation/melt loops tested"
+    ]
+  },
+  {
+    "title": "[WORLD3] Cold Snap batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun + Frost interactions",
+      "All levels solver-valid",
+      "Progression remains fair"
+    ]
+  },
+  {
+    "title": "[WORLD3] Cold Snap batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun + Frost interactions",
+      "All levels solver-valid",
+      "Mechanic mastery checkpoint"
+    ]
+  },
+  {
+    "title": "[WORLD3] Cold Snap batch 4 (levels 16-20)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Rain + Sun + Frost interactions",
+      "All levels solver-valid",
+      "Advanced chain setup introduced"
+    ]
+  },
+  {
+    "title": "[WORLD4] Gale Force batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Wind interactions introduced",
+      "All levels solver-valid",
+      "Object displacement readability preserved"
+    ]
+  },
+  {
+    "title": "[WORLD4] Gale Force batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Wind + prior weather interactions",
+      "All levels solver-valid",
+      "No input frustration on touch"
+    ]
+  },
+  {
+    "title": "[WORLD4] Gale Force batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Wind + prior weather interactions",
+      "All levels solver-valid",
+      "Mechanic combinations increase cleanly"
+    ]
+  },
+  {
+    "title": "[WORLD4] Gale Force batch 4 (levels 16-20)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Wind + prior weather interactions",
+      "All levels solver-valid",
+      "End-world challenge milestone"
+    ]
+  },
+  {
+    "title": "[WORLD5] Thunderstorm batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Lightning interactions introduced",
+      "All levels solver-valid",
+      "Risk/reward clearly communicated"
+    ]
+  },
+  {
+    "title": "[WORLD5] Thunderstorm batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Lightning + water/ice combos",
+      "All levels solver-valid",
+      "Failure states remain understandable"
+    ]
+  },
+  {
+    "title": "[WORLD5] Thunderstorm batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Lightning + multi-weather chains",
+      "All levels solver-valid",
+      "Difficulty target: medium-hard"
+    ]
+  },
+  {
+    "title": "[WORLD5] Thunderstorm batch 4 (levels 16-20)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Lightning mastery set",
+      "All levels solver-valid",
+      "End-world capstone challenge"
+    ]
+  },
+  {
+    "title": "[WORLD6] Whiteout batch 1 (levels 1-5)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Fog information-uncertainty mechanics introduced",
+      "All levels solver-valid",
+      "Whether decision moments are meaningful"
+    ]
+  },
+  {
+    "title": "[WORLD6] Whiteout batch 2 (levels 6-10)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Fog + full weather toolkit",
+      "All levels solver-valid",
+      "Clarity safeguards for hidden-state gameplay"
+    ]
+  },
+  {
+    "title": "[WORLD6] Whiteout batch 3 (levels 11-15)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Fog + full weather toolkit",
+      "All levels solver-valid",
+      "Late-game complexity remains fair"
+    ]
+  },
+  {
+    "title": "[WORLD6] Whiteout batch 4 (levels 16-20)",
+    "priority": 2,
+    "labels": ["Level-Design", "Puzzle-Design"],
+    "acceptance": [
+      "Final world completion set",
+      "All levels solver-valid",
+      "Campaign closure quality bar met"
+    ]
+  },
+  {
+    "title": "[ART] Weather VFX style lock",
+    "priority": 2,
+    "labels": ["Art-Visual"],
+    "acceptance": [
+      "Rain/Sun/Frost/Fog/Lightning/Wind effects have approved references",
+      "Animation timing guidelines applied",
+      "Mobile performance profile documented"
+    ]
+  },
+  {
+    "title": "[AUDIO] Ambient and feedback pass v1",
+    "priority": 3,
+    "labels": ["Audio Music"],
+    "acceptance": [
+      "Core weather loops defined",
+      "Interaction feedback sounds mapped",
+      "Mix levels safe for mobile speakers"
+    ]
+  },
+  {
+    "title": "[QA] Full campaign validation gate",
+    "priority": 1,
+    "labels": ["QA-Testing"],
+    "acceptance": [
+      "All levels pass solver validation",
+      "Smoke test runbook complete",
+      "Regression suite clean on main branch"
+    ]
+  },
+  {
+    "title": "[RELEASE] Windows/Steam readiness gate",
+    "priority": 1,
+    "labels": ["Release-Ops", "Store-Page"],
+    "acceptance": [
+      "Steam build checklist complete",
+      "Store assets prepared",
+      "Launch branch stability confirmed"
+    ]
+  }
+]

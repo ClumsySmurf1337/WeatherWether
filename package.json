@@ -5,7 +5,12 @@
   "description": "Tooling and automation scripts for Whether",
   "scripts": {
     "linear:seed": "tsx tools/linear/seed-backlog.ts",
-    "linear:standup": "tsx tools/linear/daily-standup.ts"
+    "linear:standup": "tsx tools/linear/daily-standup.ts",
+    "linear:bootstrap": "tsx tools/linear/bootstrap-workspace.ts",
+    "linear:dispatch": "tsx tools/linear/dispatch-tasks.ts",
+    "linear:pickup": "tsx tools/linear/pickup-task.ts",
+    "linear:producer": "tsx tools/linear/producer-cycle.ts",
+    "linear:close": "tsx tools/linear/close-loop.ts"
   },
   "devDependencies": {
     "@linear/sdk": "^41.0.0",

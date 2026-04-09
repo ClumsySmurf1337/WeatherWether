@@ -21,4 +21,6 @@
 - Use `tools/tasks/*.ps1` entry points.
 - Respect file-scope boundaries for parallel agents.
 - Keep all generated caches/builds on D drive.
+- Use producer workflow for backlog orchestration (`linear:producer`, `linear:dispatch`, `linear:pickup`).
+- Use both Godot MCP and godot-docs MCP for implementation + API reference lookups.
 

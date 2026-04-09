@@ -1,0 +1,166 @@
+import "dotenv/config";
+import { LinearClient } from "@linear/sdk";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+type BootstrapState = {
+  name: string;
+  type: "unstarted" | "started" | "completed";
+  color: string;
+  position: number;
+};
+
+const REQUIRED_STATES: BootstrapState[] = [
+  { name: "Triage", type: "unstarted", color: "#6b7280", position: 100 },
+  { name: "Backlog", type: "unstarted", color: "#374151", position: 200 },
+  { name: "Todo", type: "unstarted", color: "#2563eb", position: 300 },
+  { name: "In Progress", type: "started", color: "#7c3aed", position: 400 },
+  { name: "In Review", type: "started", color: "#0891b2", position: 500 },
+  { name: "Done", type: "completed", color: "#059669", position: 600 }
+];
+
+const REQUIRED_LABELS = [
+  "Core-Engine",
+  "Puzzle-Design",
+  "Level-Design",
+  "Art-Visual",
+  "Audio Music",
+  "UI-UX",
+  "QA-Testing",
+  "Marketing",
+  "Store-Page",
+  "Legal-Business",
+  "Release-Ops",
+  "Analytics",
+  "Accessibility",
+  "Localization",
+  "Mobile"
+];
+
+const REQUIRED_PROJECTS = [
+  "Core Engine & Framework",
+  "Puzzle Mechanics",
+  "World 1: Downpour",
+  "World 2: Heatwave",
+  "World 3: Cold Snap",
+  "World 4: Gale Force",
+  "World 5: Thunderstorm",
+  "World 6: Whiteout",
+  "UI/UX",
+  "Art & Visual",
+  "Audio & Music",
+  "Marketing & Launch",
+  "Release Ops",
+  "QA & Validation"
+];
+
+function normalizeName(value: string): string {
+  return value.trim().toLowerCase();
+}
+
+async function main(): Promise<void> {
+  const apiKey = process.env.LINEAR_API_KEY;
+  const teamKey = process.env.LINEAR_TEAM_KEY ?? "WEA";
+  const apply = process.argv.includes("--apply");
+  if (!apiKey) {
+    throw new Error("Missing LINEAR_API_KEY.");
+  }
+
+  const client = new LinearClient({ apiKey });
+  const teamConnection = await client.teams({ first: 100 });
+  const team = teamConnection.nodes.find(
+    (item) => normalizeName(item.key) === normalizeName(teamKey)
+  );
+  if (!team) {
+    throw new Error(`Unable to find Linear team with key ${teamKey}.`);
+  }
+
+  const [labelsConnection, projectsConnection, statesConnection] = await Promise.all([
+    team.labels({ first: 250 }),
+    team.projects({ first: 250 }),
+    team.states({ first: 250 })
+  ]);
+
+  const labelsByName = new Map(
+    labelsConnection.nodes.map((label) => [normalizeName(label.name), label])
+  );
+  const projectsByName = new Map(
+    projectsConnection.nodes.map((project) => [normalizeName(project.name), project])
+  );
+  const statesByName = new Map(
+    statesConnection.nodes.map((state) => [normalizeName(state.name), state])
+  );
+
+  console.log(`Team: ${team.name} (${team.key})`);
+
+  for (const labelName of REQUIRED_LABELS) {
+    if (labelsByName.has(normalizeName(labelName))) {
+      continue;
+    }
+    console.log(`[missing-label] ${labelName}`);
+    if (apply) {
+      await client.createIssueLabel({
+        teamId: team.id,
+        name: labelName
+      });
+      console.log(`  [created-label] ${labelName}`);
+    }
+  }
+
+  for (const projectName of REQUIRED_PROJECTS) {
+    if (projectsByName.has(normalizeName(projectName))) {
+      continue;
+    }
+    console.log(`[missing-project] ${projectName}`);
+    if (apply) {
+      await client.createProject({
+        name: projectName,
+        teamIds: [team.id]
+      });
+      console.log(`  [created-project] ${projectName}`);
+    }
+  }
+
+  for (const stateDef of REQUIRED_STATES) {
+    if (statesByName.has(normalizeName(stateDef.name))) {
+      continue;
+    }
+    console.log(`[missing-state] ${stateDef.name}`);
+    if (apply) {
+      await client.createWorkflowState({
+        teamId: team.id,
+        name: stateDef.name,
+        type: stateDef.type,
+        color: stateDef.color,
+        position: stateDef.position
+      });
+      console.log(`  [created-state] ${stateDef.name}`);
+    }
+  }
+
+  const refreshedStates = apply ? await team.states({ first: 250 }) : statesConnection;
+  const refreshedMap = new Map(
+    refreshedStates.nodes.map((state) => [normalizeName(state.name), state.id])
+  );
+
+  const generatedEnv = [
+    `LINEAR_TEAM_KEY=${team.key}`,
+    `LINEAR_TEAM_ID=${team.id}`,
+    `LINEAR_STATE_TODO_ID=${refreshedMap.get("todo") ?? ""}`,
+    `LINEAR_STATE_IN_PROGRESS_ID=${refreshedMap.get("in progress") ?? ""}`,
+    `LINEAR_STATE_IN_REVIEW_ID=${refreshedMap.get("in review") ?? ""}`
+  ].join("\n");
+
+  const outPath = resolve(process.cwd(), ".env.linear.generated");
+  writeFileSync(outPath, generatedEnv + "\n", "utf-8");
+  console.log(`Wrote ${outPath}`);
+
+  if (!apply) {
+    console.log("Dry run complete. Re-run with --apply to create missing items.");
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
