@@ -1,5 +1,8 @@
-import "dotenv/config";
 import { LinearClient } from "@linear/sdk";
+
+import { loadLinearEnv } from "./load-env.js";
+
+loadLinearEnv();
 
 function fmtDate(input: Date): string {
   return input.toISOString().slice(0, 10);

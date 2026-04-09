@@ -6,7 +6,18 @@ export type AgentRole =
   | "qa-agent"
   | "art-pipeline";
 
-export function inferRoleFromLabels(labels: string[]): AgentRole {
+export function inferRoleFromLabels(labels: string[], title?: string): AgentRole {
+  const t = (title ?? "").trim().toLowerCase();
+  if (t.startsWith("[level-design]")) {
+    return "level-designer";
+  }
+  if (t.startsWith("[level-implement]")) {
+    return "gameplay-programmer";
+  }
+  if (t.startsWith("[level-playtest]") || t.startsWith("[level-validate]")) {
+    return "qa-agent";
+  }
+
   const normalized = labels.map((label) => label.toLowerCase());
 
   if (normalized.some((label) => label.includes("core-engine"))) {

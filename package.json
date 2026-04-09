@@ -10,7 +10,9 @@
     "linear:dispatch": "tsx tools/linear/dispatch-tasks.ts",
     "linear:pickup": "tsx tools/linear/pickup-task.ts",
     "linear:producer": "tsx tools/linear/producer-cycle.ts",
-    "linear:close": "tsx tools/linear/close-loop.ts"
+    "linear:close": "tsx tools/linear/close-loop.ts",
+    "linear:promote": "tsx tools/linear/promote-backlog.ts",
+    "linear:status": "tsx tools/linear/workspace-status.ts"
   },
   "devDependencies": {
     "@linear/sdk": "^41.0.0",

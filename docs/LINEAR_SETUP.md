@@ -30,10 +30,37 @@ npm run linear:bootstrap -- --apply
 
 This writes `.env.linear.generated` with discovered IDs for:
 
-- `LINEAR_TEAM_ID`
-- `LINEAR_STATE_TODO_ID`
-- `LINEAR_STATE_IN_PROGRESS_ID`
-- `LINEAR_STATE_IN_REVIEW_ID`
+- `LINEAR_TEAM_ID`, `LINEAR_TEAM_KEY`, `LINEAR_WORKSPACE_ID`
+- `LINEAR_STATE_TODO_ID`, `LINEAR_STATE_IN_PROGRESS_ID`, `LINEAR_STATE_IN_REVIEW_ID`
+- `LINEAR_STATE_TRIAGE_ID`, `LINEAR_STATE_BACKLOG_ID`, `LINEAR_STATE_DONE_ID`
+- Optional: `BACKLOG`, `TODO`, `IN_PROGRESS`, `IN_REVIEW`, `DONE` (human-readable names for scripts)
+
+Put your API key in `.env.local` (gitignored):
+
+```powershell
+pwsh ./tools/tasks/init-linear-env.ps1
+```
+
+## Caps and phased intake
+
+Linear teams often hit an **active issue ceiling** (~250). This repo caps and batches seeding by env:
+
+- `LINEAR_ACTIVE_ISSUE_CAP` — stop creating issues when non-terminal count reaches this (default 230).
+- `LINEAR_SEED_BATCH_MAX` — max new issues per seed run.
+- `LINEAR_PROMOTE_BATCH_MAX` — max Backlog → Todo per `linear:promote` run.
+
+Promote backlog when you have headroom:
+
+```powershell
+npm run linear:promote -- --dry-run
+npm run linear:promote -- --apply
+```
+
+Workspace snapshot:
+
+```powershell
+npm run linear:status
+```
 
 ## One-command full setup
 
@@ -116,7 +143,8 @@ npm run linear:close -- --issue=WHT-123 --apply
 
 ## Notes
 
-- Backlog templates are in `docs/backlog/*.json`.
-- Seeding is idempotent by convention only; reruns can create duplicates.
+- Backlog templates are in `docs/backlog/*.json` and `outline-master.json`.
+- Seeding **dedupes by exact title** against existing team issues (paginated); safe reruns within the same template set.
+- Full variable reference: `docs/LINEAR_ENV_VARS.md`.
 - Dispatch/pickup scripts default to dry-run unless `--apply` is provided.
 

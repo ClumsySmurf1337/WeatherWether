@@ -1,5 +1,8 @@
-import "dotenv/config";
 import { LinearClient } from "@linear/sdk";
+
+import { loadLinearEnv } from "./load-env.js";
+
+loadLinearEnv();
 
 function arg(name: string): string | undefined {
   const full = process.argv.find((item) => item.startsWith(`--${name}=`));

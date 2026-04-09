@@ -1,6 +1,9 @@
-import "dotenv/config";
 import { LinearClient } from "@linear/sdk";
 import { AgentRole, assigneeEnvVarForRole, inferRoleFromLabels } from "./role-map.js";
+import { loadLinearEnv } from "./load-env.js";
+import { isOnboardingTitle } from "./linear-queries.js";
+
+loadLinearEnv();
 
 function getArg(name: string): string | undefined {
   const arg = process.argv.find((item) => item.startsWith(`--${name}=`));
@@ -32,8 +35,11 @@ async function main(): Promise<void> {
   });
 
   const issue = (todoConnection.nodes ?? []).find((item) => {
+    if (isOnboardingTitle(item.title)) {
+      return false;
+    }
     const labels = (item.labels?.nodes ?? []).map((node) => node.name);
-    return inferRoleFromLabels(labels) === role;
+    return inferRoleFromLabels(labels, item.title) === role;
   });
 
   if (!issue) {
@@ -41,7 +47,8 @@ async function main(): Promise<void> {
     return;
   }
 
-  const assigneeId = process.env[assigneeEnvVarForRole(role)];
+  const assigneeId =
+    process.env[assigneeEnvVarForRole(role)] ?? process.env.LINEAR_DEFAULT_ASSIGNEE_ID;
   console.log(`Selected ${issue.identifier} ${issue.title} for ${role}`);
 
   if (!apply) {

@@ -15,9 +15,15 @@ Primary responsibilities:
 Commands:
 
 - `npm run linear:standup`
+- `npm run linear:promote` and `npm run linear:promote -- --apply` (Backlog → Todo within cap)
 - `npm run linear:dispatch`
 - `npm run linear:dispatch -- --apply`
 - `npm run linear:producer -- --apply`
+
+Phased intake:
+
+- Never exceed `LINEAR_ACTIVE_ISSUE_CAP` non-terminal issues.
+- When headroom appears, run `linear:seed` then `linear:promote --apply` then `linear:dispatch --apply`.
 
 Rules:
 

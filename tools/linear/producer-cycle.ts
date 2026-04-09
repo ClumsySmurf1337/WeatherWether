@@ -15,7 +15,14 @@ function main(): void {
   console.log("== Producer cycle ==");
   console.log("1) Standup summary");
   run("npm", ["run", "linear:standup"]);
-  console.log("2) Dispatch preview");
+  if (apply) {
+    console.log("2) Promote Backlog → Todo (within cap)");
+    run("npm", ["run", "linear:promote", "--", "--apply"]);
+  } else {
+    console.log("2) Promote preview");
+    run("npm", ["run", "linear:promote"]);
+  }
+  console.log("3) Dispatch preview");
   if (apply) {
     run("npm", ["run", "linear:dispatch", "--", "--apply"]);
   } else {

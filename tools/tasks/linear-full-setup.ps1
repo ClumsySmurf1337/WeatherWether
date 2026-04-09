@@ -1,5 +1,4 @@
 param(
-    [Parameter(Mandatory = $true)][string]$LinearApiKey,
     [string]$TeamKey = "WEA"
 )
 
@@ -9,10 +8,9 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $repoRoot
 
-$env:LINEAR_API_KEY = $LinearApiKey
 $env:LINEAR_TEAM_KEY = $TeamKey
 
-Write-Host "Step 1/3: Bootstrap Linear workspace..."
+Write-Host "Step 1/4: Bootstrap Linear workspace..."
 npm run linear:bootstrap -- --apply
 
 $generated = Join-Path $repoRoot ".env.linear.generated"
@@ -20,28 +18,25 @@ if (-not (Test-Path $generated)) {
     throw "Expected $generated after bootstrap."
 }
 
-$envMap = @{}
-foreach ($line in Get-Content $generated) {
-    if ([string]::IsNullOrWhiteSpace($line) -or $line.StartsWith("#")) {
-        continue
-    }
-    $parts = $line.Split("=", 2)
-    if ($parts.Count -ne 2) {
-        continue
-    }
-    $envMap[$parts[0]] = $parts[1]
+. "$repoRoot\tools\tasks\load-repo-env.ps1"
+if (-not $env:LINEAR_API_KEY) {
+    Write-Host "Step 2/4: Create .env.local (API key prompt)..."
+    & "$repoRoot\tools\tasks\init-linear-env.ps1"
+} else {
+    Write-Host "Step 2/4: LINEAR_API_KEY already set (.env.local or environment)"
 }
 
-$env:LINEAR_TEAM_ID = $envMap["LINEAR_TEAM_ID"]
-$env:LINEAR_STATE_TODO_ID = $envMap["LINEAR_STATE_TODO_ID"]
-$env:LINEAR_STATE_IN_PROGRESS_ID = $envMap["LINEAR_STATE_IN_PROGRESS_ID"]
-$env:LINEAR_STATE_IN_REVIEW_ID = $envMap["LINEAR_STATE_IN_REVIEW_ID"]
+. "$repoRoot\tools\tasks\load-repo-env.ps1"
+if (-not $env:LINEAR_API_KEY) {
+    throw "LINEAR_API_KEY still missing. Run tools\tasks\init-linear-env.ps1"
+}
 
-Write-Host "Step 2/3: Seed full backlog..."
+Write-Host "Step 3/4: Seed backlog (batched, deduped, Backlog state)..."
 npm run linear:seed
 
-Write-Host "Step 3/3: Run producer preview..."
+Write-Host "Step 4/4: Producer cycle (standup + promote + dispatch, preview)..."
 npm run linear:producer
 
 Write-Host "Linear setup complete."
-Write-Host "You can dispatch live with: npm run linear:producer -- --apply"
+Write-Host "Apply full PM cycle (promote Backlog→Todo, then dispatch): npm run linear:producer -- --apply"
+Write-Host "Daily lane: pwsh ./tools/tasks/daily.ps1 -Autonomous"

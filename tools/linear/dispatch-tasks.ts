@@ -1,6 +1,9 @@
-import "dotenv/config";
 import { LinearClient } from "@linear/sdk";
 import { assigneeEnvVarForRole, inferRoleFromLabels } from "./role-map.js";
+import { loadLinearEnv } from "./load-env.js";
+import { isOnboardingTitle } from "./linear-queries.js";
+
+loadLinearEnv();
 
 type LinearIssueNode = {
   id: string;
@@ -48,11 +51,17 @@ async function main(): Promise<void> {
 
   console.log(`Dispatch candidates: ${issues.length}`);
   for (const issue of issues) {
+    if (isOnboardingTitle(issue.title)) {
+      console.log(`- skip onboarding: ${issue.identifier} ${issue.title}`);
+      continue;
+    }
     const labelNames = (issue.labels?.nodes ?? []).map((label) => label.name);
-    const role = inferRoleFromLabels(labelNames);
-    const assigneeId = process.env[assigneeEnvVarForRole(role)];
+    const role = inferRoleFromLabels(labelNames, issue.title);
+    const assigneeEnv = assigneeEnvVarForRole(role);
+    const assigneeId =
+      process.env[assigneeEnv] ?? process.env.LINEAR_DEFAULT_ASSIGNEE_ID;
     console.log(
-      `- ${issue.identifier} ${issue.title} => ${role}${assigneeId ? " (assignee configured)" : ""}`
+      `- ${issue.identifier} ${issue.title} => ${role}${assigneeId ? ` (${assigneeEnv} or LINEAR_DEFAULT_ASSIGNEE_ID)` : " (no assignee id)"}`
     );
 
     if (!apply) {

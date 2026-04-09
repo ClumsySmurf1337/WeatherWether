@@ -31,6 +31,10 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/AGENT_RUNTIME_MATRIX.md`
 - `docs/FALLBACK_PLAYBOOK.md`
 - `docs/CURSOR_CLOUD_AGENT_SETUP.md`
+- `docs/DAILY.md`
+- `docs/LINEAR_ENV_VARS.md`
+- `docs/AUTONOMOUS_ORCHESTRATION.md`
+- `docs/CURSOR_PARALLEL_AGENTS.md`
 - `docs/MOBILE_RELEASE_PATHS.md`
 - `docs/AGENT_CATALOG.md`
 - `docs/TOOL_AGENT_MATRIX.md`
