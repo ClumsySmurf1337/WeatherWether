@@ -20,6 +20,7 @@ This repo combines **scripted** Linear operations with **agent** behavior modele
 | `npm run linear:label-backfill -- --apply` | Create missing role labels and add one inferred role label to unlabeled Backlog/Todo/In Progress issues. |
 | `npm run linear:pm-assignments` | Regenerate **`assignments/generated/<role>.md`** (DeedWise-style handoffs; includes **Backlog**). |
 | `npm run linear:plan-deps` | Generate `assignments/generated/dependency-scope-plan.md` with suggested dependencies and role file scopes to reduce overlap. |
+| `npm run linear:apply-deps` | Dry-run/apply real Linear **blocks** relations; writes `assignments/generated/dependency-relations-plan.md`. |
 | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` | Promote/claim the first role-matching issue (Todo first, else Backlog) into **In Progress** for build testing. |
 | `npm run linear:pm-prepare` | One command: bootstrap labels/projects/states + role-label backfill + PM organize apply + assignment file generation. |
 

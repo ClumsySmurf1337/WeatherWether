@@ -136,6 +136,7 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | PM label generation + backfill | `npm run linear:label-backfill -- --apply` |
 | PM assignment markdown (per role) | `npm run linear:pm-assignments` → `assignments/generated/` |
 | PM dependency + file-scope plan | `npm run linear:plan-deps` → `assignments/generated/dependency-scope-plan.md` |
+| Apply dependency edges in Linear (blocks relations) | `npm run linear:apply-deps` (dry-run) / `npm run linear:apply-deps -- --apply` |
 | Kick off first build issue by role | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` |
 | PM all-in-one prep (bootstrap + labels + organize + assignments) | `npm run linear:pm-prepare` |
 | Promote backlog only | `npm run linear:promote -- --apply` |

@@ -28,7 +28,8 @@
     "linear:label-backfill": "tsx tools/linear/backfill-role-labels.ts",
     "linear:pm-prepare": "npm run linear:bootstrap -- --apply && npm run linear:label-backfill -- --apply && npm run linear:pm-organize -- --apply && npm run linear:pm-assignments",
     "linear:kickoff-first": "tsx tools/linear/kickoff-first-issue.ts",
-    "linear:plan-deps": "tsx tools/linear/generate-dependency-scope-plan.ts"
+    "linear:plan-deps": "tsx tools/linear/generate-dependency-scope-plan.ts",
+    "linear:apply-deps": "tsx tools/linear/apply-dependencies.ts"
   },
   "devDependencies": {
     "@linear/sdk": "^41.0.0",
