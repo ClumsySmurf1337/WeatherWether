@@ -38,7 +38,7 @@ See [GITHUB_AUTOMERGE.md](GITHUB_AUTOMERGE.md). The repo does **not** enable sil
 Target workflow:
 
 1. Author opens PR referencing Linear issue id in title/body.
-2. CI runs `npm ci` and basic tooling checks; **Godot headless tests are not in CI yet** (see `docs/BLUEPRINT_GAP_AUDIT.md`).
+2. CI runs `npm ci`, **Godot import + GUT + level validation** on Ubuntu (see `.github/workflows/ci.yml`); **export artifacts** are still local / future `build.yml`.
 3. Human or **QA agent** runs `tools/tasks/validate.ps1` locally for gameplay changes (levels + GUT when installed).
 4. Optional: add **automerge** label after review.
 

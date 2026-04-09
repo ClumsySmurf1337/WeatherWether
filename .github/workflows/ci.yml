@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  GODOT_VERSION: "4.6.2"
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,8 +25,23 @@ jobs:
       - name: Install tooling deps
         run: npm ci
 
-      - name: Linear script lint check
+      - name: Linear tooling sanity
         run: node -e "console.log('linear tooling present')"
 
-      - name: Placeholder Godot validation note
-        run: echo "Godot runtime validation executed in local/agent lanes until CI image is configured."
+      - name: Install Godot (Linux headless)
+        run: |
+          set -euo pipefail
+          VER="${GODOT_VERSION}"
+          curl -fsSL "https://github.com/godotengine/godot/releases/download/${VER}-stable/Godot_v${VER}-stable_linux.x86_64.zip" -o /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot-extract
+          sudo install -m 0755 "/tmp/godot-extract/Godot_v${VER}-stable_linux.x86_64" /usr/local/bin/godot
+          godot --version
+
+      - name: Import project (GUT global classes)
+        run: godot --headless --path "${{ github.workspace }}" --import --quit
+
+      - name: GUT unit tests
+        run: godot --headless --path "${{ github.workspace }}" -s addons/gut/gut_cmdln.gd -gdir=res://test -gexit
+
+      - name: Level validation
+        run: godot --headless --path "${{ github.workspace }}" -s scripts/validate_all_levels.gd --quit

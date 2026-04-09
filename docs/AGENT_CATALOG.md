@@ -34,3 +34,13 @@ Cursor MCP includes:
 
 Optional upgrade for heavier scene/animation automation: [youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) (paid, larger toolset) — swap or add as a second MCP server if needed.
 
+### Godot MCP: Coding-Solo vs tugcantopaloglu fork
+
+| | [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) (current) | [tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp) |
+|---|----------------|---------------|
+| **Scope** | ~20 tools: editor/run/stop, debug output, scene CRUD, sprites, UIDs | **149 tools**: extends Coding-Solo with runtime `game_eval`, property/method calls, signals, input simulation, `export_project`, scene-file JSON ops, TileMap, HTTP/WS, etc. |
+| **Install** | `npx @coding-solo/godot-mcp` | **Clone + `npm install` + `npm run build`**, then `node …/build/index.js` in MCP config ([their README](https://github.com/tugcantopaloglu/godot-mcp)) |
+| **Tradeoff** | Simple, npm-updatable, less to misconfigure | Much more agent power; larger attack surface; more moving parts and Godot-version coupling |
+
+**Recommendation:** keep **Coding-Solo** as default. Consider **tugcantopaloglu** when you need headless **export** or heavy **runtime inspection** from agents; use a **separate MCP server name** (e.g. `godot-full`) if you run both.
+
