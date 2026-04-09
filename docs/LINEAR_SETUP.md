@@ -129,11 +129,36 @@ Supported roles:
 - `qa-agent`
 - `art-pipeline`
 
-Close-loop (In Progress -> In Review):
+### Solo dev: what “role” means here
+
+You only need **one** Linear user (yourself). `--role` does **not** require six people. It chooses **which lane of work** to pull next: scripts infer role from issue **title prefixes** (for example `[LEVEL-IMPLEMENT]` → gameplay-programmer) and from team **labels** (for example `Core-Engine`, `UI-UX`, `QA-Testing`). See `tools/linear/role-map.ts`.
+
+Set **either**:
+
+- `LINEAR_DEFAULT_ASSIGNEE_ID` to your Linear **user id** (simplest), or
+- every `LINEAR_ASSIGNEE_*` to that same id if you prefer explicit wiring.
+
+Then `pickup --role=qa-agent --apply` still makes sense: it finds the next **Todo** issue classified as QA, moves it to **In Progress**, and assigns it to you. You can run different terminals or sessions “as” different roles without separate Linear accounts.
+
+Close-loop (In Progress → In Review):
 
 ```powershell
 npm run linear:close -- --issue=WHT-123 --apply
 ```
+
+Before closing UI or level work, run automated checks (GUT + level validation):
+
+```powershell
+pwsh ./tools/tasks/validate.ps1
+```
+
+### Visual QA (godogen-style) and this repo
+
+[godogen](https://github.com/htdt/godogen) runs Godot, captures **screenshots**, and feeds them to vision models for a closed-loop visual QA pass — powerful for “does it look right”, not just “does it compile”. It targets **Godot 4 + C#** and **Claude Code** skills, which is a different stack than Whether’s **GDScript** + Cursor tooling.
+
+**Current Whether flow:** headless **GUT** tests and **level solver validation** via `validate.ps1` (see `tools/tasks/validate.ps1`) — deterministic, CI-friendly, no screenshot pipeline yet.
+
+**Recommended:** keep validate + CI as the **required** gate before `linear:close`; treat **screenshot → model review** as an **optional** follow-on (manual captures, Playwright against an export, or a small Godot capture script) when you want godogen-like polish without rewriting the project in C#. The blueprint also references godogen for inspiration: `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`.
 
 ## Required Env IDs for State Transitions
 

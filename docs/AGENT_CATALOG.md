@@ -29,6 +29,8 @@ This catalog aligns agent roles across Cursor cloud/local and Claude-style role 
 
 Cursor MCP includes:
 
-- `godot` server for project/editor operations.
+- `godot` server for project/editor operations ([Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp), configured in `.cursor/mcp.json`).
 - `godot-docs` server for API/class reference lookups.
+
+Optional upgrade for heavier scene/animation automation: [youichi-uda/godot-mcp-pro](https://github.com/youichi-uda/godot-mcp-pro) (paid, larger toolset) — swap or add as a second MCP server if needed.
 

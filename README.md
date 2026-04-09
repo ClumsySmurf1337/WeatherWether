@@ -39,6 +39,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/AGENT_CATALOG.md`
 - `docs/TOOL_AGENT_MATRIX.md`
 - `docs/BLUEPRINT_GAP_AUDIT.md`
+- `docs/STITCH_UX_WORKFLOW.md`
 
 ## Daily Commands
 

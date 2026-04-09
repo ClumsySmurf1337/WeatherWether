@@ -38,8 +38,8 @@ See [GITHUB_AUTOMERGE.md](GITHUB_AUTOMERGE.md). The repo does **not** enable sil
 Target workflow:
 
 1. Author opens PR referencing Linear issue id in title/body.
-2. CI runs `npm ci`, future Godot headless tests, and `linear:seed --dry-run` where applicable.
-3. Human or **QA agent** runs `tools/tasks/validate.ps1` locally for gameplay changes.
+2. CI runs `npm ci` and basic tooling checks; **Godot headless tests are not in CI yet** (see `docs/BLUEPRINT_GAP_AUDIT.md`).
+3. Human or **QA agent** runs `tools/tasks/validate.ps1` locally for gameplay changes (levels + GUT when installed).
 4. Optional: add **automerge** label after review.
 
 ## Linear PM automation (this repo)

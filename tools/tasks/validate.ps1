@@ -18,6 +18,8 @@ if (-not $godotPath) {
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if (-not $LevelsOnly) {
     if (Test-Path "$repoRoot\addons\gut\gut_cmdln.gd") {
+        Write-Host "Importing project (GUT class_names)..."
+        & $godotPath --headless --path "$repoRoot" --import --quit
         Write-Host "Running GUT tests..."
         & $godotPath --headless --path "$repoRoot" -s addons/gut/gut_cmdln.gd -gdir=res://test -gexit
     } else {

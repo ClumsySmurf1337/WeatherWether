@@ -68,3 +68,12 @@ Include short sequences for:
 Style: smooth, readable, not overly noisy.
 ```
 
+## Using this with agents and Godot
+
+1. Generate references in **Gemini / Google AI Studio** (or any image model) using the prompts above; export PNGs to `assets/reference/` (or a dated folder).
+2. **Art/UI agents** align exports with `docs/ART_DIRECTION.md` (sizes, palette, readability).
+3. **Implementation** happens in Godot scenes/themes; agents can use **Godot MCP** (`run_project`, `get_debug_output`) to verify layout and errors.
+4. **Mobile + “console” readability:** pair reference prompts with editor checks using `tools/tasks/mobile-preview.ps1` and small display sizes; Steam Deck counts as a touch-biased, limited-resolution target.
+5. **Gemini CLI** (and the Google **Gemini IDE companion**) are enough to refine prompts locally; paste results into Stitch or AI Studio. Optional **Gemini MCP** is for when Cursor agents must call Gemini inside chat — see [STITCH_UX_WORKFLOW.md](STITCH_UX_WORKFLOW.md).
+6. Full UX mockup flow (Stitch + ART_DIRECTION): [STITCH_UX_WORKFLOW.md](STITCH_UX_WORKFLOW.md).
+
