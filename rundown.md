@@ -29,7 +29,7 @@ You now have a local-first autonomous workflow where:
 - Lanes use git worktrees under `D:\Agents\WeatherWether\wt-*` (or `WHETHER_AGENT_ROOT`).
 - Each lane role claims work by role.
 - Scope boundaries documented to reduce file overlap/conflicts.
-- Cursor CLI lane spawn support (`cursor chat`) through lane prompts.
+- Cursor CLI lane spawn support (`cursor agent`) through lane prompts.
 
 ### QA local merge + Linear completion
 

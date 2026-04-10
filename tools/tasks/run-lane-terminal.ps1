@@ -72,9 +72,10 @@ $launcherNote = @"
 "@
 $promptText = $launcherNote + "`n`n" + $template.Replace("{{ROLE}}", $role)
 
+$sub = Get-CursorTerminalAgentSubcommand
 Write-Host "Starting Cursor CLI agent (auto) in worktree — no terminal typing required." -ForegroundColor Yellow
-Write-Host "CLI: $cliExe" -ForegroundColor DarkGray
+Write-Host "CLI: $cliExe  ($sub …)" -ForegroundColor DarkGray
 Write-Host ""
 
-& $cliExe @("chat", $promptText)
+& $cliExe @($sub, $promptText)
 exit $LASTEXITCODE

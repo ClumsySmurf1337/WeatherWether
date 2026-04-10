@@ -23,8 +23,9 @@ if (-not $exe) {
 }
 
 Set-Location -LiteralPath $resolvedWork
-Write-Host "Running: $exe chat <prompt> in $resolvedWork"
+$sub = Get-CursorTerminalAgentSubcommand
+Write-Host "Running: $exe $sub <prompt> in $resolvedWork"
+Write-Host "(Subcommand from CURSOR_CLI_AGENT_SUBCOMMAND, default agent — not 'chat'; see tools/tasks/cursor-cli.ps1.)" -ForegroundColor DarkGray
 
-# Primary: `cursor chat "<prompt>"` (Cursor CLI). Legacy: `agent chat "<prompt>"`.
-& $exe @("chat", $prompt)
+& $exe @($sub, $prompt)
 exit $LASTEXITCODE

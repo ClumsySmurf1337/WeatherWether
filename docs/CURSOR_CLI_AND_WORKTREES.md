@@ -15,9 +15,9 @@ Official install (see [Cursor CLI installation](https://cursor.com/docs/cli/inst
 
 Ensure **`cursor`** is on `PATH`, or set **`CURSOR_CLI_BIN`** to the full path of `cursor.exe`. If you still use the legacy shim, **`CURSOR_AGENT_BIN`** / `agent` is used as a fallback.
 
-Then one command can open **multiple** terminals that each run **`cursor chat`** (via **`tools/tasks/run-cursor-chat.ps1`**) with a generated prompt — see **`npm run cursor:session:apply -- -SpawnAgentCli`**.
+Then one command can open **multiple** terminals that each run **`cursor agent "<prompt>"`** (via **`tools/tasks/run-cursor-chat.ps1`**) with a generated prompt — see **`npm run cursor:session:apply -- -SpawnAgentCli`**. Cursor 3.x uses the **`agent`** subcommand; **`chat`** is not a CLI subcommand (passing `chat` behaves like stray path args). Override with **`CURSOR_CLI_AGENT_SUBCOMMAND`** if Cursor changes the name.
 
-If your CLI uses different subcommands, run **`cursor --help`** and edit **`tools/tasks/run-cursor-chat.ps1`** (the `& $exe @("chat", $prompt)` line).
+If your CLI uses a different subcommand than **`agent`**, set **`CURSOR_CLI_AGENT_SUBCOMMAND`** or edit **`tools/tasks/run-cursor-chat.ps1`** (the `& $exe @($sub, $prompt)` line).
 
 ## Merge conflicts → QA Cursor session
 
@@ -25,7 +25,7 @@ If your CLI uses different subcommands, run **`cursor --help`** and edit **`tool
 npm run qa:repair-merge -- -RepoPath "D:\Agents\WeatherWether\wt-agent-cursor-lane-1"
 ```
 
-Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`git merge origin/main`** and, on conflict, launches **`cursor chat`** with **`tools/tasks/prompts/qa-merge-conflict-repair.md`**.
+Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`git merge origin/main`** and, on conflict, launches **`cursor agent`** with **`tools/tasks/prompts/qa-merge-conflict-repair.md`**.
 
 ## One- or two-command local flow
 

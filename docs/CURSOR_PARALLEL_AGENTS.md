@@ -49,7 +49,7 @@ Above **3–4 parallel implementation agents**, integration tax rises. Keep a **
 2. **Weather Whether CI** must pass on GitHub.
 3. **QA / you** run **`npm run qa:pr -- -PullRequestNumber <N>`** locally (`gh` + `validate.ps1` + merge + `linear:complete-from-pr`). See **`docs/GITHUB_AUTOMERGE.md`**.
 
-**Cursor CLI:** install the **`cursor`** CLI ([Cursor CLI docs](https://cursor.com/docs/cli/installation)), then **`npm run cursor:session:apply -- -CreateWorktrees -SpawnAgentCli`** to open one terminal per lane running **`cursor chat`** (via **`run-cursor-chat.ps1`**) — no copy-paste into the IDE chat. Details: **`docs/CURSOR_CLI_AND_WORKTREES.md`** and [DEV: worktrees + parallel agents](https://dev.to/arifszn/git-worktrees-the-power-behind-cursors-parallel-agents-19j1).
+**Cursor CLI:** install the **`cursor`** CLI ([Cursor CLI docs](https://cursor.com/docs/cli/installation)), then **`npm run cursor:session:apply -- -CreateWorktrees -SpawnAgentCli`** to open one terminal per lane running **`cursor agent`** (via **`run-cursor-chat.ps1`**) — no copy-paste into the IDE chat. Details: **`docs/CURSOR_CLI_AND_WORKTREES.md`** and [DEV: worktrees + parallel agents](https://dev.to/arifszn/git-worktrees-the-power-behind-cursors-parallel-agents-19j1).
 
 **Not automated:** conflict resolution — fix in the branch/worktree before **`qa:pr`** can merge.
 
