@@ -50,6 +50,7 @@ Test-GhCli
 
 if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
     Write-Host "=== Pre-flight: lane worktrees that need ship (lanes $($PreflightShipLaneIndexes -join ', ')) ===`n" -ForegroundColor Cyan
+    $rolesForMarker = @("gameplay-programmer", "ui-developer", "level-designer")
     foreach ($laneIdx in $PreflightShipLaneIndexes) {
         $wtPath = Join-Path $AgentRoot "wt-agent-cursor-lane-$laneIdx"
         if (-not (Test-Path -LiteralPath $wtPath)) {
@@ -66,6 +67,28 @@ if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
         if (-not $st.NeedsShip) {
             Write-Host "Lane $laneIdx : OK (nothing to ship)." -ForegroundColor DarkGray
             continue
+        }
+        $markerPath = Join-Path $wtPath ".weather-lane-issue.txt"
+        $markerOk = $false
+        if (Test-Path -LiteralPath $markerPath) {
+            $mt = (Get-Content -LiteralPath $markerPath -Raw).Trim()
+            if ($mt -match '^[A-Za-z]+-\d+$') {
+                $markerOk = $true
+            }
+        }
+        if (-not $markerOk) {
+            $role = $rolesForMarker[($laneIdx - 1) % $rolesForMarker.Length]
+            Write-Host "Lane $laneIdx : refreshing .weather-lane-issue.txt via resume-pickup (role=$role)..." -ForegroundColor DarkYellow
+            Push-Location -LiteralPath $mainResolved
+            try {
+                npm run linear:resume-pickup -- --role=$role --apply "--worktree-marker=$markerPath"
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Warning "resume-pickup exited $LASTEXITCODE for lane $laneIdx — lane-ship will try commit message or may fail without -LinearId."
+                }
+            }
+            finally {
+                Pop-Location
+            }
         }
         Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); unpushed=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
         & "$repoRoot\tools\tasks\lane-ship.ps1" -LaneIndex $laneIdx -MainRepoRoot $mainResolved -AgentRoot $AgentRoot

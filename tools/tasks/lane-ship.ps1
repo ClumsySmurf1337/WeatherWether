@@ -38,14 +38,31 @@ if (-not (Test-Path -LiteralPath $WorktreePath)) {
     throw "Worktree not found: $WorktreePath"
 }
 
+$markerFile = Join-Path $WorktreePath ".weather-lane-issue.txt"
 if ([string]::IsNullOrWhiteSpace($LinearId)) {
-    $markerFile = Join-Path $WorktreePath ".weather-lane-issue.txt"
     if (Test-Path -LiteralPath $markerFile) {
         $LinearId = (Get-Content -LiteralPath $markerFile -Raw).Trim()
     }
 }
 if ($LinearId -notmatch '^[A-Za-z]+-\d+$') {
-    throw "No Linear issue id: pass -LinearId WEA-123, or run lane terminal so resume-pickup writes .weather-lane-issue.txt in the worktree (got: '$LinearId')."
+    Push-Location -LiteralPath $WorktreePath
+    try {
+        git rev-parse HEAD *>$null
+        if ($LASTEXITCODE -eq 0) {
+            $subj = git log -1 --pretty=%s 2>$null
+            if ($subj -match '\b([A-Za-z]+-\d+)\b') {
+                $LinearId = $Matches[1].ToUpper()
+                Write-Host "Linear id from last commit message: $LinearId" -ForegroundColor DarkCyan
+                [System.IO.File]::WriteAllText($markerFile, "$LinearId`n")
+            }
+        }
+    }
+    finally {
+        Pop-Location
+    }
+}
+if ($LinearId -notmatch '^[A-Za-z]+-\d+$') {
+    throw "No Linear issue id: pass -LinearId WEA-123, run resume-pickup with --worktree-marker, or use a commit message containing WEA-### (got: '$LinearId')."
 }
 $LinearId = $LinearId.ToUpper()
 
