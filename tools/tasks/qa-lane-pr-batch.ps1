@@ -11,7 +11,11 @@ param(
     [switch]$SkipChangelog,
     [int[]]$PreflightShipLaneIndexes = @(1, 2, 3),
     [switch]$SkipPreflightShip,
-    [string]$AgentRoot = ""
+    [string]$AgentRoot = "",
+    [switch]$ReconcileLinearFromMergedLanePrs,
+    [int]$ReconcileLinearMergedWithinDays = 30,
+    [int]$ChecksPollMaxSeconds = 900,
+    [int]$ChecksPollIntervalSeconds = 15
 )
 
 Set-StrictMode -Version Latest
@@ -201,24 +205,7 @@ foreach ($p in $lanePrs) {
         }
     }
 
-    Set-Location $repoRoot
-    git fetch origin --prune 2>$null
-    $onBase = $false
-    foreach ($b in @("main", "master")) {
-        git show-ref --verify --quiet "refs/heads/$b" 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            git checkout $b
-            if ($LASTEXITCODE -eq 0) { $onBase = $true; break }
-        }
-        git show-ref --verify --quiet "refs/remotes/origin/$b" 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            git checkout -B $b "origin/$b"
-            if ($LASTEXITCODE -eq 0) { $onBase = $true; break }
-        }
-    }
-    if ($onBase) {
-        git pull --ff-only 2>$null
-    }
+    & "$repoRoot\tools\tasks\git-sync-main.ps1" -RepoRoot $repoRoot -Reason "before QA handoff PR #$n"
 
     $splat = @{
         PullRequestNumber = $n
@@ -231,6 +218,8 @@ foreach ($p in $lanePrs) {
     }
     if ($NoMerge) { $splat.NoMerge = $true }
     $splat.AgentRoot = $AgentRoot
+    $splat.ChecksPollMaxSeconds = $ChecksPollMaxSeconds
+    $splat.ChecksPollIntervalSeconds = $ChecksPollIntervalSeconds
 
     & "$repoRoot\tools\tasks\qa-pr-handoff-local.ps1" @splat
     if ($LASTEXITCODE -ne 0) {
@@ -238,16 +227,7 @@ foreach ($p in $lanePrs) {
     }
     if (-not $NoMerge) {
         Set-Location $repoRoot
-        foreach ($baseName in @("main", "master")) {
-            git show-ref --verify --quiet "refs/heads/$baseName" 2>$null
-            if ($LASTEXITCODE -eq 0) {
-                git checkout $baseName
-                if ($LASTEXITCODE -eq 0) {
-                    git pull --ff-only 2>$null
-                    break
-                }
-            }
-        }
+        # main already synced in qa-pr-handoff-local after gh pr merge; changelog only here
         Append-ChangelogLaneEntry -PrNumber $n -HeadRef $p.headRefName -Title $p.title
     }
     Write-Host ""
@@ -262,6 +242,11 @@ if ($SyncWorktreesAfter) {
 if (-not $SkipResetLaneBranches) {
     Write-Host "`n=== Resetting lane worktrees to fresh branches from main ===`n"
     & "$repoRoot\tools\tasks\lane-worktrees-reset-for-next-cycle.ps1"
+}
+
+if ($ReconcileLinearFromMergedLanePrs) {
+    Write-Host "`n=== Linear catch-up (merged lane PRs in last $ReconcileLinearMergedWithinDays days) ===`n"
+    & "$repoRoot\tools\tasks\linear-complete-from-merged-prs.ps1" -WithinDays $ReconcileLinearMergedWithinDays
 }
 
 Write-Host ""

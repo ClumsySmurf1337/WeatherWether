@@ -65,6 +65,11 @@ async function main(): Promise<void> {
       continue;
     }
     const entity = await client.issue(node.id);
+    const state = await entity.state;
+    if (state?.id === doneStateId) {
+      console.log(`${node.identifier} already in Done; skip.`);
+      continue;
+    }
     await entity.update({ stateId: doneStateId });
     console.log(`Moved ${node.identifier} to Done.`);
   }
