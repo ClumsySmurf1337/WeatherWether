@@ -48,7 +48,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 
 ## Daily Commands
 
-- `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
+- `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — prerequisites, `npm ci`, Linear PM preview, Godot validation; from **Cursor’s integrated terminal** it also refreshes assignments, syncs lane worktrees, and prints **Tasks → All lane terminals** (use **`npm run daily:full:lean`** or **`-SkipEditorLanePrep`** to skip that). **`npm run daily:full:apply`** applies producer; see `docs/DAILY.md`
 - `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor-agent`** (fallback: **`cursor agent`**) per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
 - `npm run cursor:resume:editor` — recover after interruption **without** extra PowerShell popups: refresh assignments, sync worktrees, ensure lane worktrees, then run **Tasks → Weather Whether — All lane terminals (parallel)** in this window
 - `npm run cursor:resume` — same prep, but spawns **one external `pwsh` per lane** running `cursor-agent` (use if you prefer separate windows)

@@ -40,7 +40,7 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 | **Tests + level validation** (local “did the project build?”) | `pwsh ./tools/tasks/validate.ps1` |
 | **Godot import + build scaffold** (export presets still in Godot UI) | `pwsh ./tools/tasks/build.ps1` |
 | **Run the game** | `pwsh ./tools/tasks/launch.ps1` |
-| **Full health pass** (npm ci + Linear PM dry-run + validate) | `npm run daily:full` |
+| **Full health pass** (npm ci + Linear PM dry-run + validate + **lane prep** when run from Cursor’s terminal) | `npm run daily:full` |
 | **Resume lanes — terminals inside this Cursor window** (neatest) | `npm run cursor:resume:editor` → then **Tasks: Run Task** → **Weather Whether — All lane terminals (parallel)** |
 | **Resume lanes — one external PowerShell window per lane** | `npm run cursor:resume` |
 | **Full PM kickoff — editor terminals** | `npm run cursor:go:editor` → same **All lane terminals** task |
@@ -70,20 +70,24 @@ See `.cursor/commands/cursor-session.md`, `docs/CURSOR_CLI_AND_WORKTREES.md`, an
 **`daily-full.ps1`** runs:
 
 - Prerequisites, D-drive check (lenient unless you pass **`-StrictDdrive`**), **`npm ci`**, Linear **status** + producer **dry-run** (if `.env.local` exists), **Godot import + GUT + level validation**.
+- **When run from a Cursor or VS Code integrated terminal** (or with **`-EditorLaneTerminals`**): **`linear:pm-assignments`**, **`worktrees:sync`**, **`prepare-editor-lane-worktrees.ps1`**, then prints **Tasks → Weather Whether — All lane terminals** so parallel lanes stay **inside this editor**. Use **`-SkipEditorLanePrep`** for Task Scheduler / headless runs that should not touch worktrees (`npm run daily:full:lean`).
 
 **Apply** PM moves in Linear (promote + dispatch) when you are happy with the dry-run:
 
 ```powershell
 pwsh ./tools/tasks/daily-full.ps1 -ApplyProducer
+npm run daily:full:apply
 ```
 
-npm alias (Windows):
+npm aliases:
 
 ```bash
 npm run daily:full
+npm run daily:full:apply
+npm run daily:full:lanes          # force lane prep even outside Cursor terminal
+npm run daily:full:lean           # validate-only tail; no lane prep
+npm run daily:full:apply:lanes    # apply producer + lane prep
 ```
-
-(`package.json` maps this to the same script.)
 
 ---
 
