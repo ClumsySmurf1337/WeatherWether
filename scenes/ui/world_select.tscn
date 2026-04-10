@@ -58,12 +58,10 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(144, 0)
 layout_mode = 2
 
-[node name="Placeholder" type="Label" parent="Margin/VBox"]
+[node name="WorldGrid" type="GridContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.541176, 0.607843, 0.705882, 1)
-theme_override_font_sizes/font_size = 28
-text = "World grid — coming in art pass"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
+columns = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
