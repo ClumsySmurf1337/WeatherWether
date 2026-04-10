@@ -48,7 +48,7 @@ function Test-GhCli {
 
 Write-Host ""
 Write-Host "  WHETHER — QA AGENT (lane PRs)" -ForegroundColor Cyan
-Write-Host "  Preflight: ship stale lane worktrees (validate + Linear verify → PR) → per PR: checks → merge main → validate → merge → Linear Done → sync → lane reset (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
+Write-Host "  Preflight: ship when dirty or ahead of origin/main (validate + Linear verify → PR if diff vs main) → per PR: checks → merge main → validate → merge → Linear Done → sync → lane reset (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
 Write-Host ""
 Test-GhCli
 
@@ -69,7 +69,7 @@ if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
             continue
         }
         if (-not $st.NeedsShip) {
-            Write-Host "Lane $laneIdx : OK (nothing to ship)." -ForegroundColor DarkGray
+            Write-Host "Lane $laneIdx : OK (nothing to ship; ahead-of-main=$($st.CommitsAheadOfMain))." -ForegroundColor DarkGray
             continue
         }
         $markerPath = Join-Path $wtPath ".weather-lane-issue.txt"
@@ -94,7 +94,7 @@ if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
                 Pop-Location
             }
         }
-        Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); unpushed=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
+        Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); ahead-of-main=$($st.CommitsAheadOfMain); vs-tracking=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
         & "$repoRoot\tools\tasks\lane-ship.ps1" -LaneIndex $laneIdx -MainRepoRoot $mainResolved -AgentRoot $AgentRoot
         if ($LASTEXITCODE -ne 0) {
             throw "Pre-flight lane-ship failed for lane $laneIdx (exit $LASTEXITCODE). Fix the worktree, then re-run npm run qa:agent."

@@ -82,7 +82,9 @@ Set-Location -LiteralPath $WorktreePath
 
 $state = Get-LaneWorktreeShipState -RepoPath $WorktreePath
 if (-not $state.NeedsShip) {
-    Write-Host "Nothing to ship — no uncommitted changes and no unpushed commits: $WorktreePath" -ForegroundColor Yellow
+    $mainLbl = if ($null -ne $state.MainRef) { $state.MainRef } else { "origin/main (unresolved)" }
+    Write-Host "Nothing to ship — clean tree and no commits on HEAD that are not already on $mainLbl." -ForegroundColor Yellow
+    Write-Host "  (uncommitted=$($state.HasUncommitted); commits ahead of main=$($state.CommitsAheadOfMain); ahead of tracking remote=$($state.UnpushedCount))" -ForegroundColor DarkGray
     exit 0
 }
 
@@ -94,8 +96,11 @@ $branch = $state.Branch
 if ($state.HasUncommitted) {
     Write-Host "Uncommitted changes in $WorktreePath (branch $branch)." -ForegroundColor Cyan
 }
-if ($state.UnpushedCount -gt 0) {
-    Write-Host "Unpushed commits: $($state.UnpushedCount) (will push / open PR)." -ForegroundColor Cyan
+if ($state.CommitsAheadOfMain -gt 0) {
+    Write-Host "Commits ahead of main: $($state.CommitsAheadOfMain) (will push / open PR if needed)." -ForegroundColor Cyan
+}
+elseif ($state.UnpushedCount -gt 0) {
+    Write-Host "Note: $($state.UnpushedCount) commit(s) ahead of tracking remote but not ahead of main — push may only sync the lane remote to main." -ForegroundColor DarkYellow
 }
 
 if (-not $SkipValidate) {

@@ -12,6 +12,7 @@
     "daily:full:lanes": "pwsh -NoProfile -File tools/tasks/daily-full.ps1 -EditorLaneTerminals",
     "daily:full:lean": "pwsh -NoProfile -File tools/tasks/daily-full.ps1 -SkipEditorLanePrep",
     "daily:full:apply:lanes": "pwsh -NoProfile -File tools/tasks/daily-full.ps1 -ApplyProducer -EditorLaneTerminals",
+    "workflow:simple": "pwsh -NoProfile -File tools/tasks/simple-flow.ps1",
     "cursor:session": "pwsh -NoProfile -File tools/tasks/cursor-autonomous-session.ps1",
     "cursor:session:apply": "pwsh -NoProfile -File tools/tasks/cursor-autonomous-session.ps1 -ApplyProducer",
     "cursor:go": "pwsh -NoProfile -File tools/tasks/cursor-go.ps1",

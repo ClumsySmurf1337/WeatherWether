@@ -101,8 +101,9 @@ if (-not $SkipAutoShip) {
     }
     else {
         Write-Host ""
-        Write-Host "After agent: no uncommitted changes and no unpushed commits — nothing to auto-ship." -ForegroundColor DarkYellow
-        Write-Host "If you expected a PR, the agent may not have saved files; or run: npm run lane:ship:lanes" -ForegroundColor DarkGray
+        Write-Host "After agent: nothing to auto-ship (clean tree, branch not ahead of origin/main)." -ForegroundColor DarkYellow
+        Write-Host "  Detail: commits ahead of main=$($shipState.CommitsAheadOfMain); uncommitted=$($shipState.HasUncommitted); ahead of lane remote=$($shipState.UnpushedCount)." -ForegroundColor DarkGray
+        Write-Host "  If you wanted a new PR: confirm the agent wrote & committed files. For a fresh Linear task use daily with -ApplyProducer (``npm run daily:full:apply:lanes``). To realign branches: ``npm run lane:next-cycle`` or ``npm run worktrees:sync``." -ForegroundColor DarkGray
     }
 }
 

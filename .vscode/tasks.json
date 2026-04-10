@@ -93,6 +93,23 @@
       "problemMatcher": []
     },
     {
+      "label": "Weather Whether — Simple flow (npm: daily+lanes+QA)",
+      "type": "shell",
+      "command": "npm run workflow:simple",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "daily"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Weather Whether — QA agent (lane PRs)",
       "type": "shell",
       "command": "npm run qa:agent",
