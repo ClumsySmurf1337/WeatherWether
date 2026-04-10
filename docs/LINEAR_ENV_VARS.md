@@ -62,7 +62,10 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 | `GITHUB_TOKEN` | For GitHub MCP / future PR automation (repo `contents` + `pull_requests` if auto-merge) |
 | `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (editor wrapper; folder open + fallback terminal agent) |
 | `CURSOR_AGENT_CLI_BIN` | Full path to **`cursor-agent`** if not on PATH (preferred terminal agent for lane / merge scripts) |
-| `CURSOR_AGENT_MODEL` | Model slug for **`cursor-agent --model`** (lanes, **`qa:repair-merge`**). Default in **`cursor-cli.ps1`** is **`claude-4.6-sonnet-medium`** to avoid **Opus** monthly caps; set to **`claude-4.6-opus-high`** (or another slug) when you need it |
+| `CURSOR_AGENT_MODEL` | First model in the **terminal agent chain** (**`cursor-agent --model`**). Default **`claude-4.6-sonnet-medium`**. Ignored as “first” when **`CURSOR_AGENT_MODELS`** is set |
+| `CURSOR_AGENT_MODELS` | Optional **ordered** list (comma or semicolon) — **replaces** the default chain entirely. Example: **`claude-4.6-sonnet-medium,gpt-5.2,composer-2`** |
+| `CURSOR_AGENT_MODEL_FALLBACKS` | Extra models tried after **`CURSOR_AGENT_MODEL`** (comma/semicolon). If **unset**, scripts append built-in fallbacks **`gpt-5.2`**, **`composer-2`** after the primary |
+| `CURSOR_AGENT_MODEL_DISABLE_FALLBACK` | If **`1`** / **`true`**, only **`CURSOR_AGENT_MODEL`** is used (no retry on limits) |
 | `CURSOR_AGENT_TRUST_ARGS` | Space-separated flags passed **before** the prompt so **`cursor-agent`** skips the Workspace Trust prompt (default in scripts: **`--trust`**). Example override: **`--yolo`** |
 | `CURSOR_AGENT_NO_TRUST` | If **`1`** / **`true`**, do **not** auto-append trust flags (you want the interactive trust prompt) |
 | `CURSOR_AGENT_INTERACTIVE` | If **`1`** / **`true`**, same as **`CURSOR_AGENT_NO_TRUST`** (no auto **`--trust`**) |

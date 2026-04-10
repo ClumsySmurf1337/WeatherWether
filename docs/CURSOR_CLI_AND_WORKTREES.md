@@ -19,17 +19,35 @@ Then one command can open **multiple** terminals that each run **`cursor-agent "
 
 Prefer fixing **`PATH`** / **`CURSOR_AGENT_CLI_BIN`** so **`cursor-agent`** resolves. If you only have the editor wrapper, set **`CURSOR_CLI_AGENT_SUBCOMMAND`** for the fallback `cursor <subcommand>` line in **`tools/tasks/cursor-cli.ps1`** / **`run-cursor-chat.ps1`**.
 
-### Terminal agent model (Opus limits, Godot / GDScript)
+### Terminal agent model (limits, fallbacks, Godot / GDScript)
 
-Lane and merge scripts pass **`--model`** from **`Get-CursorAgentModel`** in **`tools/tasks/cursor-cli.ps1`**. Default is **`claude-4.6-sonnet-medium`** — strong on code and much lighter on **Cursor Pro** usage than **`claude-4.6-opus-high`**. For **strict typed GDScript** and deterministic game logic, **Sonnet-class** is usually the right default; reserve **Opus** for rare deep design sessions via **`cursor-agent --model claude-4.6-opus-high`** in the IDE or by setting **`CURSOR_AGENT_MODEL`**.
+Lane and merge scripts invoke **`cursor-agent`** via **`Invoke-CursorTerminalAgent`** in **`tools/tasks/cursor-cli.ps1`**. They pass an ordered **model chain**: try the first slug, and if the process exits non-zero **and** the combined output looks like a **usage cap**, **rate limit**, **unknown model**, or **`not available for your account`**, they automatically try the next slug.
 
-Override for all terminal agents (lanes, **`qa:repair-merge`**, etc.):
+**Defaults (when you do not set env vars):** primary **`CURSOR_AGENT_MODEL`** (default **`claude-4.6-sonnet-medium`**), then built-in fallbacks **`gpt-5.2`**, **`composer-2`** — both are usually cheaper tiers on **Cursor Pro** than **Claude 4.6 Opus**. Slugs must exist for your account; run **`cursor-agent --help`** or check Cursor’s model list and override if a step fails with “unknown model” without a retry.
+
+**Configure the chain (PowerShell, before Tasks / lane scripts):**
 
 ```powershell
-$env:CURSOR_AGENT_MODEL = "claude-4.6-sonnet-medium"   # or another slug from `cursor-agent --help` / Cursor settings
+# Full order (overrides primary + fallbacks):
+$env:CURSOR_AGENT_MODELS = "claude-4.6-sonnet-medium;gpt-5.2;composer-2"
+
+# Or primary + extra fallbacks only (defaults still append gpt + composer if FALLBACKS unset — set FALLBACKS to control):
+$env:CURSOR_AGENT_MODEL = "claude-4.6-sonnet-medium"
+$env:CURSOR_AGENT_MODEL_FALLBACKS = "gpt-5.2-low,gpt-5.2,composer-2-fast"
+
+# Disable auto-fallback (old single-model behavior):
+$env:CURSOR_AGENT_MODEL_DISABLE_FALLBACK = "1"
 ```
 
-If a slug is rejected (“unknown model”), your account or CLI build may use different IDs — pick an available **Sonnet** or **GPT** tier from the CLI help output.
+See **`docs/LINEAR_ENV_VARS.md`** for the variable table.
+
+### GitHub Pro+, `gh`, Codex — same lane harness?
+
+**Not as an automatic swap inside `cursor-agent`.** **`cursor-agent`** only talks to **Cursor’s** model/router. **GitHub Copilot** (Pro+, Business, etc.) uses **different** CLIs and auth (`gh copilot`, editor integration, or API keys) and does **not** plug into **`cursor-agent --model`** unless Cursor exposes a backend slug that maps to that service (then you’d add that slug to **`CURSOR_AGENT_MODELS`** like any other model).
+
+Spawning **extra** “fleet” **PowerShell** windows that run **`gh …`** does not run the same prompt/tools pipeline as this repo’s **`run-lane-terminal.ps1`** (resume-pickup, trust flags, **`validate.ps1`**, **`lane-ship`**). You *can* run **Codex** or **Copilot** **manually** in parallel worktrees for experiments, but that is a **separate** workflow — not something we can wire as a drop-in second engine without a **new** script (different binary, different args, no shared tool-use contract with **`cursor-agent`**).
+
+**Practical split:** use **model chaining** above for all automated lanes; use **GitHub / Codex** in the **IDE** or a **dedicated** terminal when you want that subscription’s strengths; add any **Cursor-supported** slug for those backends into **`CURSOR_AGENT_MODELS`** if Cursor lists it.
 
 ## Merge conflicts → QA Cursor session
 

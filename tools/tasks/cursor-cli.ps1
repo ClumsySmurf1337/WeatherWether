@@ -58,7 +58,7 @@ function Get-CursorAgentAutomationTrustArgs {
     return @("--trust")
 }
 
-# Default model for lane / merge terminal agents. Override via CURSOR_AGENT_MODEL.
+# Primary model when using fallbacks. Override via CURSOR_AGENT_MODEL.
 # Opus hits Pro usage caps quickly; Sonnet is the usual balance for GDScript + repo refactors.
 function Get-CursorAgentModel {
     $m = $env:CURSOR_AGENT_MODEL
@@ -68,14 +68,83 @@ function Get-CursorAgentModel {
     return "claude-4.6-sonnet-medium"
 }
 
+function Split-CursorAgentModelList([string]$Raw) {
+    $Raw -split '[,;]' | ForEach-Object { $_.Trim() } | Where-Object { $_.Length -gt 0 }
+}
+
+# Ordered models for cursor-agent: try each until success, or until a non-retryable failure.
+# CURSOR_AGENT_MODELS overrides (comma/semicolon list). Else CURSOR_AGENT_MODEL + CURSOR_AGENT_MODEL_FALLBACKS + built-ins.
+# CURSOR_AGENT_MODEL_DISABLE_FALLBACK=1 — only the primary (Get-CursorAgentModel).
+function Get-CursorAgentModelChain {
+    if ($env:CURSOR_AGENT_MODEL_DISABLE_FALLBACK -eq "1" -or $env:CURSOR_AGENT_MODEL_DISABLE_FALLBACK -eq "true") {
+        return ,@( (Get-CursorAgentModel) )
+    }
+    $explicit = $env:CURSOR_AGENT_MODELS
+    if ($null -ne $explicit -and $explicit.Trim().Length -gt 0) {
+        return [string[]](Split-CursorAgentModelList $explicit)
+    }
+    $chain = New-Object System.Collections.ArrayList
+    [void]$chain.Add((Get-CursorAgentModel))
+    $fb = $env:CURSOR_AGENT_MODEL_FALLBACKS
+    if ($null -ne $fb -and $fb.Trim().Length -gt 0) {
+        foreach ($x in (Split-CursorAgentModelList $fb)) {
+            [void]$chain.Add($x)
+        }
+    }
+    else {
+        foreach ($x in @("gpt-5.2", "composer-2")) {
+            [void]$chain.Add($x)
+        }
+    }
+    $out = New-Object System.Collections.ArrayList
+    $seen = @{}
+    foreach ($x in $chain) {
+        $k = [string]$x
+        if (-not $seen.ContainsKey($k)) {
+            $seen[$k] = $true
+            [void]$out.Add($k)
+        }
+    }
+    return [string[]]$out.ToArray()
+}
+
+function Test-CursorAgentRetryableFailure([string]$CombinedOutput, [int]$ExitCode) {
+    if ($ExitCode -eq 0) {
+        return $false
+    }
+    $t = $CombinedOutput
+    if ([string]::IsNullOrWhiteSpace($t)) {
+        return $false
+    }
+    $patterns = @(
+        'usage limit',
+        "you've hit your",
+        'hit your usage',
+        'rate limit',
+        'rate_limit',
+        '\b429\b',
+        'too many requests',
+        'Unknown model',
+        'unknown model',
+        'not available for your account',
+        'spend limit',
+        '\bquota\b'
+    )
+    foreach ($p in $patterns) {
+        if ($t -imatch $p) {
+            return $true
+        }
+    }
+    return $false
+}
+
 # `Get-CursorAgentAutomationTrustArgs` may return a [string] scalar (PowerShell unrolls single-element `return @("--trust")`).
 # `$scalar + @($prompt)` coerces the RHS and concatenates as strings → `--trustYou are...`. Build argv with an ArrayList instead.
-function Build-CursorAgentArgvWithTrust([string]$Prompt) {
+function Build-CursorAgentArgvWithTrustForModel([string]$Prompt, [string]$Model) {
     $list = New-Object System.Collections.ArrayList
-    $model = Get-CursorAgentModel
-    if ($model.Length -gt 0) {
+    if ($null -ne $Model -and $Model.Trim().Length -gt 0) {
         [void]$list.Add("--model")
-        [void]$list.Add($model)
+        [void]$list.Add($Model.Trim())
     }
     $raw = Get-CursorAgentAutomationTrustArgs
     if ($null -ne $raw) {
@@ -83,7 +152,8 @@ function Build-CursorAgentArgvWithTrust([string]$Prompt) {
             foreach ($x in $raw) {
                 [void]$list.Add([string]$x)
             }
-        } else {
+        }
+        else {
             [void]$list.Add([string]$raw)
         }
     }
@@ -91,13 +161,41 @@ function Build-CursorAgentArgvWithTrust([string]$Prompt) {
     return [string[]]$list.ToArray()
 }
 
+function Build-CursorAgentArgvWithTrust([string]$Prompt) {
+    return (Build-CursorAgentArgvWithTrustForModel -Prompt $Prompt -Model (Get-CursorAgentModel))
+}
+
 function Invoke-CursorTerminalAgent([string]$Prompt) {
     $agentExe = Get-CursorAgentCliExecutable
     if ($agentExe) {
-        $cursorAgentArgv = Build-CursorAgentArgvWithTrust $Prompt
-        Write-Host "  Model: $(Get-CursorAgentModel)" -ForegroundColor DarkGray
-        & $agentExe @cursorAgentArgv
-        return $LASTEXITCODE
+        $chain = Get-CursorAgentModelChain
+        $attempt = 0
+        $lastExit = 1
+        foreach ($model in $chain) {
+            $attempt++
+            $cursorAgentArgv = Build-CursorAgentArgvWithTrustForModel -Prompt $Prompt -Model $model
+            Write-Host "  Model ($attempt/$($chain.Length)): $model" -ForegroundColor DarkGray
+            $buf = New-Object System.Collections.ArrayList
+            & $agentExe @cursorAgentArgv 2>&1 | ForEach-Object {
+                $line = if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.ToString() } else { "$_" }
+                [void]$buf.Add($line)
+                Write-Host $line
+            }
+            $lastExit = $LASTEXITCODE
+            $text = ($buf -join "`n")
+            if ($lastExit -eq 0) {
+                return 0
+            }
+            if (-not (Test-CursorAgentRetryableFailure $text $lastExit)) {
+                Write-Host "  Agent failed (exit $lastExit); not retrying with another model." -ForegroundColor Red
+                return $lastExit
+            }
+            if ($attempt -lt $chain.Length) {
+                Write-Host "  Retrying with next model in chain..." -ForegroundColor Yellow
+            }
+        }
+        Write-Host "  All models in chain exhausted (last exit $lastExit)." -ForegroundColor Red
+        return $lastExit
     }
     $exe = Get-CursorCliExecutable
     if (-not $exe) {
