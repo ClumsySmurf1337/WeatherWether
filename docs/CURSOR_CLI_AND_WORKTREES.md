@@ -3,7 +3,7 @@
 ## How this fits Whether
 
 - **Git worktrees** give each agent an isolated checkout (shared object DB). That matches Cursor’s parallel-agent model and the classic workflow described for Cursor + worktrees ([DEV: Git worktrees and parallel agents](https://dev.to/arifszn/git-worktrees-the-power-behind-cursors-parallel-agents-19j1)).
-- **This repo adds:** Linear **producer/dispatch/pickup**, WIP caps, **`validate.ps1`**, and a **local QA handoff** script — complementary to worktrees, not a replacement.
+- **This repo adds:** Linear **producer/dispatch/resume-pickup**, WIP caps, **`validate.ps1`**, and a **local QA handoff** script — complementary to worktrees, not a replacement.
 - **DEV article vs our scripts:** The article explains *why* worktrees; our **`new-agent-worktree.ps1`**, **`sync-agent-worktrees.ps1`**, and **`cursor-autonomous-session.ps1`** automate *your* paths and lanes. Use both.
 
 ## Cursor Agent CLI (terminal, no paste into the IDE chat)
@@ -31,7 +31,11 @@ Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`gi
 
 1. **Start lanes (PM + optional agent spawn):**  
    `npm run cursor:session:apply -- -CreateWorktrees -SpawnAgentCli`  
-   Optional: **`-SyncWorktrees`** before pickup to merge **`origin/main`** into each lane.
+   Optional: **`-SyncWorktrees`** before resume/pickup to merge **`origin/main`** into each lane.
+
+Recovery after interruption/shutdown:
+
+- `npm run cursor:resume` (refresh PM assignments, sync worktrees, relaunch lanes; each lane runs `linear:resume-pickup` so In Progress work is continued first).
 
 2. **After a PR exists and GitHub CI is green:** local QA (or you) runs:  
    `npm run qa:pr -- -PullRequestNumber <N>`  

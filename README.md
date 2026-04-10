@@ -50,13 +50,17 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 
 - `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
 - `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor chat`** per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
+- `npm run cursor:resume` — recover after interruption; refresh assignments, sync worktrees, relaunch lanes using `linear:resume-pickup`
 - `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor chat`**)
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
-- `npm run linear:pm-organize -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + DeedWise-style per-role assignment markdown
+- `npm run linear:pm-organize -- --apply` / `npm run linear:pm-feed-todo -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + Todo queue fill + DeedWise-style per-role assignment markdown
 - `npm run linear:plan-deps` — generate dependency + file-scope plan for non-overlapping lanes
 - `npm run linear:apply-deps -- --apply` — write real Linear `blocks` relations from dependency heuristics
 - `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` — force-start first role issue (Todo first, otherwise Backlog) for build testing
+- `npm run linear:kickoff-lanes -- --apply` — force-start one issue each for gameplay/UI/level lanes
+- `npm run cursor:go` — full kickoff (PM prepare + dependency edges + Todo feed + lane kickoff + session launch)
+- `npm run linear:resume-pickup -- --role=gameplay-programmer --apply` — resume existing in-progress lane work first, otherwise claim a Todo issue
 - `npm run worktrees:sync` — merge `origin/main` into each `wt-*` under the agent root
 - `tools/tasks/daily.ps1` quick health/status checks
 - `tools/tasks/build.ps1` local build/export workflow

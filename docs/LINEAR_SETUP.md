@@ -49,7 +49,7 @@ Linear teams often hit an **active issue ceiling** (~250). This repo caps and ba
 - `LINEAR_SEED_BATCH_MAX` — max new issues per seed run.
 - `LINEAR_PROMOTE_BATCH_MAX` — max Backlog → Todo per `linear:promote` run.
 - `LINEAR_MAX_IN_PROGRESS` — max **In Progress** count before `linear:dispatch` stops pulling from Todo (default **3**).
-- `LINEAR_DISPATCH_ROLES` — comma-separated roles for dispatch (default: gameplay, UI, level-design, art — not `producer` / `qa-agent`; use `linear:pickup` for those).
+- `LINEAR_DISPATCH_ROLES` — comma-separated roles for dispatch (default: gameplay, UI, level-design, art — not `producer` / `qa-agent`; use `linear:resume-pickup` for those).
 
 If **`npm run linear:status`** shows **headroom 0**, `linear:promote` will not move Backlog → Todo until you complete/cancel issues or adjust **`LINEAR_ACTIVE_ISSUE_CAP`** (documented in `LINEAR_ENV_VARS.md`).
 
@@ -90,6 +90,7 @@ Then run PM ordering + assignment files:
 
 ```powershell
 npm run linear:pm-organize -- --apply
+npm run linear:pm-feed-todo -- --apply
 npm run linear:pm-assignments
 ```
 
@@ -97,6 +98,14 @@ Or all-in-one:
 
 ```powershell
 npm run linear:pm-prepare
+```
+
+To auto-fill Todo by PM phase order (foundation-first) up to a queue target:
+
+```powershell
+npm run linear:pm-feed-todo -- --apply
+# optional target override
+npm run linear:pm-feed-todo -- --apply --target=12
 ```
 
 ## Dry Run
@@ -142,7 +151,7 @@ npm run linear:dispatch -- --apply
 Worker pickup by role:
 
 ```powershell
-npm run linear:pickup -- --role=gameplay-programmer --apply
+npm run linear:resume-pickup -- --role=gameplay-programmer --apply
 ```
 
 Supported roles:

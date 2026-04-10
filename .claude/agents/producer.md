@@ -12,7 +12,7 @@ Primary responsibilities:
 2. **Keep the backlog ordered** against the GDD spine using **`pm-phase-plan.json`** (`npm run linear:pm-organize`) — foundation / core / mechanics before levels and UI.
 3. **Auto-assign** unassigned **Todo + Backlog** issues by **role** (assignee UUID env vars) when you run organize with `--apply`.
 4. **Write assignment handoffs** (DeedWise-style) with `npm run linear:pm-assignments` → `assignments/generated/<role>.md`.
-5. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:pickup`).
+5. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:resume-pickup`).
 6. Track blockers, stalled tickets, and scope creep.
 7. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
 

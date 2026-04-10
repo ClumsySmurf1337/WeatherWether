@@ -152,7 +152,7 @@ async function main(): Promise<void> {
   lines.push("## Notes");
   lines.push("");
   lines.push("- This is a planning artifact; it does not write Linear relation edges yet.");
-  lines.push("- Use it to avoid overlap and choose next lane claims before `linear:pickup --apply`.");
+  lines.push("- Use it to avoid overlap and choose next lane claims before `linear:resume-pickup --apply`.");
 
   const outDir = resolve(process.cwd(), "assignments/generated");
   mkdirSync(outDir, { recursive: true });

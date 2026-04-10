@@ -20,14 +20,14 @@ This doc is the **single operator contract**: what runs once a day, how **PM** u
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  PARALLEL BUILD (local by default)                               │
-│  One Cursor window per lane = git worktree + `linear:pickup`      │
+│  One Cursor window per lane = git worktree + `linear:resume-pickup`│
 │  Cursor Cloud is optional; not self-hosted.                      │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 1. **DAILY** does **not** replace humans entirely: it **aligns** health checks and surfaces **what** Linear says is ready.  
 2. **PM in Linear** (producer automation + your judgment) **moves** issues and **assigns** work so the board matches capacity.  
-3. **Agents** (you + AI in Cursor) **build in parallel** by using **separate folders** (worktrees) and **non-overlapping scopes** — each lane runs `linear:pickup -- --role=... --apply` in its own window so different issues go **In Progress** without editing the same files.
+3. **Agents** (you + AI in Cursor) **build in parallel** by using **separate folders** (worktrees) and **non-overlapping scopes** — each lane runs `linear:resume-pickup -- --role=... --apply` so shutdowns resume existing **In Progress** work before claiming new Todo.
 
 Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes: [CURSOR_PARALLEL_AGENTS.md](CURSOR_PARALLEL_AGENTS.md).
 
@@ -116,7 +116,7 @@ pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/test-lane
 **3. In each window**, claim **one** issue for that lane’s role:
 
 ```powershell
-npm run linear:pickup -- --role=gameplay-programmer --apply
+npm run linear:resume-pickup -- --role=gameplay-programmer --apply
 ```
 
 Roles: `producer`, `gameplay-programmer`, `ui-developer`, `level-designer`, `qa-agent`, `art-pipeline`.
@@ -135,9 +135,13 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | PM phase order + auto-assign preview/apply | `npm run linear:pm-organize` / `npm run linear:pm-organize -- --apply` |
 | PM label generation + backfill | `npm run linear:label-backfill -- --apply` |
 | PM assignment markdown (per role) | `npm run linear:pm-assignments` → `assignments/generated/` |
+| PM fill Todo from Backlog by phase order | `npm run linear:pm-feed-todo -- --apply` (`--target=<N>` optional) |
 | PM dependency + file-scope plan | `npm run linear:plan-deps` → `assignments/generated/dependency-scope-plan.md` |
 | Apply dependency edges in Linear (blocks relations) | `npm run linear:apply-deps` (dry-run) / `npm run linear:apply-deps -- --apply` |
 | Kick off first build issue by role | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` |
+| Kick off default 3 lanes (gameplay/ui/level) | `npm run linear:kickoff-lanes -- --apply` |
+| One command kickoff (prepare+deps+todo+lanes+session) | `npm run cursor:go` (add `-- -SkipSessionLaunch` to prep only) |
+| Resume after interruption/shutdown | `npm run cursor:resume` |
 | PM all-in-one prep (bootstrap + labels + organize + assignments) | `npm run linear:pm-prepare` |
 | Promote backlog only | `npm run linear:promote -- --apply` |
 | Dispatch only | `npm run linear:dispatch -- --apply` |

@@ -25,3 +25,21 @@ Sync all `wt-*` worktrees with `main`:
 ```powershell
 npm run worktrees:sync
 ```
+
+One-command kickoff (PM prepare + dependency edges + Todo feed + lane kickoff + session launch):
+
+```powershell
+npm run cursor:go
+```
+
+Resume after shutdown/interruption (rebuild handoffs + relaunch resume-first lanes):
+
+```powershell
+npm run cursor:resume
+```
+
+Prep only (no session launch):
+
+```powershell
+npm run cursor:go -- -SkipSessionLaunch
+```

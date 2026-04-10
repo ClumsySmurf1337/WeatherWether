@@ -50,7 +50,7 @@ Linear enforces a **maximum number of open/active issues** on many plans (often 
 | `LINEAR_SEED_BATCH_MAX` | `40` | Max **new** issues per `linear:seed` run |
 | `LINEAR_PROMOTE_BATCH_MAX` | `25` | Max issues moved **Backlog → Todo** per `linear:promote` run |
 | `LINEAR_MAX_IN_PROGRESS` | `3` | Max issues in **In Progress** before `linear:dispatch` stops moving **Todo → In Progress** (implementation WIP) |
-| `LINEAR_DISPATCH_ROLES` | (see below) | Comma-separated roles auto-dispatched. Default: `gameplay-programmer,ui-developer,level-designer,art-pipeline` (**excludes** `producer` and `qa-agent`; use `linear:pickup` for those) |
+| `LINEAR_DISPATCH_ROLES` | (see below) | Comma-separated roles auto-dispatched. Default: `gameplay-programmer,ui-developer,level-designer,art-pipeline` (**excludes** `producer` and `qa-agent`; use `linear:resume-pickup` for those) |
 
 Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGRESS` to `4` if you routinely run four dev lanes.
 
@@ -63,7 +63,7 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 | `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (parallel lanes + `qa:repair-merge`) |
 | `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable |
 | `LINEAR_PM_AUTO_ASSIGN` | If `false`, `linear:pm-organize -- --apply` skips setting assignees (priorities still update unless `--assign-only`) |
-| `LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER` | Default `true`. If role/default assignee IDs are missing, assign to the API-key user for `linear:dispatch`, `linear:pickup`, and `linear:pm-organize` |
+| `LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER` | Default `true`. If role/default assignee IDs are missing, assign to the API-key user for `linear:dispatch`, `linear:resume-pickup`, and `linear:pm-organize` |
 | `LINEAR_PM_LABEL_BACKFILL_STATE_IDS` | Optional comma-separated extra state IDs for `linear:label-backfill` scan (Todo/Backlog/In Progress are included by default) |
 
 ## Setup helpers

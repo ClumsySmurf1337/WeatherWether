@@ -50,5 +50,5 @@ Write-Host "`n[5/5] Godot validation (import + GUT + levels)"
 
 Write-Host "`n=== DAILY FULL complete ==="
 Write-Host "Next: open parallel lanes — pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/your-lane"
-Write-Host "Then per window: npm run linear:pickup -- --role=<role> --apply"
+Write-Host "Then per window: npm run linear:resume-pickup -- --role=<role> --apply"
 Write-Host "Doc: docs/DAILY.md"

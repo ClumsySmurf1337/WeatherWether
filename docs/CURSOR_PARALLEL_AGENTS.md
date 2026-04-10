@@ -28,7 +28,7 @@
    | QA | `test/`, `scripts/validate_all_levels.gd`, CI |
 
 3. **Linear**  
-   One **In Progress** issue per lane; run `linear:pickup -- --role=... --apply`.
+   One **In Progress** issue per lane; run `linear:resume-pickup -- --role=... --apply` (resume first, then pickup).
 
 ## Cursor Cloud vs local
 
@@ -41,7 +41,7 @@ Use Cursor’s **Cloud Agents** UI (dashboard above) or **multiple local** chats
 
 Above **3–4 parallel implementation agents**, integration tax rises. Keep a **Producer** pass (`linear:producer`) to serialize merges.
 
-`LINEAR_MAX_IN_PROGRESS` (default **3**) and `LINEAR_DISPATCH_ROLES` limit how many **Todo** issues `linear:dispatch` moves to **In Progress** per cycle; **producer** and **qa-agent** work is usually claimed with `linear:pickup` instead.
+`LINEAR_MAX_IN_PROGRESS` (default **3**) and `LINEAR_DISPATCH_ROLES` limit how many **Todo** issues `linear:dispatch` moves to **In Progress** per cycle; **producer** and **qa-agent** work is usually claimed with `linear:resume-pickup` instead.
 
 ## PR → CI → local QA → merge → Linear Done
 

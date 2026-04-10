@@ -17,7 +17,7 @@
 - Keep behavior aligned with `.cursor/rules/*.mdc`.
 - Use repo task scripts in `tools/tasks/` as entry points.
 - Do not bypass validation (`tools/tasks/validate.ps1`) before handoff.
-- Use Linear orchestration scripts for PM loops (`linear:producer`, `linear:dispatch`, `linear:pickup`).
+- Use Linear orchestration scripts for PM loops (`linear:producer`, `linear:dispatch`, `linear:resume-pickup`).
 - Prefer **`godot-full`** ([tugcantopaloglu/godot-mcp](https://github.com/tugcantopaloglu/godot-mcp)) after `tools/install/setup-godot-mcp-full.ps1`; optional **`godot`** (Coding-Solo, `npx -y`). API docs: **https://docs.godotengine.org/en/4.6/** (`docs/GODOT_DOCS_ACCESS.md`).
 - **Parallel agents:** Cursor Cloud is **not** self-hosted. Use **local** git worktrees: `pwsh ./tools/tasks/new-agent-worktree.ps1 -BranchName agent/lane` + `docs/CURSOR_PARALLEL_AGENTS.md`.
 

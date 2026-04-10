@@ -80,7 +80,7 @@ $promptTemplatePath = Join-Path $repoRoot "tools\tasks\prompts\lane-agent-prompt
 $promptTemplate = if (Test-Path $promptTemplatePath) {
     Get-Content -LiteralPath $promptTemplatePath -Raw
 } else {
-    "Run npm run linear:pickup -- --role={{ROLE}} --apply then implement per .claude/CLAUDE.md. Commit with ${teamKey}-### in message."
+    "Run npm run linear:resume-pickup -- --role={{ROLE}} --apply then implement per .claude/CLAUDE.md. Commit with ${teamKey}-### in message."
 }
 
 Write-Host "`n[5] Parallel lanes"
@@ -104,7 +104,7 @@ for ($i = 1; $i -le $LaneCount; $i++) {
     $role = $roles[($i - 1) % $roles.Length]
     Write-Host "Lane $i  ($role)"
     Write-Host "  Folder: $wtPath"
-    Write-Host "  Pickup: npm run linear:pickup -- --role=$role --apply"
+    Write-Host "  Resume/Pickup: npm run linear:resume-pickup -- --role=$role --apply"
     if ($SpawnAgentCli -and $cliExe -and (Test-Path -LiteralPath $wtPath)) {
         $promptText = $promptTemplate.Replace("{{ROLE}}", $role)
         $tempFile = Join-Path ([System.IO.Path]::GetTempPath()) "whether-lane-$i-prompt.md"
@@ -136,7 +136,7 @@ if ($LaunchWTerminal -and -not $SpawnAgentCli) {
                 continue
             }
             $role = $roles[($i - 1) % $roles.Length]
-            $pickup = "npm run linear:pickup -- --role=$role --apply"
+            $pickup = "npm run linear:resume-pickup -- --role=$role --apply"
             if ($wtArgs.Count -gt 2) {
                 $wtArgs += ";"
             }

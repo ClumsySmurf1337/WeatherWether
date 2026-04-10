@@ -24,7 +24,7 @@ This catalog aligns agent roles across Cursor cloud/local and Claude-style role 
 2. Seed backlog with `linear:seed`.
 3. Producer runs `linear:producer` (dry-run).
 4. Producer applies dispatch `linear:producer -- --apply`.
-5. Worker agents claim by role using `linear:pickup -- --role=<role> --apply`.
+5. Worker agents claim by role using `linear:resume-pickup -- --role=<role> --apply` (resumes in-progress first).
 6. Workers execute implementation and validation scripts.
 
 ## Godot MCP (what is wired)
