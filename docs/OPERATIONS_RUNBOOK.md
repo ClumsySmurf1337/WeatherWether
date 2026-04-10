@@ -1,5 +1,13 @@
 # Operations Runbook
 
+## Weather Whether — Cursor lane loop (local, recommended)
+
+See **`docs/DAILY.md`**. Short path:
+
+1. **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents**
+2. **Tasks → Run Task →** **Weather Whether — QA agent (lane PRs)** when PRs are ready to merge
+3. Repeat step 1 (and step 2 as needed)
+
 ## Daily Start
 
 1. `pwsh ./tools/tasks/daily.ps1`

@@ -49,12 +49,18 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 ## Daily Commands
 
 - `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — prerequisites, `npm ci`, Linear PM preview, Godot validation; from **Cursor’s integrated terminal** it also refreshes assignments, syncs lane worktrees, and prints **Tasks → All lane terminals** (use **`npm run daily:full:lean`** or **`-SkipEditorLanePrep`** to skip that). **`npm run daily:full:apply`** applies producer; see `docs/DAILY.md`
+- **Cursor Tasks** (`.vscode/tasks.json`) — **Weather Whether — Daily apply:lanes, then parallel lane agents** runs **`daily:full:apply:lanes`** then **three lane agents in parallel**; each lane terminal **closes when that lane finishes** (`presentation.close`). **Weather Whether — QA agent (lane PRs)** runs **`npm run qa:agent`**. See **`docs/DAILY.md`** for the full loop.
 - `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor-agent`** (fallback: **`cursor agent`**) per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
 - `npm run cursor:resume:editor` — recover after interruption **without** extra PowerShell popups: refresh assignments, sync worktrees, ensure lane worktrees, then run **Tasks → Weather Whether — All lane terminals (parallel)** in this window
 - `npm run cursor:resume` — same prep, but spawns **one external `pwsh` per lane** running `cursor-agent` (use if you prefer separate windows)
 - `npm run cursor:go:editor` — full PM kickoff + same integrated-terminal hint (no external lane popups)
 - `npm run cursor:open-lanes` — optional: open **new Cursor windows** on each lane worktree (does not conflict with resume; skip if you use integrated Tasks)
 - `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor-agent`** / **`cursor agent`**)
+- `npm run lane:ship -- -LaneIndex <1-3>` — commit + push + open PR when a lane worktree has **uncommitted changes or unpushed commits** (Linear id from **`.weather-lane-issue.txt`** after `resume-pickup`, or **`-LinearId WEA-###`**); validates via `validate.ps1 -GodotProjectPath`
+- `npm run lane:ship:lanes` — run **`lane:ship`** for lanes **1–3** (recovery when agents left local commits without a PR)
+- `npm run qa:agent` (alias: **`npm run qa:lane-prs`**) — **Pre-flight:** ship lanes **1–3** if a worktree has uncommitted or unpushed work (opens PRs). Then QA **open** PRs with head **`agent/cursor-lane-*`**: merge main, validate, merge, **Linear Done**, `worktrees:sync`, **`docs/CHANGELOG_LANES.md`**, reset lane branches. **`-SkipPreflightShip`** skips the ship scan; **`-SkipResetLaneBranches`** skips branch reset; **`npm run lane:next-cycle`** if you skipped reset
+- `npm run qa:lane-prs:quick` — same batch but **`-SkipChecksWatch`** (use when CI already green)
+- `npm run lane:next-cycle` — reset each **`wt-agent-cursor-lane-*`** to a new **`agent/cursor-lane-N`** branch from **main** after merges
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
 - `npm run linear:pm-organize -- --apply` / `npm run linear:pm-feed-todo -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + Todo queue fill + DeedWise-style per-role assignment markdown

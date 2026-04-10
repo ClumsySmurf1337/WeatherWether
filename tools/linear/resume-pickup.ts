@@ -1,3 +1,6 @@
+import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
+
 import { LinearClient } from "@linear/sdk";
 
 import { loadLinearEnv } from "./load-env.js";
@@ -22,6 +25,25 @@ function getArg(name: string): string | undefined {
     return undefined;
   }
   return arg.slice(name.length + 3);
+}
+
+async function syncWorktreeMarker(path: string | undefined, identifier: string | null, apply: boolean): Promise<void> {
+  if (!path?.trim() || !apply) {
+    return;
+  }
+  const target = path.trim();
+  if (identifier) {
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, `${identifier}\n`, "utf8");
+    console.log(`  [marker] wrote ${identifier} -> ${target}`);
+    return;
+  }
+  try {
+    await unlink(target);
+    console.log(`  [marker] cleared ${target}`);
+  } catch {
+    // absent file is fine
+  }
 }
 
 function sortByPriorityThenId(a: IssueNode, b: IssueNode): number {
@@ -62,6 +84,7 @@ async function main(): Promise<void> {
   const inProgressStateId = process.env.LINEAR_STATE_IN_PROGRESS_ID;
   const role = (getArg("role") ?? "gameplay-programmer") as AgentRole;
   const apply = process.argv.includes("--apply");
+  const worktreeMarker = getArg("worktree-marker");
 
   if (!apiKey || !teamId || !todoStateId || !inProgressStateId) {
     throw new Error(
@@ -123,6 +146,7 @@ async function main(): Promise<void> {
       );
       console.log("  [updated] set assignee for resumed issue");
     }
+    await syncWorktreeMarker(worktreeMarker, resumeCandidate.identifier, apply);
     console.log("  [resume] continue this In Progress issue.");
     return;
   }
@@ -130,6 +154,7 @@ async function main(): Promise<void> {
   const todoCandidate = todo.filter(roleMatch).sort(sortByPriorityThenId)[0];
   if (!todoCandidate) {
     console.log(`No In Progress or Todo issue available for role=${role}`);
+    await syncWorktreeMarker(worktreeMarker, null, apply);
     return;
   }
 
@@ -150,6 +175,7 @@ async function main(): Promise<void> {
     () => issueEntity.update(updateInput),
     `issue.update.claim:${todoCandidate.identifier}`
   );
+  await syncWorktreeMarker(worktreeMarker, todoCandidate.identifier, apply);
   console.log("  [updated] moved Todo -> In Progress");
 }
 
