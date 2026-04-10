@@ -24,6 +24,8 @@ This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 
 Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done), **`-AgentRoot`** (where **`wt-agent-cursor-lane-*`** live; batch passes this automatically).
 
+**Missed Linear Done** (merge succeeded but **`linear:complete-from-pr`** never ran): run **`npm run linear:complete-merged-lane-prs`** — scans recent **merged** PRs whose head is **`agent/cursor-lane-*`**, then runs **`linear:complete-from-pr`** for each (same **`WEA-###`** rules). Optional: **`npm run qa:agent -- -ReconcileLinearFromMergedLanePrs`** (add **`-ReconcileLinearMergedWithinDays 60`** if needed).
+
 **Batch lane PRs:** **`npm run qa:agent`** (alias **`npm run qa:lane-prs`**) runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**), including a pre-flight ship pass for stale lane worktrees. Use **`npm run lane:ship`** / **`lane:ship:lanes`** when needed; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
 
 ## Optional: GitHub-side automation later

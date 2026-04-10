@@ -11,7 +11,9 @@ param(
     [switch]$SkipChangelog,
     [int[]]$PreflightShipLaneIndexes = @(1, 2, 3),
     [switch]$SkipPreflightShip,
-    [string]$AgentRoot = ""
+    [string]$AgentRoot = "",
+    [switch]$ReconcileLinearFromMergedLanePrs,
+    [int]$ReconcileLinearMergedWithinDays = 30
 )
 
 Set-StrictMode -Version Latest
@@ -236,6 +238,11 @@ if ($SyncWorktreesAfter) {
 if (-not $SkipResetLaneBranches) {
     Write-Host "`n=== Resetting lane worktrees to fresh branches from main ===`n"
     & "$repoRoot\tools\tasks\lane-worktrees-reset-for-next-cycle.ps1"
+}
+
+if ($ReconcileLinearFromMergedLanePrs) {
+    Write-Host "`n=== Linear catch-up (merged lane PRs in last $ReconcileLinearMergedWithinDays days) ===`n"
+    & "$repoRoot\tools\tasks\linear-complete-from-merged-prs.ps1" -WithinDays $ReconcileLinearMergedWithinDays
 }
 
 Write-Host ""
