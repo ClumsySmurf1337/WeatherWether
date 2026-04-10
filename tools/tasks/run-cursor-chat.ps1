@@ -22,7 +22,7 @@ Set-Location -LiteralPath $resolvedWork
 if ($CliExe) {
     $forcedArgs = @($prompt)
     if ($CliExe -like '*cursor-agent*') {
-        $forcedArgs = @(Get-CursorAgentAutomationTrustArgs) + @($prompt)
+        $forcedArgs = Build-CursorAgentArgvWithTrust $prompt
     }
     Write-Host "Running: $CliExe in $resolvedWork (forced -CliExe; trust flags applied if path matches cursor-agent)"
     & $CliExe @forcedArgs

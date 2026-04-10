@@ -58,11 +58,29 @@ function Get-CursorAgentAutomationTrustArgs {
     return @("--trust")
 }
 
+# `Get-CursorAgentAutomationTrustArgs` may return a [string] scalar (PowerShell unrolls single-element `return @("--trust")`).
+# `$scalar + @($prompt)` coerces the RHS and concatenates as strings → `--trustYou are...`. Build argv with an ArrayList instead.
+function Build-CursorAgentArgvWithTrust([string]$Prompt) {
+    $list = New-Object System.Collections.ArrayList
+    $raw = Get-CursorAgentAutomationTrustArgs
+    if ($null -ne $raw) {
+        if ($raw -is [System.Array]) {
+            foreach ($x in $raw) {
+                [void]$list.Add([string]$x)
+            }
+        } else {
+            [void]$list.Add([string]$raw)
+        }
+    }
+    [void]$list.Add($Prompt)
+    return [string[]]$list.ToArray()
+}
+
 function Invoke-CursorTerminalAgent([string]$Prompt) {
     $agentExe = Get-CursorAgentCliExecutable
     if ($agentExe) {
-        $trust = Get-CursorAgentAutomationTrustArgs
-        & $agentExe @($trust + @($Prompt))
+        $cursorAgentArgv = Build-CursorAgentArgvWithTrust $Prompt
+        & $agentExe @cursorAgentArgv
         return $LASTEXITCODE
     }
     $exe = Get-CursorCliExecutable
@@ -75,7 +93,8 @@ function Invoke-CursorTerminalAgent([string]$Prompt) {
     if ($null -ne $cliTrust -and $cliTrust.Trim().Length -gt 0) {
         $extra = @($cliTrust.Trim() -split '\s+')
     }
-    & $exe @(@($sub) + $extra + @($Prompt))
+    $subArr = @($sub)
+    & $exe @($subArr + $extra + @($Prompt))
     return $LASTEXITCODE
 }
 
