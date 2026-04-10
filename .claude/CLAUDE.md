@@ -1,11 +1,23 @@
 # Weather Whether Agent Instructions
 
+## Reading order for new agents
+
+Read these in order before touching code or Linear. They are the source of truth for v2 (sequence model + walking character).
+
+1. `docs/GAME_DESIGN.md` — game design spine (READ FIRST)
+2. `docs/UI_SCREENS.md` — every screen with mockups
+3. `docs/ASSET_MANIFEST.md` — sprite/audio contract
+4. `docs/SPEC_DIFF.md` — what changed and the rewrite plan
+5. `.cursor/rules/weather-game.mdc` — runtime architecture rules
+
+If anything in those five files contradicts an older doc (including `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` or the old `ART_DIRECTION.md`), the v2 spec wins. Flag the contradiction in your PR description so the producer agent can clean up the older doc.
+
 ## Project
 
 - Godot 4.6 + strict typed GDScript.
 - Mobile-first UX and controls.
 - Windows/Steam shipping lane is current priority.
-- **Design spine:** grid + weather **cards** (order + placement) + **six weathers** + **fog/uncertainty** later — `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`.
+- **Design spine:** Sequence model + walking character (Sky). See `docs/GAME_DESIGN.md` v2. The old "Building Whether..." doc is superseded for game design but still valid for toolkit/pipeline info.
 
 ## Path Policy
 
@@ -45,4 +57,3 @@
 - Pipeline gaps: `docs/OPEN_SOURCE_AND_PIPELINE.md`
 
 When you change pipelines, MCP, or CI, update the relevant docs (see `.cursor/rules/whether-development.mdc`).
-

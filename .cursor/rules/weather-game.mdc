@@ -8,11 +8,14 @@ alwaysApply: true
 
 ## Core concept (align all features)
 
-Grid puzzle: **terrain + objects**, **hand of weather cards** (player picks **order** and **grid placement**). Weathers—**Rain, Sun, Frost, Wind, Lightning, Fog**—apply **physical, deterministic** board changes (water/ice/steam, push, fog reveal, chains, etc.). Early levels: **perfect information**; later: **fog / hidden tiles** for real commitment under uncertainty. Full spine: `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` (core concept section).
+Grid puzzle where the player **queues a sequence of weather cards**, then watches a pixel-art **character (Sky)** auto-walk from START to GOAL across the transformed board. Six weather cards (Rain, Sun, Frost, Wind, Lightning, Fog) interact deterministically with 14 terrain types. Win = character reaches goal. Lose = character dies on a death tile or no path exists.
 
-- Mobile-first interactions are mandatory (touch-safe targets and layout).
-- Windows/Steam is current release lane; do not block it on deferred iOS work.
-- Keep weather rules deterministic and testable.
-- Use signal-based communication between systems.
-- Do not place temporary caches or outputs on non-D drives.
+**Authoritative spec:** `docs/GAME_DESIGN.md` v2. Always defer to that doc on disputes.
 
+- Mobile-first. Touch is canonical, mouse/keyboard inherit.
+- Windows/Steam first release lane.
+- Strictly deterministic mechanics. No randomness in puzzle logic.
+- Linear unlock per world (Cut the Rope style).
+- Sequence model: queue → commit → resolve → walk.
+- Pixel art tiles + painterly key art only.
+- One-time premium purchase. No IAP, no ads, no live service.
