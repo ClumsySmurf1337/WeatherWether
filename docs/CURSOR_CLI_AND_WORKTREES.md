@@ -19,6 +19,18 @@ Then one command can open **multiple** terminals that each run **`cursor-agent "
 
 Prefer fixing **`PATH`** / **`CURSOR_AGENT_CLI_BIN`** so **`cursor-agent`** resolves. If you only have the editor wrapper, set **`CURSOR_CLI_AGENT_SUBCOMMAND`** for the fallback `cursor <subcommand>` line in **`tools/tasks/cursor-cli.ps1`** / **`run-cursor-chat.ps1`**.
 
+### Terminal agent model (Opus limits, Godot / GDScript)
+
+Lane and merge scripts pass **`--model`** from **`Get-CursorAgentModel`** in **`tools/tasks/cursor-cli.ps1`**. Default is **`claude-4.6-sonnet-medium`** — strong on code and much lighter on **Cursor Pro** usage than **`claude-4.6-opus-high`**. For **strict typed GDScript** and deterministic game logic, **Sonnet-class** is usually the right default; reserve **Opus** for rare deep design sessions via **`cursor-agent --model claude-4.6-opus-high`** in the IDE or by setting **`CURSOR_AGENT_MODEL`**.
+
+Override for all terminal agents (lanes, **`qa:repair-merge`**, etc.):
+
+```powershell
+$env:CURSOR_AGENT_MODEL = "claude-4.6-sonnet-medium"   # or another slug from `cursor-agent --help` / Cursor settings
+```
+
+If a slug is rejected (“unknown model”), your account or CLI build may use different IDs — pick an available **Sonnet** or **GPT** tier from the CLI help output.
+
 ## Merge conflicts → QA Cursor session
 
 ```powershell

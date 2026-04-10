@@ -58,13 +58,14 @@ function Get-CursorAgentAutomationTrustArgs {
     return @("--trust")
 }
 
-# Default model for lane agents. Override via CURSOR_AGENT_MODEL env var.
+# Default model for lane / merge terminal agents. Override via CURSOR_AGENT_MODEL.
+# Opus hits Pro usage caps quickly; Sonnet is the usual balance for GDScript + repo refactors.
 function Get-CursorAgentModel {
     $m = $env:CURSOR_AGENT_MODEL
     if ($null -ne $m -and $m.Trim().Length -gt 0) {
         return $m.Trim()
     }
-    return "claude-4.6-opus-high"
+    return "claude-4.6-sonnet-medium"
 }
 
 # `Get-CursorAgentAutomationTrustArgs` may return a [string] scalar (PowerShell unrolls single-element `return @("--trust")`).
