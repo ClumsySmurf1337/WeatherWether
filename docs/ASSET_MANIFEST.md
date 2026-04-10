@@ -383,3 +383,22 @@ This is a real but tractable list for a solo dev with AI assistance. About 60% o
 - **No localized art.** Text is rendered in font, never baked into images. (Wordmark is the only exception — and we ship one per supported language eventually.)
 - **No social media assets.** Those live in `marketing/` and are tracked separately by release-ops.
 - **No store-page art.** Steam capsule, Apple screenshots, Google Play feature graphic — release-ops scope.
+
+---
+
+## Mock pack (reference only, not shipped)
+
+Located at assets/mocks/. SVG placeholder mocks for AI agent visual reference
+during implementation. NOT shippable game assets.
+
+| File | Purpose |
+|---|---|
+| README.md | Contract — what mocks are, how agents use them, what they exclude |
+| level_mockup.svg | Full 360x640 mobile gameplay screen layout reference |
+| tiles.svg | All 14 v2 terrain types with locked colors and pattern cues |
+| cards.svg | All 6 weather cards with locked per-card colors |
+| character.svg | All 10 Sky character states (idle, walk, surprised, cheer, drown, burn, fall, electrocute v1.5, freeze v1.5, hidden) |
+
+Updates to the mock pack happen via Linear tickets against assets/mocks/.
+Real pixel art is generated separately per docs/ART_DIRECTION.md and
+docs/ASSET_PROMPTS_GEMINI.md.

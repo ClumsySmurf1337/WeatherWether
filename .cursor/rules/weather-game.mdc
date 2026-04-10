@@ -19,3 +19,25 @@ Grid puzzle where the player **queues a sequence of weather cards**, then watche
 - Sequence model: queue → commit → resolve → walk.
 - Pixel art tiles + painterly key art only.
 - One-time premium purchase. No IAP, no ads, no live service.
+
+## Visual reference (mocks)
+
+When implementing any UI screen (.tscn / .gd in ui/screens/ or ui/popups/),
+first check assets/mocks/ for a layout reference SVG. If a reference exists,
+match its proportions in the Godot scene tree. If no reference exists for
+the screen you're building, ask the producer to add one before proceeding.
+
+Mock pack contents:
+- assets/mocks/level_mockup.svg — full gameplay screen layout (HUD, grid,
+  queue strip, hand, PLAY SEQUENCE button) at 360x640 mobile aspect ratio.
+  Canonical reference for ui/screens/gameplay.tscn.
+- assets/mocks/tiles.svg — all 14 v2 terrain types with locked colors and
+  the colorblind-safe pattern cue per tile.
+- assets/mocks/cards.svg — all 6 weather cards with locked per-card colors.
+- assets/mocks/character.svg — all 10 Sky character states (idle, walk,
+  surprised, cheer, drown, burn, fall, electrocute v1.5, freeze v1.5, hidden).
+- assets/mocks/README.md — the contract for what mocks are and are not.
+
+Mocks are SVG layout references, NOT shippable pixel art. The art-pipeline
+agent generates real 32-color pixel art per docs/ASSET_PROMPTS_GEMINI.md.
+Do not commit the SVG mocks as game assets — they live only in assets/mocks/.

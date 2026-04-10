@@ -8,9 +8,14 @@ Read these in order before touching code or Linear. They are the source of truth
 2. `docs/UI_SCREENS.md` — every screen with mockups
 3. `docs/ASSET_MANIFEST.md` — sprite/audio contract
 4. `docs/SPEC_DIFF.md` — what changed vs the legacy instant-resolve model; rewrite direction and backlog context (file-by-file targets: `docs/CODE_REWRITE_PLAN.md`)
-5. `.cursor/rules/weather-game.mdc` — runtime and arc rules (architecture, core loop, product contract); defers to `docs/GAME_DESIGN.md` on disputes
+5. `docs/ANIMATION_DIRECTION_2D.md` — character and tile animation specs for v2
+6. `.cursor/rules/weather-game.mdc` — runtime and arc rules (architecture, core loop, product contract); defers to `docs/GAME_DESIGN.md` on disputes
 
-If anything in those five files contradicts an older doc (including `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` or the old `ART_DIRECTION.md`), the v2 spec wins. Flag the contradiction in your PR description so the producer agent can clean up the older doc.
+For visual layout reference when implementing UI scenes or character/tile/card
+sprites, see assets/mocks/README.md and the SVGs in assets/mocks/. The
+level_mockup.svg is the canonical layout for ui/screens/gameplay.tscn.
+
+If anything in those files contradicts an older doc (including `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` or the old `ART_DIRECTION.md`), the v2 spec wins. Flag the contradiction in your PR description so the producer agent can clean up the older doc.
 
 ## Project
 
