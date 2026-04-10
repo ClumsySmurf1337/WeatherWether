@@ -52,7 +52,8 @@ If anything in those five files contradicts an older doc (including `docs/Buildi
 
 ## Canonical references
 
-- Game + LDtk + Sokoban study links: `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- **GDD (game design):** `docs/GAME_DESIGN.md` v2 — always read this for product truth.
+- **Legacy / toolkit / LDtk + Sokoban study narrative (not GDD):** `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
 - Agent/orchestration blueprint: `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`
 - Pipeline gaps: `docs/OPEN_SOURCE_AND_PIPELINE.md`
 

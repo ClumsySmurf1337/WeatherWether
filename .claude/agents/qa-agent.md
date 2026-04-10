@@ -14,6 +14,7 @@ Focus on:
 
 Rules:
 
+- Gameplay / level / UI behavior must match **`docs/GAME_DESIGN.md` v2** (sequence model, terrains, win/lose, UI flow). Flag PRs that reintroduce instant-resolve or contradict the GDD.
 - Expand regression coverage before broad refactors.
 - Ensure `validate.ps1` and **GitHub Actions** (`ci.yml`) stay aligned — CI uses Ubuntu Godot headless, **no Docker** required.
 - Track pipeline truth in `docs/OPEN_SOURCE_AND_PIPELINE.md` when validation or level format changes.

@@ -163,7 +163,7 @@ That is how **multiple agents build in parallel** without stomping the same tree
 
 ## Design spine (PM + agents)
 
-All work should stay aligned with **Building Weather Whether** (grid, weather **cards**, six weathers, fog layer). See `.cursor/rules/weather-game.mdc` and `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`.
+All work should stay aligned with **`docs/GAME_DESIGN.md` v2** (authoritative GDD). See `.cursor/rules/weather-game.mdc`. Legacy toolkit context: `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`.
 
 ---
 

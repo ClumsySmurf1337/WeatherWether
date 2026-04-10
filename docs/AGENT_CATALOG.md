@@ -2,7 +2,7 @@
 
 This catalog aligns agent roles across Cursor cloud/local and Claude-style role files.
 
-**Design spine:** PM and every agent keep work aligned with the **core concept** in `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` — grid + weather **cards** (order + placement) + **six weathers** + later **fog / uncertainty**.
+**GDD:** PM and every agent align with **`docs/GAME_DESIGN.md` v2**. The file `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` is supplementary (toolkit / pipeline / study links), not the authority for mechanics.
 
 ## PM/Orchestration
 

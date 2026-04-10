@@ -1,6 +1,6 @@
 # Weather Whether — UI Screens Spec
 
-> **Status:** Authoritative UI spec for v1. Pairs with `docs/GAME_DESIGN.md` and `docs/ASSET_MANIFEST.md`.
+> **Status:** Authoritative UI spec (ships with **GDD v2**). Pairs with `docs/GAME_DESIGN.md` and `docs/ASSET_MANIFEST.md`.
 >
 > **For agents:** Each screen below has an SVG wireframe, exact layout regions, behavior for every interactive element, and a list of which sprites/fonts it uses. SVGs are wireframes for structure — they are NOT the final art. Final art is generated separately per `docs/ASSET_PROMPTS_GEMINI.md`.
 >

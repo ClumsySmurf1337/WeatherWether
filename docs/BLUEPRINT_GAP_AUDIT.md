@@ -8,7 +8,8 @@ Source blueprint:
 
 Companion specs:
 
-- `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- **`docs/GAME_DESIGN.md` v2** (authoritative GDD)
+- `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` (legacy toolkit / study links)
 - `docs/OPEN_SOURCE_AND_PIPELINE.md`
 
 ---

@@ -9,7 +9,7 @@ Focus on:
 
 Rules:
 
-- Stay aligned with the **core concept**: grid + **weather cards** (order + placement) + **six weathers** with deterministic board transforms; later **fog** for uncertainty (`docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`).
+- Stay aligned with the **GDD**: `docs/GAME_DESIGN.md` v2 (sequence model, Sky, terrains, weathers). Do not use `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` as the authority for mechanics.
 - Typed GDScript only.
 - Add/maintain unit tests for behavior changes.
 - Keep system boundaries signal-based.

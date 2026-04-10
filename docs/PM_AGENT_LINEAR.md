@@ -4,7 +4,7 @@ This repo combines **scripted** Linear operations with **agent** behavior modele
 
 ## Source of truth
 
-- **GDD spine:** `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md`
+- **GDD (authoritative):** `docs/GAME_DESIGN.md` v2 — `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` is legacy toolkit / study context only.
 - **Phase → priority mapping:** `docs/backlog/pm-phase-plan.json` (edit labels/title prefixes to match your board)
 - **Role from labels/title:** `tools/linear/role-map.ts` (`[CORE]` / `[MECH]` → gameplay programmer, etc.)
 
