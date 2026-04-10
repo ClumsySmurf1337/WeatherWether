@@ -24,6 +24,8 @@ This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 
 Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done).
 
+**Batch lane PRs:** **`npm run qa:lane-prs`** runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**). Use **`npm run lane:ship`** when agents left uncommitted work; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
+
 ## Optional: GitHub-side automation later
 
 If you later want Actions to merge on a label, add a **separate** workflow and secrets; keep branch protection strict. The default documented path here remains **local QA**.

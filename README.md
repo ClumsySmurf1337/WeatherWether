@@ -55,6 +55,11 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `npm run cursor:go:editor` — full PM kickoff + same integrated-terminal hint (no external lane popups)
 - `npm run cursor:open-lanes` — optional: open **new Cursor windows** on each lane worktree (does not conflict with resume; skip if you use integrated Tasks)
 - `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor-agent`** / **`cursor agent`**)
+- `npm run lane:ship -- -LaneIndex <1-3>` — commit + push + open PR when a lane worktree has **uncommitted changes or unpushed commits** (Linear id from **`.weather-lane-issue.txt`** after `resume-pickup`, or **`-LinearId WEA-###`**); validates via `validate.ps1 -GodotProjectPath`
+- `npm run lane:ship:lanes` — run **`lane:ship`** for lanes **1–3** (recovery when agents left local commits without a PR)
+- `npm run qa:agent` (alias: **`npm run qa:lane-prs`**) — QA **all** open PRs with head **`agent/cursor-lane-*`**: merge main into each PR, validate, merge, **Linear Done**, `worktrees:sync`, append **`docs/CHANGELOG_LANES.md`**, reset lane branches (**`-SkipResetLaneBranches`** to skip; **`npm run lane:next-cycle`** if you skipped)
+- `npm run qa:lane-prs:quick` — same batch but **`-SkipChecksWatch`** (use when CI already green)
+- `npm run lane:next-cycle` — reset each **`wt-agent-cursor-lane-*`** to a new **`agent/cursor-lane-N`** branch from **main** after merges
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
 - `npm run linear:pm-organize -- --apply` / `npm run linear:pm-feed-todo -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + Todo queue fill + DeedWise-style per-role assignment markdown

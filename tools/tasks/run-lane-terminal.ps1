@@ -5,7 +5,8 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$MainRepoRoot,
     [string]$AgentRoot = "",
-    [switch]$SkipCursorChat
+    [switch]$SkipCursorChat,
+    [switch]$SkipAutoShip
 )
 
 Set-StrictMode -Version Latest
@@ -31,6 +32,7 @@ if (-not (Test-Path -LiteralPath $wtPath)) {
 }
 
 $mainResolved = (Resolve-Path -LiteralPath $MainRepoRoot).Path
+. (Join-Path $mainResolved "tools\tasks\lane-ship-lib.ps1")
 
 Write-Host ""
 Write-Host "========== Lane $LaneIndex | $role ==========" -ForegroundColor Cyan
@@ -40,7 +42,8 @@ Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host ""
 
 Set-Location -LiteralPath $mainResolved
-npm run linear:resume-pickup -- --role=$role --apply
+$markerPath = Join-Path $wtPath ".weather-lane-issue.txt"
+npm run linear:resume-pickup -- --role=$role --apply "--worktree-marker=$markerPath"
 
 Write-Host ""
 Write-Host "resume-pickup ran from main repo (reads .env.local there)." -ForegroundColor DarkGray
@@ -83,4 +86,24 @@ if ($agentExe) {
 Write-Host ""
 
 $code = Invoke-CursorTerminalAgent -Prompt $promptText
+
+if (-not $SkipAutoShip) {
+    $shipState = Get-LaneWorktreeShipState -RepoPath $wtPath
+    if ($shipState.NeedsShip) {
+        Write-Host ""
+        Write-Host "========== Auto-ship (validate, commit if needed, push, PR) ==========" -ForegroundColor Magenta
+        & "$mainResolved\tools\tasks\lane-ship.ps1" -LaneIndex $LaneIndex -MainRepoRoot $mainResolved -AgentRoot $AgentRoot
+        $shipExit = $LASTEXITCODE
+        if ($shipExit -ne 0) {
+            Write-Host "Auto-ship failed (exit $shipExit). From main repo: npm run lane:ship -- -LaneIndex $LaneIndex" -ForegroundColor Red
+            exit $shipExit
+        }
+    }
+    else {
+        Write-Host ""
+        Write-Host "After agent: no uncommitted changes and no unpushed commits — nothing to auto-ship." -ForegroundColor DarkYellow
+        Write-Host "If you expected a PR, the agent may not have saved files; or run: npm run lane:ship:lanes" -ForegroundColor DarkGray
+    }
+}
+
 exit $code
