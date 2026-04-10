@@ -14,7 +14,7 @@ alwaysApply: true
 - **Open-source study targets + LDtk pipeline status:** `docs/OPEN_SOURCE_AND_PIPELINE.md`
 - **Godot API / doc URLs (no docs MCP):** `docs/GODOT_DOCS_ACCESS.md`
 
-**Agent reading order** (same numbered list as `.claude/CLAUDE.md`): (1) `docs/GAME_DESIGN.md` v2, (2) `docs/UI_SCREENS.md`, (3) `docs/ASSET_MANIFEST.md`, (4) `docs/SPEC_DIFF.md` (high-level delta vs instant-resolve; file targets in `docs/CODE_REWRITE_PLAN.md`), (5) `.cursor/rules/weather-game.mdc` (runtime + arc rules; GDD wins on disputes).
+**Agent reading order** (same numbered list as `.claude/CLAUDE.md`): (1) `docs/GAME_DESIGN.md` v2, (2) `docs/UI_SCREENS.md`, (3) `docs/ASSET_MANIFEST.md`, (4) `docs/SPEC_DIFF.md` (high-level delta vs instant-resolve; file targets in `docs/CODE_REWRITE_PLAN.md`), (5) `docs/ANIMATION_DIRECTION_2D.md`, (6) `.cursor/rules/weather-game.mdc` (runtime + arc rules; GDD wins on disputes).
 
 ## Stack and code style
 
@@ -39,5 +39,5 @@ Prefer **godot-full** for heavy **UI/Control** work, runtime inspection, and exp
 
 When you change **build/CI**, **MCP**, **LDtk import path**, **level format**, or **validation**:
 
-- Update the **smallest set** of: `README.md`, `docs/AGENT_CATALOG.md`, `docs/OPEN_SOURCE_AND_PIPELINE.md`, `docs/BLUEPRINT_GAP_AUDIT.md`, `.claude/CLAUDE.md`, and any touched `.claude/agents/*.md`.
+- Update the **smallest set** of: `README.md`, `docs/AGENT_CATALOG.md`, `docs/OPEN_SOURCE_AND_PIPELINE.md`, `docs/BLUEPRINT_GAP_AUDIT.md`, `.claude/CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md`, and any touched `.claude/agents/*.md`.
 - Refresh **`docs/AGENT_SYNC_CHECKLIST.md`** if workspace conventions change.

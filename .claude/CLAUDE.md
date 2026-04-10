@@ -60,6 +60,10 @@ If anything in those files contradicts an older doc (including `docs/Building Wh
 - `art-pipeline` owns style references and prompt assets.
 - `release-ops` owns build/release workflows and launch readiness.
 
+## GitHub Copilot parity
+
+- **`AGENTS.md`** (repo root) and **`.github/copilot-instructions.md`** mirror this file for Copilot agents and Copilot Chat/CLI. When you change global agent rules here, update **`.github/copilot-instructions.md`** in the same change so CI and **validate.ps1** expectations stay in sync.
+
 ## Canonical references
 
 - **GDD (game design):** `docs/GAME_DESIGN.md` v2 — always read this for product truth.

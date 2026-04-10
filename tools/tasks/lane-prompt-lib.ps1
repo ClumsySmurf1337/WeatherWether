@@ -43,7 +43,7 @@ function Build-WeatherLaneCopilotLauncherNote {
 - In the numbered task list below, **step 1** (resume-pickup) is **already done** unless that marker is wrong — re-run from **main** using the same ``npm run linear:resume-pickup`` command shown in step 1 if you must fix it.
 - After implementation: run **``pwsh <MAIN_REPO>/tools/tasks/validate.ps1 -GodotProjectPath (Get-Location).Path``** until green, then from **main**: **``npm run lane:ship -- -LaneIndex $LaneIndex``** or let **``npm run qa:agent``** preflight ship.
 
-**Instruction sync:** Copilot should honor **``.github/copilot-instructions.md``** (and VS Code **instruction files** if enabled). Cursor/Claude agents use **``.claude/CLAUDE.md``**. On disputes, **``docs/GAME_DESIGN.md``** v2 wins.
+**Instruction sync:** GitHub Copilot loads root **``AGENTS.md``** and **``.github/copilot-instructions.md``** (and VS Code **instruction files** if enabled). Cursor/Claude agents use **``.claude/CLAUDE.md``** and **``.claude/agents/<role>.md``** — same expectations. On disputes, **``docs/GAME_DESIGN.md``** v2 wins.
 
 "@
 }

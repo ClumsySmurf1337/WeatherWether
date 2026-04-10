@@ -29,7 +29,8 @@ Optional **`WEATHER_COPILOT_USE_FLEET=1`**: the pointer is sent as **`/fleet …
 
 ## Instruction sync
 
-- **`.github/copilot-instructions.md`** ↔ **`.claude/CLAUDE.md`** and **`docs/GAME_DESIGN.md` v2** (same rule as before).
+- **`AGENTS.md`** (repo root) — Copilot **agent** entry point; directs agents to **`.claude/CLAUDE.md`** and this repo’s **`.github/copilot-instructions.md`**.
+- **`.github/copilot-instructions.md`** ↔ **`.claude/CLAUDE.md`**, **`.claude/agents/*.md`**, and **`docs/GAME_DESIGN.md` v2** (same rules as Cursor/Claude).
 - Optional VS Code/Cursor settings to load instruction files into **Copilot Chat** when you open Chat manually — not required for **CLI** lanes.
 
 ## Environment variables
