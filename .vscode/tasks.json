@@ -2,6 +2,23 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Weather Whether — Daily full (apply + lane prep)",
+      "type": "shell",
+      "command": "npm run daily:full:apply:lanes",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "daily"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Weather Whether — Lane 1 (gameplay)",
       "type": "shell",
       "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-terminal.ps1\" -LaneIndex 1 -MainRepoRoot \"${workspaceFolder}\"",
@@ -11,7 +28,8 @@
         "focus": false,
         "panel": "dedicated",
         "showReuseMessage": false,
-        "group": "lanes"
+        "group": "lanes",
+        "close": true
       },
       "problemMatcher": []
     },
@@ -25,7 +43,8 @@
         "focus": false,
         "panel": "dedicated",
         "showReuseMessage": false,
-        "group": "lanes"
+        "group": "lanes",
+        "close": true
       },
       "problemMatcher": []
     },
@@ -39,7 +58,8 @@
         "focus": false,
         "panel": "dedicated",
         "showReuseMessage": false,
-        "group": "lanes"
+        "group": "lanes",
+        "close": true
       },
       "problemMatcher": []
     },
@@ -51,6 +71,15 @@
         "Weather Whether — Lane 3 (levels)"
       ],
       "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Daily apply:lanes, then parallel lane agents",
+      "dependsOn": [
+        "Weather Whether — Daily full (apply + lane prep)",
+        "Weather Whether — All lane terminals (parallel)"
+      ],
+      "dependsOrder": "sequence",
       "problemMatcher": []
     },
     {
