@@ -13,7 +13,9 @@ param(
     [switch]$SkipPreflightShip,
     [string]$AgentRoot = "",
     [switch]$ReconcileLinearFromMergedLanePrs,
-    [int]$ReconcileLinearMergedWithinDays = 30
+    [int]$ReconcileLinearMergedWithinDays = 30,
+    [int]$ChecksPollMaxSeconds = 900,
+    [int]$ChecksPollIntervalSeconds = 15
 )
 
 Set-StrictMode -Version Latest
@@ -216,6 +218,8 @@ foreach ($p in $lanePrs) {
     }
     if ($NoMerge) { $splat.NoMerge = $true }
     $splat.AgentRoot = $AgentRoot
+    $splat.ChecksPollMaxSeconds = $ChecksPollMaxSeconds
+    $splat.ChecksPollIntervalSeconds = $ChecksPollIntervalSeconds
 
     & "$repoRoot\tools\tasks\qa-pr-handoff-local.ps1" @splat
     if ($LASTEXITCODE -ne 0) {

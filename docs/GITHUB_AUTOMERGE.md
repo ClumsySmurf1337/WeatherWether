@@ -26,6 +26,10 @@ Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValid
 
 **Missed Linear Done** (merge succeeded but **`linear:complete-from-pr`** never ran): run **`npm run linear:complete-merged-lane-prs`** — scans recent **merged** PRs whose head is **`agent/cursor-lane-*`**, then runs **`linear:complete-from-pr`** for each (same **`WEA-###`** rules). Optional: **`npm run qa:agent -- -ReconcileLinearFromMergedLanePrs`** (add **`-ReconcileLinearMergedWithinDays 60`** if needed).
 
+**Same `WEA-###` on a new open PR after an earlier merge:** that is usually **new commits on the same lane branch** (e.g. PR #1 merged, then more work + **`lane-ship`** opened PR #4). The title still says **`WEA-520: lane work`** because **`.weather-lane-issue.txt`** still holds **520**. It is **not** re-merging the old PR; it is a **new PR** with additional diff vs **`main`**. After you truly finish the issue, clear or update the marker (next **`resume-pickup`** / new issue) and prefer a **new Linear issue** for follow-up work so titles stay honest.
+
+**CI “no checks reported” on a brand-new PR:** **`qa-pr-handoff-local.ps1`** polls **`gh pr view --json statusCheckRollup`** until checks exist (default up to **15 minutes**, **15 s** interval), then runs **`gh pr checks --watch`**. Tune with **`npm run qa:pr -- -PullRequestNumber N -ChecksPollMaxSeconds 1200`** or from the batch: **`npm run qa:agent -- -ChecksPollMaxSeconds 1200`**.
+
 **Batch lane PRs:** **`npm run qa:agent`** (alias **`npm run qa:lane-prs`**) runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**), including a pre-flight ship pass for stale lane worktrees. Use **`npm run lane:ship`** / **`lane:ship:lanes`** when needed; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
 
 ## Optional: GitHub-side automation later

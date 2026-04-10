@@ -7,7 +7,9 @@ param(
     [switch]$NoMerge,
     [ValidateSet("squash", "merge", "rebase")]
     [string]$MergeMode = "squash",
-    [string]$AgentRoot = ""
+    [string]$AgentRoot = "",
+    [int]$ChecksPollMaxSeconds = 900,
+    [int]$ChecksPollIntervalSeconds = 15
 )
 
 Set-StrictMode -Version Latest
@@ -34,15 +36,42 @@ function Resolve-AgentRootHandoff {
     return "D:\Agents\WeatherWether"
 }
 
+function Wait-PrChecksRegisteredAndWatch {
+    param(
+        [int]$PrNumber,
+        [int]$MaxWaitSeconds,
+        [int]$PollSeconds
+    )
+    Write-Host "[1] Waiting for GitHub checks on PR #$PrNumber (remote CI)..."
+    $deadline = (Get-Date).AddSeconds($MaxWaitSeconds)
+    while ((Get-Date) -lt $deadline) {
+        $json = gh pr view $PrNumber --json statusCheckRollup 2>$null
+        if ($LASTEXITCODE -eq 0 -and $json) {
+            $rollup = ($json | ConvertFrom-Json).statusCheckRollup
+            $n = 0
+            if ($null -ne $rollup) {
+                $n = @($rollup).Count
+            }
+            if ($n -gt 0) {
+                Write-Host "  $n check run(s) on PR; watching to completion..." -ForegroundColor DarkGreen
+                gh pr checks $PrNumber --watch
+                if ($LASTEXITCODE -ne 0) {
+                    throw "PR checks failed or gh pr checks exited non-zero after watch."
+                }
+                return
+            }
+        }
+        Write-Host "  No CI checks on PR yet (new PR or workflow still queuing). Retry in ${PollSeconds}s (max $MaxWaitSeconds s)..." -ForegroundColor DarkYellow
+        Start-Sleep -Seconds $PollSeconds
+    }
+    throw "Timed out after $MaxWaitSeconds s waiting for checks on PR #$PrNumber. Confirm Actions run on pull_request, then re-run: npm run qa:pr -- -PullRequestNumber $PrNumber"
+}
+
 Write-Host "=== Local QA handoff: PR #$PullRequestNumber ===`n"
 Test-GhCli
 
 if (-not $SkipChecksWatch) {
-    Write-Host "[1] Waiting for GitHub checks on PR #$PullRequestNumber (remote CI)..."
-    gh pr checks $PullRequestNumber --watch
-    if ($LASTEXITCODE -ne 0) {
-        throw "PR checks failed or gh pr checks exited non-zero."
-    }
+    Wait-PrChecksRegisteredAndWatch -PrNumber $PullRequestNumber -MaxWaitSeconds $ChecksPollMaxSeconds -PollSeconds $ChecksPollIntervalSeconds
 } else {
     Write-Host "[1] Skipped gh pr checks --watch (-SkipChecksWatch)"
 }
