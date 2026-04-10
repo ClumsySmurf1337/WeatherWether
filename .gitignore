@@ -20,6 +20,10 @@ Thumbs.db
 # Lane launcher: current Linear issue id for auto-ship (per worktree)
 .weather-lane-issue.txt
 
+# Copilot CLI: regenerated each lane run in worktrees (never commit — causes add/add merge conflicts)
+WEATHER_COPILOT_LANE_PROMPT.md
+COPILOT_LANE_BLOCKER.md
+
 # Built locally: full Godot MCP (tugcantopaloglu fork) — run tools/install/setup-godot-mcp-full.ps1
 tools/godot-mcp-full/
 
