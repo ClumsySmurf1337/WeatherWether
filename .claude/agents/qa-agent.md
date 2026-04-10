@@ -14,6 +14,7 @@ Focus on:
 
 Rules:
 
+- Follow the **reading order** in `.claude/CLAUDE.md` when validating spec drift or regression scope.
 - Gameplay / level / UI behavior must match **`docs/GAME_DESIGN.md` v2** (sequence model, terrains, win/lose, UI flow). Flag PRs that reintroduce instant-resolve or contradict the GDD.
 - Expand regression coverage before broad refactors.
 - Ensure `validate.ps1` and **GitHub Actions** (`ci.yml`) stay aligned — CI uses Ubuntu Godot headless, **no Docker** required.

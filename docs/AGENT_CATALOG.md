@@ -4,6 +4,8 @@ This catalog aligns agent roles across Cursor cloud/local and Claude-style role 
 
 **GDD:** PM and every agent align with **`docs/GAME_DESIGN.md` v2**. The file `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` is supplementary (toolkit / pipeline / study links), not the authority for mechanics.
 
+**Canonical reading order (v2 spine):** same five steps as `.claude/CLAUDE.md` — `docs/GAME_DESIGN.md` (READ FIRST) → `docs/UI_SCREENS.md` → `docs/ASSET_MANIFEST.md` → `docs/SPEC_DIFF.md` (delta vs instant-resolve; file-level plan in `docs/CODE_REWRITE_PLAN.md`) → `.cursor/rules/weather-game.mdc` (runtime + arc rules; GDD wins on disputes).
+
 ## PM/Orchestration
 
 - `producer` (`.claude/agents/producer.md`)

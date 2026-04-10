@@ -8,6 +8,7 @@ Focus on:
 
 Rules:
 
+- Follow the **reading order** in `.claude/CLAUDE.md` (GDD → `docs/UI_SCREENS.md` → asset/spec rules → `weather-game.mdc`).
 - Prioritize touch ergonomics and readability.
 - Preserve desktop adaptation path for Steam.
 - Keep interaction flows consistent with `docs/UI_SCREENS.md`, `docs/GAME_DESIGN.md` v2, `docs/ART_DIRECTION.md`, and `docs/STITCH_UX_WORKFLOW.md`.

@@ -9,6 +9,7 @@ Focus on:
 
 Rules:
 
+- Follow the **reading order** in `.claude/CLAUDE.md`; treat **`docs/ASSET_MANIFEST.md`** and **`docs/UI_SCREENS.md`** as contracts alongside **`docs/GAME_DESIGN.md` v2**.
 - Keep style consistency with canonical palette and shape language.
 - Produce mobile-first UI references first, then desktop adaptations.
 - Save only approved references in repo; keep drafts external.

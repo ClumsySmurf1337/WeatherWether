@@ -311,8 +311,8 @@ And add a section near the top:
 1. `docs/GAME_DESIGN.md` — game design spine (READ FIRST)
 2. `docs/UI_SCREENS.md` — every screen with mockups
 3. `docs/ASSET_MANIFEST.md` — sprite/audio contract
-4. `docs/SPEC_DIFF.md` — what changed and the rewrite plan
-5. `.cursor/rules/weather-game.mdc` — runtime architecture rules
+4. `docs/SPEC_DIFF.md` — what changed vs the legacy instant-resolve model; rewrite direction (file-by-file: `docs/CODE_REWRITE_PLAN.md`)
+5. `.cursor/rules/weather-game.mdc` — runtime and arc rules (architecture, core loop); defers to `docs/GAME_DESIGN.md` on disputes
 ```
 
 **`.cursor/rules/weather-game.mdc`** — replace the entire "Core concept" section with:
