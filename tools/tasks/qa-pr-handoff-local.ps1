@@ -36,6 +36,58 @@ function Resolve-AgentRootHandoff {
     return "D:\Agents\WeatherWether"
 }
 
+## `gh pr merge --delete-branch` deletes the local branch in the shared git repo; Git refuses if any
+## worktree still has that branch checked out (e.g. wt-agent-cursor-lane-N on agent/cursor-lane-N).
+function Release-LaneWorktreeBeforePrBranchDelete {
+    param(
+        [Parameter(Mandatory = $true)]
+        [int]$PrNumber
+    )
+    $headJson = gh pr view $PrNumber --json headRefName 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        return
+    }
+    $headRef = [string](($headJson | ConvertFrom-Json).headRefName)
+    if ($headRef -notmatch '^agent/cursor-lane-(\d+)$') {
+        return
+    }
+    $laneIdx = [int]$Matches[1]
+    $wt = Join-Path (Resolve-AgentRootHandoff) "wt-agent-cursor-lane-$laneIdx"
+    if (-not (Test-Path -LiteralPath $wt)) {
+        return
+    }
+    git -C $wt rev-parse --git-dir *>$null
+    if ($LASTEXITCODE -ne 0) {
+        return
+    }
+    Write-Host "  Lane worktree cannot stay on $headRef while gh deletes that branch — detaching $wt at origin (same tip as main)..." -ForegroundColor DarkCyan
+    $porcelain = git -C $wt status --porcelain
+    if (-not [string]::IsNullOrWhiteSpace($porcelain)) {
+        throw "Lane worktree $wt has uncommitted changes. Commit, stash, or discard, then re-run QA."
+    }
+    git -C $wt fetch origin --prune
+    if ($LASTEXITCODE -ne 0) {
+        throw "git fetch failed in lane worktree $wt"
+    }
+    $base = $null
+    foreach ($b in @("main", "master")) {
+        git -C $wt rev-parse "refs/remotes/origin/$b" *>$null
+        if ($LASTEXITCODE -eq 0) {
+            $base = $b
+            break
+        }
+    }
+    if ($null -eq $base) {
+        throw "No origin/main or origin/master in lane worktree $wt"
+    }
+    # Cannot `git checkout main` here: branch `main` is usually already checked out in the primary
+    # repo worktree. Detached HEAD at origin/<base> releases the PR branch so local delete succeeds.
+    git -C $wt checkout --detach "origin/$base"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not detach lane worktree $wt at origin/$base (git checkout --detach failed)."
+    }
+}
+
 function Wait-PrChecksRegisteredAndWatch {
     param(
         [int]$PrNumber,
@@ -147,6 +199,7 @@ if (-not $NoMerge) {
     Write-Host "`n[3] Merge PR (--$MergeMode, delete branch)"
     # gh merge updates local git refs; must run from the worktree that has `main` (not a lane wt).
     Set-Location -LiteralPath $repoRoot
+    Release-LaneWorktreeBeforePrBranchDelete -PrNumber $PullRequestNumber
     gh pr merge $PullRequestNumber --$MergeMode --delete-branch
     if ($LASTEXITCODE -ne 0) {
         throw "gh pr merge failed (branch protection, conflicts, or not mergeable)."
@@ -158,7 +211,7 @@ if (-not $NoMerge) {
 
 if (-not $NoMerge) {
     Write-Host "`n[4] Move Linear issue(s) to Done from PR title/body (local .env.local API key)"
-    $raw = gh pr view $PullRequestNumber --json title, body
+    $raw = gh pr view $PullRequestNumber --json "title,body"
     if ($LASTEXITCODE -ne 0) {
         throw "gh pr view failed."
     }

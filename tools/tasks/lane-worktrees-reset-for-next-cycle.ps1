@@ -63,20 +63,11 @@ for ($i = 1; $i -le $LaneCount; $i++) {
         continue
     }
 
-    $hasMain = git show-ref --verify --quiet "refs/heads/$BaseBranch" 2>$null
+    # Primary repo worktree already has `main` checked out; this lane worktree cannot attach to the
+    # same branch name. Detach at origin/<base>, drop the old lane branch, recreate from that tip.
+    git checkout --detach "origin/$BaseBranch"
     if ($LASTEXITCODE -ne 0) {
-        git branch $BaseBranch "origin/$BaseBranch" 2>$null
-    }
-
-    git checkout $BaseBranch
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warning "Cannot checkout $BaseBranch in lane $i — resolve manually."
-        continue
-    }
-
-    git merge --ff-only "origin/$BaseBranch"
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warning "merge --ff-only origin/$BaseBranch failed in lane $i — resolve manually."
+        Write-Warning "detach at origin/$BaseBranch failed in lane $i — resolve manually."
         continue
     }
 
