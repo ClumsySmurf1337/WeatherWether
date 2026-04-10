@@ -7,8 +7,8 @@ Do this in order:
 3. Then follow the **full reading order** in `.claude/CLAUDE.md` (UI_SCREENS → ASSET_MANIFEST → SPEC_DIFF → `weather-game.mdc`). Use `docs/CODE_REWRITE_PLAN.md` when your issue touches file-level rewrite targets.
 4. Open `docs/CURSOR_PARALLEL_AGENTS.md` — stay inside the file scope for your lane role.
 5. Implement the Linear issue now In Progress. Use strict GDScript typing and existing project patterns.
-6. Run `pwsh <MAIN_REPO>/tools/tasks/validate.ps1 -GodotProjectPath (Get-Location).Path` when your changes touch gameplay, tests, or levels (`<MAIN_REPO>` is the Weather Whether repo that contains `package.json`).
-7. **You are not done until** there is an **open PR to `main`** with **`WEA-###`** (or your team key) in the **title** — same id as the issue **In Progress** after step 1.
+6. **Fix errors before handoff:** after edits, run **`pwsh <MAIN_REPO>/tools/tasks/validate.ps1 -GodotProjectPath (Get-Location).Path`** (`<MAIN_REPO>` = repo with `package.json`). **Repeat until it passes** — parser errors, failing GUT tests, and level validation failures are **blockers**; do not rely on “CI will catch it.” If you use a Godot API you are unsure about, check the **stable class reference** (see `docs/GODOT_DOCS_ACCESS.md`; base **https://docs.godotengine.org/en/stable/**) so signatures match **Godot 4.x** (e.g. `Color.from_string` takes `(str, default_color)`).
+7. **You are not done until** validate is **green** for this worktree **and** there is an **open PR to `main`** with **`WEA-###`** (or your team key) in the **title** — same id as the issue **In Progress** after step 1.
 
 **Ship (automatic):** the lane launcher runs **`resume-pickup`** with **`--worktree-marker`** so your Linear id is stored as **`.weather-lane-issue.txt`** in this worktree. When the launcher finishes, it **auto-runs `lane-ship`** if the worktree is dirty — you do **not** need to pass **`-LinearId`** manually.
 

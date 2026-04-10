@@ -24,6 +24,11 @@ If anything in those five files contradicts an older doc (including `docs/Buildi
 - Godot path: `D:\Godot`.
 - Caches/build/temp/logs must stay on D drive.
 
+## Quality before handoff
+
+- **Fix what you break:** GDScript parse errors, failing GUT tests, and level validation failures must be **resolved in your branch** before you consider work done or open/refresh a PR. Do not ship “best effort” code and assume CI or QA will fix it.
+- **API truth:** when using unfamiliar Godot APIs, verify against the **stable** docs (`docs/GODOT_DOCS_ACCESS.md`; Godot **4.x** class pages). Wrong arity or renamed methods (common when copying older snippets) introduce silent breakage until import.
+
 ## Runtime Parity
 
 - Keep behavior aligned with `.cursor/rules/*.mdc`.

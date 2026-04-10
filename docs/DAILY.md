@@ -13,7 +13,7 @@ This doc is the **single operator contract**: what runs once a day, how **PM** u
 | **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three lane agents in parallel**. Lane terminals **auto-close** when each lane finishes. |
 | **2** | **When lane PRs exist and CI is ready** | **Weather Whether — QA agent (lane PRs)** — ships stale lanes if needed, merges **`agent/cursor-lane-*`** PRs, Linear **Done**, **`worktrees:sync`**, lane reset. Use **`npm run qa:lane-prs:quick`** if checks are already green. |
 | **3** | **Next cycle** | Go back to **step 1** (and **step 2** whenever you need merges). |
-| **1+2** | **Optional one-shot** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — runs the **step 1** Task, then the **step 2** Task in order (wait for all three lane agents to finish, then **`qa:agent`**). |
+| **1+2** | **Optional one-shot** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — **flattened** sequence in **`.vscode/tasks.json`**: **Daily full** → **All lane terminals (parallel)** → **QA agent**, so the runner waits for **all three** lane shells to exit before **`qa:agent`** (avoids nested compound-task ordering glitches in some Cursor/VS Code builds). |
 
 **Same flow from the integrated terminal** (if you prefer typing instead of the one-click Task for step 1):
 
@@ -25,6 +25,10 @@ npm run qa:agent
 ```
 
 **Optional — daily health without applying Linear moves:** `npm run daily:full` (producer **dry-run** only) or **`npm run daily:full:lean`** (no lane prep). For PM apply **without** starting agents yet: **Tasks →** **Weather Whether — Daily full (apply + lane prep)** (= `npm run daily:full:apply:lanes` alone).
+
+**Why did Linear Todo jump by a lot?** Each **`linear:promote --apply`** moves at most **`LINEAR_PROMOTE_BATCH_MAX`** issues **Backlog → Todo** (default **25**). Producer logs like **`Todo scan: 80 issue(s) (fetch first 80)`** come from **`linear:dispatch`** (it **reads** up to 80 Todo rows to choose dispatch targets), **not** from promoting 80 issues in that line. Seeing **many** new Todos still means **repeated apply runs**, a **higher `LINEAR_PROMOTE_BATCH_MAX`** in **`.env.local`**, or issues **already in Todo**. See **`docs/LINEAR_ENV_VARS.md`**.
+
+**Compound Task vs terminal text:** **`Daily apply:lanes, then parallel lane agents`** and **`Simple flow`** already chain **All lane terminals** after daily full. **`daily-full.ps1`** may still print “run All lane terminals” for people who run daily **standalone** — ignore that line when your Task is still running the chain.
 
 Details, recovery commands, and the full cheat sheet are below.
 

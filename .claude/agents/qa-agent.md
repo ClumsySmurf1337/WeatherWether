@@ -16,6 +16,7 @@ Focus on:
 
 Rules:
 
+- Lane PRs should already be **validate-clean** before merge (see **Quality before handoff** in `.claude/CLAUDE.md` and `tools/tasks/prompts/lane-agent-prompt.md`); treat unexpected parse/test failures as process drift, not normal.
 - Follow the **reading order** in `.claude/CLAUDE.md` when validating spec drift or regression scope.
 - Gameplay / level / UI behavior must match **`docs/GAME_DESIGN.md` v2** (sequence model, terrains, win/lose, UI flow). Flag PRs that reintroduce instant-resolve or contradict the GDD.
 - Expand regression coverage before broad refactors.

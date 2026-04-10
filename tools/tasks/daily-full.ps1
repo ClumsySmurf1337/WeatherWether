@@ -85,7 +85,12 @@ if ($runEditorLanePrep) {
 
 Write-Host "`n=== DAILY FULL complete ==="
 if ($runEditorLanePrep) {
-    Write-Host "Next IN THIS CURSOR WINDOW:"
+    if ($EditorLaneTerminals) {
+        Write-Host "Note: This run used **-EditorLaneTerminals** (e.g. **npm run daily:full:apply:lanes** or the **Daily apply:lanes, then parallel lane agents** / **Simple flow** Task)." -ForegroundColor DarkCyan
+        Write-Host "  If you started it from that **compound Task**, Cursor will run **All lane terminals (parallel)** next in the **same** Run Task chain — you do **not** need to start lanes again manually." -ForegroundColor DarkCyan
+        Write-Host ""
+    }
+    Write-Host "If you ran **daily full** standalone (not the compound Task), start lanes here:"
     Write-Host "  Ctrl+Shift+P -> Tasks: Run Task -> Weather Whether — All lane terminals (parallel)"
     Write-Host "Doc: docs/DAILY.md (cheat sheet)"
 } else {

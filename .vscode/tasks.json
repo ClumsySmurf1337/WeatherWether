@@ -85,7 +85,8 @@
     {
       "label": "Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)",
       "dependsOn": [
-        "Weather Whether — Daily apply:lanes, then parallel lane agents",
+        "Weather Whether — Daily full (apply + lane prep)",
+        "Weather Whether — All lane terminals (parallel)",
         "Weather Whether — QA agent (lane PRs)"
       ],
       "dependsOrder": "sequence",

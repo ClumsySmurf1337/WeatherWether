@@ -4,25 +4,28 @@ extends RefCounted
 ## Single source for UI colors, fonts, and layout metrics per `docs/UI_SCREENS.md` and `docs/GAME_DESIGN.md` v2.
 ## Scenes under `scenes/ui/` should reference this class only — avoid literal hex in UI scripts.
 
+# Godot 4.x: Color.from_string requires (hex_string, fallback_if_parse_fails).
+const _COLOR_PARSE_FALLBACK: Color = Color.BLACK
+
 # --- Color tokens (table in UI_SCREENS.md) ---
 
-static var bg_deep: Color = Color.from_string("#0a1428")
-static var bg_panel: Color = Color.from_string("#142844")
-static var bg_panel_alt: Color = Color.from_string("#1f3a5c")
-static var border_frame: Color = Color.from_string("#3a5f8a")
-static var text_title: Color = Color.from_string("#f5e89c")
-static var text_body: Color = Color.from_string("#e8eef7")
-static var text_muted: Color = Color.from_string("#8a9bb4")
-static var accent_primary: Color = Color.from_string("#4a90e2")
-static var accent_success: Color = Color.from_string("#5fc97e")
-static var accent_warning: Color = Color.from_string("#e8a73a")
-static var accent_danger: Color = Color.from_string("#e8584a")
-static var card_rain: Color = Color.from_string("#3aa8e8")
-static var card_sun: Color = Color.from_string("#f0b340")
-static var card_frost: Color = Color.from_string("#7ad8e8")
-static var card_wind: Color = Color.from_string("#5fc97e")
-static var card_lightning: Color = Color.from_string("#a06fe8")
-static var card_fog: Color = Color.from_string("#8a9bb4")
+static var bg_deep: Color = Color.from_string("#0a1428", _COLOR_PARSE_FALLBACK)
+static var bg_panel: Color = Color.from_string("#142844", _COLOR_PARSE_FALLBACK)
+static var bg_panel_alt: Color = Color.from_string("#1f3a5c", _COLOR_PARSE_FALLBACK)
+static var border_frame: Color = Color.from_string("#3a5f8a", _COLOR_PARSE_FALLBACK)
+static var text_title: Color = Color.from_string("#f5e89c", _COLOR_PARSE_FALLBACK)
+static var text_body: Color = Color.from_string("#e8eef7", _COLOR_PARSE_FALLBACK)
+static var text_muted: Color = Color.from_string("#8a9bb4", _COLOR_PARSE_FALLBACK)
+static var accent_primary: Color = Color.from_string("#4a90e2", _COLOR_PARSE_FALLBACK)
+static var accent_success: Color = Color.from_string("#5fc97e", _COLOR_PARSE_FALLBACK)
+static var accent_warning: Color = Color.from_string("#e8a73a", _COLOR_PARSE_FALLBACK)
+static var accent_danger: Color = Color.from_string("#e8584a", _COLOR_PARSE_FALLBACK)
+static var card_rain: Color = Color.from_string("#3aa8e8", _COLOR_PARSE_FALLBACK)
+static var card_sun: Color = Color.from_string("#f0b340", _COLOR_PARSE_FALLBACK)
+static var card_frost: Color = Color.from_string("#7ad8e8", _COLOR_PARSE_FALLBACK)
+static var card_wind: Color = Color.from_string("#5fc97e", _COLOR_PARSE_FALLBACK)
+static var card_lightning: Color = Color.from_string("#a06fe8", _COLOR_PARSE_FALLBACK)
+static var card_fog: Color = Color.from_string("#8a9bb4", _COLOR_PARSE_FALLBACK)
 
 # --- Font asset paths (`docs/ASSET_MANIFEST.md` §6) ---
 
