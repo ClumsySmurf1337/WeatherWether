@@ -105,6 +105,99 @@ static func configure_numbers_label(label: Label) -> void:
 
 
 ## Baseline Theme for Control nodes (optional root `theme` on UI screens).
+static func apply_primary_button(button: Button) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = accent_primary
+	normal.corner_radius_top_left = 6
+	normal.corner_radius_top_right = 6
+	normal.corner_radius_bottom_right = 6
+	normal.corner_radius_bottom_left = 6
+	normal.content_margin_left = 24.0
+	normal.content_margin_right = 24.0
+	normal.content_margin_top = 16.0
+	normal.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"normal", normal)
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = accent_primary.lightened(0.06)
+	hover.corner_radius_top_left = 6
+	hover.corner_radius_top_right = 6
+	hover.corner_radius_bottom_right = 6
+	hover.corner_radius_bottom_left = 6
+	hover.content_margin_left = 24.0
+	hover.content_margin_right = 24.0
+	hover.content_margin_top = 16.0
+	hover.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"hover", hover)
+	var pressed := StyleBoxFlat.new()
+	pressed.bg_color = accent_primary.darkened(0.08)
+	pressed.corner_radius_top_left = 6
+	pressed.corner_radius_top_right = 6
+	pressed.corner_radius_bottom_right = 6
+	pressed.corner_radius_bottom_left = 6
+	pressed.content_margin_left = 24.0
+	pressed.content_margin_right = 24.0
+	pressed.content_margin_top = 16.0
+	pressed.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"pressed", pressed)
+	button.add_theme_color_override(&"font_color", bg_deep)
+	button.add_theme_color_override(&"font_hover_color", bg_deep)
+	button.add_theme_color_override(&"font_pressed_color", bg_deep)
+
+
+static func apply_secondary_button(button: Button) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = bg_panel
+	normal.border_color = border_frame
+	normal.border_width_left = 2
+	normal.border_width_top = 2
+	normal.border_width_right = 2
+	normal.border_width_bottom = 2
+	normal.corner_radius_top_left = 6
+	normal.corner_radius_top_right = 6
+	normal.corner_radius_bottom_right = 6
+	normal.corner_radius_bottom_left = 6
+	normal.content_margin_left = 24.0
+	normal.content_margin_right = 24.0
+	normal.content_margin_top = 16.0
+	normal.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"normal", normal)
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = bg_panel.lightened(0.04)
+	hover.border_color = border_frame
+	hover.border_width_left = 2
+	hover.border_width_top = 2
+	hover.border_width_right = 2
+	hover.border_width_bottom = 2
+	hover.corner_radius_top_left = 6
+	hover.corner_radius_top_right = 6
+	hover.corner_radius_bottom_right = 6
+	hover.corner_radius_bottom_left = 6
+	hover.content_margin_left = 24.0
+	hover.content_margin_right = 24.0
+	hover.content_margin_top = 16.0
+	hover.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"hover", hover)
+	var pressed := StyleBoxFlat.new()
+	pressed.bg_color = bg_panel.darkened(0.06)
+	pressed.border_color = border_frame
+	pressed.border_width_left = 2
+	pressed.border_width_top = 2
+	pressed.border_width_right = 2
+	pressed.border_width_bottom = 2
+	pressed.corner_radius_top_left = 6
+	pressed.corner_radius_top_right = 6
+	pressed.corner_radius_bottom_right = 6
+	pressed.corner_radius_bottom_left = 6
+	pressed.content_margin_left = 24.0
+	pressed.content_margin_right = 24.0
+	pressed.content_margin_top = 16.0
+	pressed.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"pressed", pressed)
+	button.add_theme_color_override(&"font_color", text_body)
+	button.add_theme_color_override(&"font_hover_color", text_title)
+	button.add_theme_color_override(&"font_pressed_color", text_title)
+
+
 static func create_base_theme() -> Theme:
 	var theme := Theme.new()
 	theme.set_color(&"font_color", &"Label", text_body)
