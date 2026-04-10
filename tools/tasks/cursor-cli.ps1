@@ -58,10 +58,24 @@ function Get-CursorAgentAutomationTrustArgs {
     return @("--trust")
 }
 
+# Default model for lane agents. Override via CURSOR_AGENT_MODEL env var.
+function Get-CursorAgentModel {
+    $m = $env:CURSOR_AGENT_MODEL
+    if ($null -ne $m -and $m.Trim().Length -gt 0) {
+        return $m.Trim()
+    }
+    return "claude-4.6-opus-high"
+}
+
 # `Get-CursorAgentAutomationTrustArgs` may return a [string] scalar (PowerShell unrolls single-element `return @("--trust")`).
 # `$scalar + @($prompt)` coerces the RHS and concatenates as strings → `--trustYou are...`. Build argv with an ArrayList instead.
 function Build-CursorAgentArgvWithTrust([string]$Prompt) {
     $list = New-Object System.Collections.ArrayList
+    $model = Get-CursorAgentModel
+    if ($model.Length -gt 0) {
+        [void]$list.Add("--model")
+        [void]$list.Add($model)
+    }
     $raw = Get-CursorAgentAutomationTrustArgs
     if ($null -ne $raw) {
         if ($raw -is [System.Array]) {
@@ -80,6 +94,7 @@ function Invoke-CursorTerminalAgent([string]$Prompt) {
     $agentExe = Get-CursorAgentCliExecutable
     if ($agentExe) {
         $cursorAgentArgv = Build-CursorAgentArgvWithTrust $Prompt
+        Write-Host "  Model: $(Get-CursorAgentModel)" -ForegroundColor DarkGray
         & $agentExe @cursorAgentArgv
         return $LASTEXITCODE
     }
