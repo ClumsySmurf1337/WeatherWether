@@ -41,6 +41,8 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 | **Godot import + build scaffold** (export presets still in Godot UI) | `pwsh ./tools/tasks/build.ps1` |
 | **Run the game** | `pwsh ./tools/tasks/launch.ps1` |
 | **Full health pass** (npm ci + Linear PM dry-run + validate + **lane prep** when run from Cursor’s terminal) | `npm run daily:full` |
+| **Simplest daily + parallel agents (one Task)** | **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** (`daily:full:apply:lanes`, then three lanes). Lane task terminals use **`presentation.close`** so each **closes when that lane finishes** (success or failure — re-run a single lane Task to debug). |
+| **Daily apply + lane prep only** (no agents yet) | **Tasks →** **Weather Whether — Daily full (apply + lane prep)** — same as `npm run daily:full:apply:lanes` |
 | **Resume lanes — terminals inside this Cursor window** (neatest) | `npm run cursor:resume:editor` → then **Tasks: Run Task** → **Weather Whether — All lane terminals (parallel)** |
 | **Resume lanes — one external PowerShell window per lane** | `npm run cursor:resume` |
 | **Full PM kickoff — editor terminals** | `npm run cursor:go:editor` → same **All lane terminals** task |
@@ -50,19 +52,22 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 
 ### Typical loop (lanes in Cursor)
 
-1. **`npm run daily:full:apply:lanes`** from the repo root (ideally **Cursor’s integrated terminal** so step 6 can prep worktrees and print the Tasks hint).
-2. **Tasks → Run Task → Weather Whether — All lane terminals (parallel)** (three terminals, one per lane). Wait until each finishes (checkmarks).
-3. **`npm run qa:agent`** when GitHub CI is green (or **`npm run qa:lane-prs:quick`** to skip waiting on checks). This merges lane PRs, moves Linear to Done, syncs worktrees, resets lane branches, and prints what to run next.
-4. Run **`daily:full:apply:lanes`** again (and step 2) for the next cycle.
+**Recommended (three steps in Cursor):**
 
-`daily:full:apply:lanes` does **not** start the agents by itself; it runs validate, optional Linear producer, worktree prep, and tells you to run the **All lane terminals** task.
+1. **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** — runs **`npm run daily:full:apply:lanes`**, then **three lane terminals in parallel**. Each lane terminal **auto-closes when that lane’s script exits** (see `.vscode/tasks.json` **`presentation.close`**).
+2. **Tasks → Run Task →** **Weather Whether — QA agent (lane PRs)** (or `npm run qa:agent` in the terminal) when you are ready to merge — waits on GitHub checks unless you use **`npm run qa:lane-prs:quick`**. This merges lane PRs, moves Linear to Done, **`worktrees:sync`**, resets lane branches, and prints what to run next.
+3. Repeat **step 1** (and **step 2** when you have PRs to land) for the next cycle.
+
+**Equivalent commands** (if you prefer typing): **`npm run daily:full:apply:lanes`**, then **Tasks →** **All lane terminals (parallel)**, then **`npm run qa:agent`**.
+
+`daily:full:apply:lanes` does **not** start the agents by itself unless you use the **compound Task** above; by itself it runs validate, optional Linear producer, worktree prep, and prints the Tasks hint.
 
 ### Lane ship → QA batch → next cycle
 
 1. **Implementation** (Tasks / `cursor-agent`): each lane Task runs **`run-lane-terminal.ps1`**, which runs **`linear:resume-pickup`** with **`--worktree-marker`** (writes **`.weather-lane-issue.txt`** in the worktree), then **`cursor-agent`**. When the agent exits, if there are **uncommitted changes *or* unpushed commits**, the launcher **auto-runs `lane-ship`** (validate, commit if needed, push, **`gh pr create`** if there is no open PR) — **no `-LinearId`** needed. **Stuck (finished work, no PR)?** Often the agent **committed locally but did not push**; that is fixed now. If something still did not ship, from main repo run **`npm run lane:ship:lanes`** (lanes 1–3) or **`npm run lane:ship -- -LaneIndex N`**. Pass **`-LinearId WEA-###`** only if **`.weather-lane-issue.txt`** is missing.
 2. Run **`npm run qa:agent`** from the main repo (visible in terminal; VS Code: **Tasks → Weather Whether — QA agent (lane PRs)**). It first **scans lanes 1–3** for **uncommitted or unpushed** work and runs **`lane-ship`** so missing PRs get opened, then for each open PR whose head is **`agent/cursor-lane-*`**: wait on GitHub checks (use **`npm run qa:lane-prs:quick`** to skip that wait), verify **`LINEAR_TEAM_KEY`-###** in PR text, merge **`origin/main`** into the PR (conflicts → repair), **`validate.ps1`**, **`gh pr merge`**, **`linear:complete-from-pr`** (Done), append **`docs/CHANGELOG_LANES.md`**, then **`worktrees:sync`** and **lane branch reset** (use **`npm run qa:agent -- -SkipResetLaneBranches`** to skip reset). To **only** merge existing PRs without a ship pre-pass: **`npm run qa:agent -- -SkipPreflightShip`**.
 3. **Lane reset** is **on by default** after **`qa:agent`**. If you skipped it: **`npm run lane:next-cycle`**.
-4. **`npm run daily:full:apply:lanes`** (or **`daily:full:apply`** then **All lane terminals**) for the next batch — **`qa:agent`** prints this at the end.
+4. **`npm run daily:full:apply:lanes`** or the **Daily apply:lanes, then parallel lane agents** Task for the next batch — **`qa:agent`** prints this at the end.
 
 ---
 
@@ -104,6 +109,8 @@ npm run daily:full:lanes          # force lane prep even outside Cursor terminal
 npm run daily:full:lean           # validate-only tail; no lane prep
 npm run daily:full:apply:lanes    # apply producer + lane prep
 ```
+
+**Cursor / VS Code Tasks** (`.vscode/tasks.json`): **Weather Whether — Daily full (apply + lane prep)**, **Weather Whether — All lane terminals (parallel)**, **Weather Whether — Daily apply:lanes, then parallel lane agents** (daily then lanes), **Weather Whether — QA agent (lane PRs)**.
 
 ---
 
