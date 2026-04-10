@@ -107,13 +107,17 @@ if (-not $SkipLocalValidate) {
             throw "qa-merge-conflicts.ps1 failed (exit $LASTEXITCODE)."
         }
     }
-    & "$repoRoot\tools\tasks\validate.ps1"
+    $validateProjectPath = (Get-Location).Path
+    Write-Host "  validate.ps1 using Godot project: $validateProjectPath" -ForegroundColor DarkGray
+    & "$repoRoot\tools\tasks\validate.ps1" -GodotProjectPath $validateProjectPath
 } else {
     Write-Host "`n[2] Skipped local validate (-SkipLocalValidate)"
 }
 
 if (-not $NoMerge) {
     Write-Host "`n[3] Merge PR (--$MergeMode, delete branch)"
+    # gh merge updates local git refs; must run from the worktree that has `main` (not a lane wt).
+    Set-Location -LiteralPath $repoRoot
     gh pr merge $PullRequestNumber --$MergeMode --delete-branch
     if ($LASTEXITCODE -ne 0) {
         throw "gh pr merge failed (branch protection, conflicts, or not mergeable)."
