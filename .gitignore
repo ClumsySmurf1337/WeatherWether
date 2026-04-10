@@ -1,5 +1,6 @@
 .godot/
 .import/
+assets/mocks/*.import
 .cursor/cache/
 .env
 .env.local
