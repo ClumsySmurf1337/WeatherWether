@@ -48,6 +48,22 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 
 **`cursor:open-lanes` after `cursor:resume`?** It does **not** break Linear or undo resume-pickup. It only opens **extra Cursor IDE windows** (one folder per worktree). Skip it if you already use **integrated Tasks** in one window; use it when you want **separate Cursor windows** per lane instead.
 
+### Typical loop (lanes in Cursor)
+
+1. **`npm run daily:full:apply:lanes`** from the repo root (ideally **Cursor’s integrated terminal** so step 6 can prep worktrees and print the Tasks hint).
+2. **Tasks → Run Task → Weather Whether — All lane terminals (parallel)** (three terminals, one per lane). Wait until each finishes (checkmarks).
+3. **`npm run qa:agent`** when GitHub CI is green (or **`npm run qa:lane-prs:quick`** to skip waiting on checks). This merges lane PRs, moves Linear to Done, syncs worktrees, resets lane branches, and prints what to run next.
+4. Run **`daily:full:apply:lanes`** again (and step 2) for the next cycle.
+
+`daily:full:apply:lanes` does **not** start the agents by itself; it runs validate, optional Linear producer, worktree prep, and tells you to run the **All lane terminals** task.
+
+### Lane ship → QA batch → next cycle
+
+1. **Implementation** (Tasks / `cursor-agent`): each lane Task runs **`run-lane-terminal.ps1`**, which runs **`linear:resume-pickup`** with **`--worktree-marker`** (writes **`.weather-lane-issue.txt`** in the worktree), then **`cursor-agent`**. When the agent exits, if there are **uncommitted changes *or* unpushed commits**, the launcher **auto-runs `lane-ship`** (validate, commit if needed, push, **`gh pr create`** if there is no open PR) — **no `-LinearId`** needed. **Stuck (finished work, no PR)?** Often the agent **committed locally but did not push**; that is fixed now. If something still did not ship, from main repo run **`npm run lane:ship:lanes`** (lanes 1–3) or **`npm run lane:ship -- -LaneIndex N`**. Pass **`-LinearId WEA-###`** only if **`.weather-lane-issue.txt`** is missing.
+2. Run **`npm run qa:agent`** from the main repo (visible in terminal; VS Code: **Tasks → Weather Whether — QA agent (lane PRs)**). It first **scans lanes 1–3** for **uncommitted or unpushed** work and runs **`lane-ship`** so missing PRs get opened, then for each open PR whose head is **`agent/cursor-lane-*`**: wait on GitHub checks (use **`npm run qa:lane-prs:quick`** to skip that wait), verify **`LINEAR_TEAM_KEY`-###** in PR text, merge **`origin/main`** into the PR (conflicts → repair), **`validate.ps1`**, **`gh pr merge`**, **`linear:complete-from-pr`** (Done), append **`docs/CHANGELOG_LANES.md`**, then **`worktrees:sync`** and **lane branch reset** (use **`npm run qa:agent -- -SkipResetLaneBranches`** to skip reset). To **only** merge existing PRs without a ship pre-pass: **`npm run qa:agent -- -SkipPreflightShip`**.
+3. **Lane reset** is **on by default** after **`qa:agent`**. If you skipped it: **`npm run lane:next-cycle`**.
+4. **`npm run daily:full:apply:lanes`** (or **`daily:full:apply`** then **All lane terminals**) for the next batch — **`qa:agent`** prints this at the end.
+
 ---
 
 ## One command — run almost everything
@@ -151,7 +167,7 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | Task | Command |
 |------|---------|
 | Full workspace audit (prereqs + optional Linear + seed dry-run) | `pwsh ./tools/tasks/validate-workspace.ps1` |
-| Godot tests + levels only | `pwsh ./tools/tasks/validate.ps1` |
+| Godot tests + levels only | `pwsh ./tools/tasks/validate.ps1` (add **`-GodotProjectPath <worktree>`** to validate a lane checkout) |
 | Linear snapshot | `npm run linear:status` |
 | PM phase order + auto-assign preview/apply | `npm run linear:pm-organize` / `npm run linear:pm-organize -- --apply` |
 | PM label generation + backfill | `npm run linear:label-backfill -- --apply` |
@@ -170,6 +186,11 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | Dispatch only | `npm run linear:dispatch -- --apply` |
 | Merge conflicts → Cursor QA prompt | `npm run qa:repair-merge` (see `.cursor/commands/qa-repair-merge.md`) |
 | PR merge + Linear Done (local) | `npm run qa:pr -- -PullRequestNumber <N>` |
+| Ship one lane worktree (commit + push + PR) | `npm run lane:ship -- -LaneIndex <1-3>` (optional **`-LinearId`**; else **`.weather-lane-issue.txt`**) |
+| Ship **all** default lanes (1–3) — recovery when work exists but no PR | `npm run lane:ship:lanes` |
+| QA merge **all** open lane PRs + Linear Done + sync + changelog + lane reset | `npm run qa:agent` (**`-SkipResetLaneBranches`** to skip branch reset) |
+| QA lane PRs, CI already green | `npm run qa:lane-prs:quick` |
+| Reset lane worktrees to fresh `agent/cursor-lane-*` from main | `npm run lane:next-cycle` |
 | Sync all agent worktrees with `main` | `npm run worktrees:sync` |
 | Play game | `pwsh ./tools/tasks/launch.ps1` |
 | Mobile preview posture | `pwsh ./tools/tasks/mobile-preview.ps1` |

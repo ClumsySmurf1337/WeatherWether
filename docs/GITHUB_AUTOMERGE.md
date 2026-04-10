@@ -17,12 +17,14 @@ npm run qa:pr -- -PullRequestNumber 42
 This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 
 1. **`gh pr checks --watch`** — waits for remote CI.
-2. **`gh pr checkout`** — your tree matches the PR.
-3. **`tools/tasks/validate.ps1`** — local Godot validation.
+2. **Checkout PR branch** — **`gh pr checkout`** in the main repo, **unless** the PR head is **`agent/cursor-lane-N`**: then the script uses your linked worktree **`wt-agent-cursor-lane-N`** under **`WHETHER_AGENT_ROOT`** (default `D:\Agents\WeatherWether`), because Git cannot check out the same branch in two worktrees.
+3. **`tools/tasks/validate.ps1`** — local Godot validation (runs in that checkout directory).
 4. **`gh pr merge --squash --delete-branch`** — merge from your machine (needs `gh` auth + branch rules).
 5. **`npm run linear:complete-from-pr`** — reads PR title/body for **`WEA-###`**, moves issue(s) to **Done** via **local** Linear API key.
 
-Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done).
+Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done), **`-AgentRoot`** (where **`wt-agent-cursor-lane-*`** live; batch passes this automatically).
+
+**Batch lane PRs:** **`npm run qa:agent`** (alias **`npm run qa:lane-prs`**) runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**), including a pre-flight ship pass for stale lane worktrees. Use **`npm run lane:ship`** / **`lane:ship:lanes`** when needed; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
 
 ## Optional: GitHub-side automation later
 

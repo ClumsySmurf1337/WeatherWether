@@ -1,5 +1,6 @@
 param(
-    [switch]$LevelsOnly
+    [switch]$LevelsOnly,
+    [string]$GodotProjectPath = ""
 )
 
 Set-StrictMode -Version Latest
@@ -27,7 +28,11 @@ if (-not $godotPath) {
     throw "Godot not found. Set GODOT_PATH, add godot to PATH, or install under D:\Godot (see docs/PATHS_AND_STORAGE_POLICY.md)."
 }
 
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$repoRoot = if ($GodotProjectPath) {
+    (Resolve-Path -LiteralPath $GodotProjectPath).Path
+} else {
+    Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+}
 if (-not $LevelsOnly) {
     if (Test-Path "$repoRoot\addons\gut\gut_cmdln.gd") {
         Write-Host "Importing project (GUT class_names)..."

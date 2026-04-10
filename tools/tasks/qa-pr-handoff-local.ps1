@@ -6,7 +6,8 @@ param(
     [switch]$SyncMainBeforeValidate,
     [switch]$NoMerge,
     [ValidateSet("squash", "merge", "rebase")]
-    [string]$MergeMode = "squash"
+    [string]$MergeMode = "squash",
+    [string]$AgentRoot = ""
 )
 
 Set-StrictMode -Version Latest
@@ -21,6 +22,16 @@ function Test-GhCli {
     if (-not $gh) {
         throw "GitHub CLI (gh) not found. Install: https://cli.github.com/"
     }
+}
+
+function Resolve-AgentRootHandoff {
+    if (-not [string]::IsNullOrWhiteSpace($AgentRoot)) {
+        return $AgentRoot.TrimEnd('\', '/')
+    }
+    if (-not [string]::IsNullOrWhiteSpace($env:WHETHER_AGENT_ROOT)) {
+        return $env:WHETHER_AGENT_ROOT.TrimEnd('\', '/')
+    }
+    return "D:\Agents\WeatherWether"
 }
 
 Write-Host "=== Local QA handoff: PR #$PullRequestNumber ===`n"
@@ -38,9 +49,52 @@ if (-not $SkipChecksWatch) {
 
 if (-not $SkipLocalValidate) {
     Write-Host "`n[2] Checkout PR branch and run local validate.ps1"
-    gh pr checkout $PullRequestNumber
+    $headJson = gh pr view $PullRequestNumber --json headRefName 2>$null
     if ($LASTEXITCODE -ne 0) {
-        throw "gh pr checkout failed."
+        throw "gh pr view (headRefName) failed."
+    }
+    $headObj = $headJson | ConvertFrom-Json
+    $headRef = [string]$headObj.headRefName
+
+    $laneWtPath = $null
+    if ($headRef -match '^agent/cursor-lane-(\d+)$') {
+        $laneIdx = [int]$Matches[1]
+        $wtCandidate = Join-Path (Resolve-AgentRootHandoff) "wt-agent-cursor-lane-$laneIdx"
+        if (Test-Path -LiteralPath $wtCandidate) {
+            Push-Location -LiteralPath $wtCandidate
+            try {
+                git rev-parse --git-dir *>$null
+                if ($LASTEXITCODE -eq 0) {
+                    $laneWtPath = $wtCandidate
+                }
+            }
+            finally {
+                Pop-Location
+            }
+        }
+    }
+
+    if ($null -ne $laneWtPath) {
+        Write-Host "  Using lane worktree (branch already linked here): $laneWtPath" -ForegroundColor Cyan
+        Set-Location -LiteralPath $laneWtPath
+        git fetch origin --prune 2>$null
+        git checkout $headRef 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            throw "git checkout $headRef failed in lane worktree $laneWtPath."
+        }
+        git merge --ff-only "origin/$headRef" 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            git merge --no-edit "origin/$headRef" 2>$null
+            if ($LASTEXITCODE -ne 0) {
+                throw "Could not sync origin/$headRef in lane worktree (conflicts). Fix in $laneWtPath, push, re-run."
+            }
+        }
+    }
+    else {
+        gh pr checkout $PullRequestNumber
+        if ($LASTEXITCODE -ne 0) {
+            throw "gh pr checkout failed. If the error mentions a worktree, ensure wt-agent-cursor-lane-* exists under $(Resolve-AgentRootHandoff) for PR heads agent/cursor-lane-N."
+        }
     }
     if ($SyncMainBeforeValidate) {
         Write-Host "  Merging origin/main into PR branch (conflicts → Cursor repair window)..."

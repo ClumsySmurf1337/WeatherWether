@@ -67,6 +67,7 @@ Companion specs:
 | `npm run qa:pr` | Local merge handoff + Linear Done (`gh` + `.env.local`) |
 | `npm run qa:repair-merge` | `git merge origin/main` + **`cursor-agent`** / **`cursor agent`** conflict repair prompt |
 | `npm run cursor:resume:editor` / `cursor:go:editor` | PM/worktree prep + **integrated** lane terminals (Tasks); **`prepare-editor-lane-worktrees.ps1`** |
+| `npm run lane:ship` / `qa:lane-prs` / `lane:next-cycle` | **`lane-ship.ps1`** (commit/push/PR from worktree), **`qa-lane-pr-batch.ps1`** (merge + Linear Done + sync), **`lane-worktrees-reset-for-next-cycle.ps1`** |
 | `npm run worktrees:sync` | `git fetch` + merge `origin/main` into each `wt-*` |
 | `pwsh ./tools/tasks/new-agent-worktree.ps1` | Add lane under `WHETHER_AGENT_ROOT` |
 
