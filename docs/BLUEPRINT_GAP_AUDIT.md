@@ -24,7 +24,7 @@ Companion specs:
 | **GUT** | **Installed** (bitwes/Gut in `addons/gut/`). |
 | **Godot MCP** | **Primary: `godot-full`** (tugcantopaloglu; `setup-godot-mcp-full.ps1`). **Optional:** `godot` (Coding-Solo `npx`). |
 | **Godot API docs** | **No docs MCP** — official [4.6 docs](https://docs.godotengine.org/en/4.6/) + `docs/GODOT_DOCS_ACCESS.md` + optional Cursor doc index. |
-| **Parallel agents** | **`new-agent-worktree.ps1`**, **`sync-agent-worktrees.ps1`**, **`cursor-autonomous-session.ps1`**, **`run-cursor-chat.ps1`** (`cursor agent`), **`cursor-cli.ps1`** (prefers `cursor` CLI). |
+| **Parallel agents** | **`new-agent-worktree.ps1`**, **`sync-agent-worktrees.ps1`**, **`cursor-autonomous-session.ps1`**, **`run-cursor-chat.ps1`** (`cursor-agent`, fallback `cursor agent`), **`cursor-cli.ps1`**. |
 | **QA / merge** | **`qa-pr-handoff-local.ps1`** (`npm run qa:pr`), **`qa-merge-conflicts.ps1`** (`npm run qa:repair-merge`) — **local**; merge + **Linear Done** via **`.env.local`**. |
 | **Export / release EXE in CI** | **Not done** — `build.yml` scaffold only; no `export_presets.cfg`. |
 | **LDtk → runtime** | **`levels/whether.ldtk` exists**; **no** `level_loader.gd` / **no** godot-ldtk-importer addon yet. |
@@ -62,10 +62,10 @@ Companion specs:
 | Script | Purpose |
 |--------|---------|
 | `npm run daily:full` | Prerequisites, `npm ci`, Linear producer preview/apply, `validate.ps1` |
-| `npm run cursor:session` / `cursor:session:apply` | Producer + validate + lanes; **`-SpawnAgentCli`** → `cursor agent` per worktree |
+| `npm run cursor:session` / `cursor:session:apply` | Producer + validate + lanes; **`-SpawnAgentCli`** → `cursor-agent` per worktree (fallback `cursor agent`) |
 | `npm run linear:*` | status, standup, promote, dispatch, pickup, producer, seed, bootstrap, close, complete-from-pr, **pm-organize**, **pm-assignments** |
 | `npm run qa:pr` | Local merge handoff + Linear Done (`gh` + `.env.local`) |
-| `npm run qa:repair-merge` | `git merge origin/main` + **`cursor agent`** conflict repair prompt |
+| `npm run qa:repair-merge` | `git merge origin/main` + **`cursor-agent`** / **`cursor agent`** conflict repair prompt |
 | `npm run worktrees:sync` | `git fetch` + merge `origin/main` into each `wt-*` |
 | `pwsh ./tools/tasks/new-agent-worktree.ps1` | Add lane under `WHETHER_AGENT_ROOT` |
 

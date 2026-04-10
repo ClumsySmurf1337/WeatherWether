@@ -89,10 +89,10 @@ if ($SpawnAgentCli) {
         Write-Warning "Cursor CLI not found. Install from https://cursor.com/docs/cli/installation and ensure ``cursor`` is on PATH, or set CURSOR_CLI_BIN."
     } else {
         Write-Host "  Using CLI: $cliExe (prefers ``cursor``, falls back to ``agent``)"
-        Write-Host "  Spawner: $runner — if agent fails, run ``cursor --help`` and adjust run-cursor-chat.ps1 / CURSOR_CLI_AGENT_SUBCOMMAND`n"
+        Write-Host "  Spawner: $runner — if spawn fails, ensure ``cursor-agent`` is on PATH (or CURSOR_AGENT_CLI_BIN); run ``cursor-agent --help`` / ``cursor --help`` and adjust run-cursor-chat.ps1`n"
     }
 } else {
-    Write-Host "  (Add -SpawnAgentCli to open one terminal per lane running ``cursor agent`` via run-cursor-chat.ps1.)"
+    Write-Host "  (Add -SpawnAgentCli to open one terminal per lane running ``cursor-agent`` via run-cursor-chat.ps1.)"
 }
 Write-Host "  Merge conflicts: npm run qa:repair-merge -- -RepoPath `"<worktree>`""
 Write-Host "  PR + Linear: put ${teamKey}-### in PR title/body; after CI green:"
@@ -117,7 +117,7 @@ for ($i = 1; $i -le $LaneCount; $i++) {
             "-WorkDir", $wtPath,
             "-PromptFile", $tempFile
         )
-        Write-Host "  Spawned: cursor agent (prompt: $tempFile)"
+        Write-Host "  Spawned: cursor-agent / cursor agent (prompt: $tempFile)"
     }
     Write-Host ""
 }

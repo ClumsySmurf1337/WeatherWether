@@ -42,6 +42,21 @@ function Get-CursorTerminalAgentSubcommand {
     return "agent"
 }
 
+function Invoke-CursorTerminalAgent([string]$Prompt) {
+    $agentExe = Get-CursorAgentCliExecutable
+    if ($agentExe) {
+        & $agentExe @($Prompt)
+        return $LASTEXITCODE
+    }
+    $exe = Get-CursorCliExecutable
+    if (-not $exe) {
+        throw "No terminal agent: put cursor-agent on PATH or set CURSOR_AGENT_CLI_BIN; or install cursor and set CURSOR_CLI_BIN."
+    }
+    $sub = Get-CursorTerminalAgentSubcommand
+    & $exe @($sub, $Prompt)
+    return $LASTEXITCODE
+}
+
 function Get-CursorElectronLaunch {
     $wrapper = Get-CursorCliExecutable
     if (-not $wrapper) {

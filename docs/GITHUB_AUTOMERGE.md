@@ -22,7 +22,7 @@ This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 4. **`gh pr merge --squash --delete-branch`** — merge from your machine (needs `gh` auth + branch rules).
 5. **`npm run linear:complete-from-pr`** — reads PR title/body for **`WEA-###`**, moves issue(s) to **Done** via **local** Linear API key.
 
-Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done).
+Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done).
 
 ## Optional: GitHub-side automation later
 

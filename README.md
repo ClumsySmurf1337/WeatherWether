@@ -49,9 +49,9 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 ## Daily Commands
 
 - `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
-- `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor agent`** per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
+- `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor-agent`** (fallback: **`cursor agent`**) per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
 - `npm run cursor:resume` — recover after interruption; refresh assignments, sync worktrees, relaunch lanes using `linear:resume-pickup`
-- `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor agent`**)
+- `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor-agent`** / **`cursor agent`**)
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
 - `npm run linear:pm-organize -- --apply` / `npm run linear:pm-feed-todo -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + Todo queue fill + DeedWise-style per-role assignment markdown

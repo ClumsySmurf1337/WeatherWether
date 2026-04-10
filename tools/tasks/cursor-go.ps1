@@ -67,10 +67,10 @@ if ($EditorLaneTerminals) {
     Write-Host "    2) Tasks: Run Task"
     Write-Host "    3) Pick:  Weather Whether — All lane terminals (parallel)"
     Write-Host ""
-    Write-Host "    Each task runs: resume-pickup (main repo .env.local) -> cd worktree -> ``cursor agent`` (lane prompt)."
+    Write-Host "    Each task runs: resume-pickup (main repo .env.local) -> cd worktree -> ``cursor-agent`` (lane prompt; fallback ``cursor agent``)."
     Write-Host "    No manual typing in the terminal. If 3 parallel agents fight for one Cursor UI, run lanes one at a time from Tasks.`n"
 } elseif (-not $SkipSessionLaunch) {
-    Write-Host "`n[5/5] Launch parallel Cursor session (external PowerShell + cursor agent)"
+    Write-Host "`n[5/5] Launch parallel Cursor session (external PowerShell + cursor-agent)"
     & "$repoRoot\tools\tasks\cursor-autonomous-session.ps1" -ApplyProducer -CreateWorktrees -SyncWorktrees -SpawnAgentCli -LaneCount $LaneCount
 } else {
     Write-Host "`n[5/5] Skipped session launch (-SkipSessionLaunch)"

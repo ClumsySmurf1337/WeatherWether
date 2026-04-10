@@ -60,8 +60,10 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 |----------|---------|
 | `LINEAR_WORKSPACE_ID` | Workspace/org UUID — rarely needed for our scripts; reserve for future org-level API |
 | `GITHUB_TOKEN` | For GitHub MCP / future PR automation (repo `contents` + `pull_requests` if auto-merge) |
-| `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (parallel lanes + `qa:repair-merge`) |
-| `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable |
+| `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (editor wrapper; folder open + fallback terminal agent) |
+| `CURSOR_AGENT_CLI_BIN` | Full path to **`cursor-agent`** if not on PATH (preferred terminal agent for lane / merge scripts) |
+| `CURSOR_CLI_AGENT_SUBCOMMAND` | When **`cursor-agent`** is missing, scripts run **`cursor <subcommand> <prompt>`** — default subcommand is **`agent`** |
+| `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable (`Get-CursorCliExecutable` only) |
 | `LINEAR_PM_AUTO_ASSIGN` | If `false`, `linear:pm-organize -- --apply` skips setting assignees (priorities still update unless `--assign-only`) |
 | `LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER` | Default `true`. If role/default assignee IDs are missing, assign to the API-key user for `linear:dispatch`, `linear:resume-pickup`, and `linear:pm-organize` |
 | `LINEAR_PM_LABEL_BACKFILL_STATE_IDS` | Optional comma-separated extra state IDs for `linear:label-backfill` scan (Todo/Backlog/In Progress are included by default) |

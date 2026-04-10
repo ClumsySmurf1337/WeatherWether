@@ -55,9 +55,8 @@ if ($SkipCursorChat) {
 }
 
 . (Join-Path $mainResolved "tools\tasks\cursor-cli.ps1")
-$cliExe = Get-CursorCliExecutable
-if (-not $cliExe) {
-    Write-Warning "Cursor CLI not found (PATH or CURSOR_CLI_BIN). Open Agent manually in this worktree."
+if (-not (Get-CursorAgentCliExecutable) -and -not (Get-CursorCliExecutable)) {
+    Write-Warning "No cursor-agent on PATH (or CURSOR_AGENT_CLI_BIN) and no cursor CLI (CURSOR_CLI_BIN). Open Agent manually in this worktree."
     exit 0
 }
 
@@ -72,10 +71,16 @@ $launcherNote = @"
 "@
 $promptText = $launcherNote + "`n`n" + $template.Replace("{{ROLE}}", $role)
 
-$sub = Get-CursorTerminalAgentSubcommand
 Write-Host "Starting Cursor CLI agent (auto) in worktree — no terminal typing required." -ForegroundColor Yellow
-Write-Host "CLI: $cliExe  ($sub …)" -ForegroundColor DarkGray
+$agentExe = Get-CursorAgentCliExecutable
+if ($agentExe) {
+    Write-Host "CLI: $agentExe (cursor-agent)" -ForegroundColor DarkGray
+} else {
+    $wrap = Get-CursorCliExecutable
+    $sub = Get-CursorTerminalAgentSubcommand
+    Write-Host "CLI: $wrap $sub (fallback; install cursor-agent for the supported entry point)" -ForegroundColor DarkGray
+}
 Write-Host ""
 
-& $cliExe @($sub, $promptText)
-exit $LASTEXITCODE
+$code = Invoke-CursorTerminalAgent -Prompt $promptText
+exit $code

@@ -48,5 +48,5 @@ for ($i = 1; $i -le $LaneCount; $i++) {
 }
 Write-Host "3. Prefer Cursor Agent in the sidebar on the In Progress issue."
 Write-Host "   Optional same-terminal CLI: open tools/tasks/prompts/lane-agent-prompt.md, replace {{ROLE}}, then:"
-Write-Host '   cursor agent "<pasted prompt text>"'
-Write-Host "`nTip: ``npm run cursor:go`` / ``cursor:resume`` run PM/sync then spawn **pwsh** windows that invoke **``cursor agent``** (terminal agent). This script only opens **new Cursor windows** on each worktree folder — use it when you want IDE workspaces instead of extra PowerShell popups.`n"
+Write-Host '   cursor-agent "<pasted prompt text>"'
+Write-Host "`nTip: ``npm run cursor:go`` / ``cursor:resume`` run PM/sync then spawn **pwsh** windows that invoke **``cursor-agent``** (fallback **``cursor agent``**). This script only opens **new Cursor windows** on each worktree folder — use it when you want IDE workspaces instead of extra PowerShell popups.`n"

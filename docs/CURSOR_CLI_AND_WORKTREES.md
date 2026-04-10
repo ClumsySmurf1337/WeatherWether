@@ -13,11 +13,11 @@ Official install (see [Cursor CLI installation](https://cursor.com/docs/cli/inst
 - **macOS / Linux / WSL:** `curl https://cursor.com/install -fsS | bash`
 - **Windows (native PowerShell):** `irm 'https://cursor.com/install?win32=true' | iex`
 
-Ensure **`cursor`** is on `PATH`, or set **`CURSOR_CLI_BIN`** to the full path of `cursor.exe`. If you still use the legacy shim, **`CURSOR_AGENT_BIN`** / `agent` is used as a fallback.
+Ensure **`cursor-agent`** is on `PATH` for lane automation (or set **`CURSOR_AGENT_CLI_BIN`**). For opening the editor from the CLI, ensure **`cursor`** is on `PATH`, or set **`CURSOR_CLI_BIN`**. If you still use the legacy shim, **`CURSOR_AGENT_BIN`** / `agent` is used as a fallback for **`Get-CursorCliExecutable`** only.
 
-Then one command can open **multiple** terminals that each run **`cursor agent "<prompt>"`** (via **`tools/tasks/run-cursor-chat.ps1`**) with a generated prompt — see **`npm run cursor:session:apply -- -SpawnAgentCli`**. Cursor 3.x uses the **`agent`** subcommand; **`chat`** is not a CLI subcommand (passing `chat` behaves like stray path args). Override with **`CURSOR_CLI_AGENT_SUBCOMMAND`** if Cursor changes the name.
+Then one command can open **multiple** terminals that each run **`cursor-agent "<prompt>"`** (via **`tools/tasks/run-cursor-chat.ps1`**) with a generated prompt — see **`npm run cursor:session:apply -- -SpawnAgentCli`**. Scripts **prefer `cursor-agent`** on `PATH` (or **`CURSOR_AGENT_CLI_BIN`**). If it is missing, they fall back to **`cursor agent "<prompt>"`** (override subcommand with **`CURSOR_CLI_AGENT_SUBCOMMAND`**). **`chat`** is not a `cursor` subcommand (passing `chat` behaves like stray path args).
 
-If your CLI uses a different subcommand than **`agent`**, set **`CURSOR_CLI_AGENT_SUBCOMMAND`** or edit **`tools/tasks/run-cursor-chat.ps1`** (the `& $exe @($sub, $prompt)` line).
+Prefer fixing **`PATH`** / **`CURSOR_AGENT_CLI_BIN`** so **`cursor-agent`** resolves. If you only have the editor wrapper, set **`CURSOR_CLI_AGENT_SUBCOMMAND`** for the fallback `cursor <subcommand>` line in **`tools/tasks/cursor-cli.ps1`** / **`run-cursor-chat.ps1`**.
 
 ## Merge conflicts → QA Cursor session
 
@@ -25,7 +25,7 @@ If your CLI uses a different subcommand than **`agent`**, set **`CURSOR_CLI_AGEN
 npm run qa:repair-merge -- -RepoPath "D:\Agents\WeatherWether\wt-agent-cursor-lane-1"
 ```
 
-Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`git merge origin/main`** and, on conflict, launches **`cursor agent`** with **`tools/tasks/prompts/qa-merge-conflict-repair.md`**.
+Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`git merge origin/main`** and, on conflict, launches **`cursor-agent`** (or **`cursor agent`** fallback) with **`tools/tasks/prompts/qa-merge-conflict-repair.md`**.
 
 ## One- or two-command local flow
 

@@ -17,15 +17,23 @@ if (-not (Test-Path -LiteralPath $PromptFile)) {
 $resolvedWork = (Resolve-Path -LiteralPath $WorkDir).Path
 $prompt = Get-Content -LiteralPath $PromptFile -Raw
 
-$exe = if ($CliExe) { $CliExe } else { Get-CursorCliExecutable }
-if (-not $exe) {
-    throw "Cursor CLI not found. Install Cursor CLI and ensure 'cursor' is on PATH, or set CURSOR_CLI_BIN."
+Set-Location -LiteralPath $resolvedWork
+
+if ($CliExe) {
+    Write-Host "Running: $CliExe <prompt> in $resolvedWork (forced -CliExe)"
+    & $CliExe @($prompt)
+    exit $LASTEXITCODE
 }
 
-Set-Location -LiteralPath $resolvedWork
-$sub = Get-CursorTerminalAgentSubcommand
-Write-Host "Running: $exe $sub <prompt> in $resolvedWork"
-Write-Host "(Subcommand from CURSOR_CLI_AGENT_SUBCOMMAND, default agent — not 'chat'; see tools/tasks/cursor-cli.ps1.)" -ForegroundColor DarkGray
+$agentExe = Get-CursorAgentCliExecutable
+if ($agentExe) {
+    Write-Host "Running: $agentExe <prompt> in $resolvedWork"
+} else {
+    $wrap = Get-CursorCliExecutable
+    $sub = Get-CursorTerminalAgentSubcommand
+    Write-Host "Running: $wrap $sub <prompt> in $resolvedWork (fallback; prefer cursor-agent on PATH)"
+}
+Write-Host "(See tools/tasks/cursor-cli.ps1: CURSOR_AGENT_CLI_BIN, CURSOR_CLI_AGENT_SUBCOMMAND.)" -ForegroundColor DarkGray
 
-& $exe @($sub, $prompt)
-exit $LASTEXITCODE
+$code = Invoke-CursorTerminalAgent -Prompt $prompt
+exit $code
