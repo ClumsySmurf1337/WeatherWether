@@ -31,7 +31,7 @@ Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValid
 
 **CI “no checks reported” on a brand-new PR:** **`qa-pr-handoff-local.ps1`** polls **`gh pr view --json statusCheckRollup`** until checks exist (default up to **15 minutes**, **15 s** interval), then runs **`gh pr checks --watch`**. Tune with **`npm run qa:pr -- -PullRequestNumber N -ChecksPollMaxSeconds 1200`** or from the batch: **`npm run qa:agent -- -ChecksPollMaxSeconds 1200`**.
 
-**Batch lane PRs:** **`npm run qa:agent`** (alias **`npm run qa:lane-prs`**) runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**), including a pre-flight ship pass for stale lane worktrees. Use **`npm run lane:ship`** / **`lane:ship:lanes`** when needed; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
+**Batch lane PRs:** **`npm run qa:agent`** (alias **`npm run qa:lane-prs`**) runs the same handoff for every open PR whose head matches **`agent/cursor-lane-*`** (see **`tools/tasks/qa-lane-pr-batch.ps1`**), including a pre-flight ship pass for stale lane worktrees (**`lane-ship`**: **`validate.ps1`** + **`linear:verify-issue-for-ship`** before **`gh pr create`**). Use **`npm run lane:ship`** / **`lane:ship:lanes`** when needed; **`npm run lane:next-cycle`** after merges to recreate lane branches from **main**.
 
 ## Optional: GitHub-side automation later
 

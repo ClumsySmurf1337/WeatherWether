@@ -20,6 +20,7 @@
     "cursor:resume:editor": "pwsh -NoProfile -File tools/tasks/cursor-resume.ps1 -EditorLaneTerminals",
     "cursor:open-lanes": "pwsh -NoProfile -File tools/tasks/open-cursor-lane-windows.ps1",
     "linear:complete-from-pr": "tsx tools/linear/complete-linear-from-pr.ts",
+    "linear:verify-issue-for-ship": "tsx tools/linear/verify-linear-issue-for-ship.ts",
     "linear:complete-merged-lane-prs": "pwsh -NoProfile -File tools/tasks/linear-complete-from-merged-prs.ps1",
     "qa:pr": "pwsh -NoProfile -File tools/tasks/qa-pr-handoff-local.ps1",
     "qa:lane-prs": "pwsh -NoProfile -File tools/tasks/qa-lane-pr-batch.ps1",

@@ -4,7 +4,8 @@ param(
     [string]$WorktreePath = "",
     [string]$MainRepoRoot = "",
     [string]$AgentRoot = "",
-    [switch]$SkipValidate
+    [switch]$SkipValidate,
+    [switch]$SkipLinearVerify
 )
 
 Set-StrictMode -Version Latest
@@ -98,8 +99,25 @@ if ($state.UnpushedCount -gt 0) {
 }
 
 if (-not $SkipValidate) {
-    Write-Host "Running validate.ps1 against this worktree..."
+    Write-Host "Running validate.ps1 against this worktree (GUT + level checks when GUT is installed)..."
     & "$mainResolved\tools\tasks\validate.ps1" -GodotProjectPath $WorktreePath
+}
+
+if (-not $SkipLinearVerify) {
+    Write-Host "Verifying Linear issue $LinearId exists and is not Done/Canceled (repo root for .env.local)..."
+    Push-Location -LiteralPath $mainResolved
+    try {
+        $env:LINEAR_SHIP_ISSUE_ID = $LinearId
+        npm run linear:verify-issue-for-ship
+        if ($LASTEXITCODE -ne 0) {
+            throw "linear:verify-issue-for-ship failed (exit $LASTEXITCODE)."
+        }
+    }
+    finally {
+        Remove-Item Env:\LINEAR_SHIP_ISSUE_ID -ErrorAction SilentlyContinue
+        Pop-Location
+    }
+    Set-Location -LiteralPath $WorktreePath
 }
 
 if ($state.HasUncommitted) {

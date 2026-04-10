@@ -48,7 +48,7 @@ function Test-GhCli {
 
 Write-Host ""
 Write-Host "  WHETHER — QA AGENT (lane PRs)" -ForegroundColor Cyan
-Write-Host "  Preflight: ship stale lane worktrees (uncommitted / unpushed) → open PRs → checks → merge main → validate → merge PR → Linear Done → sync → lane reset (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
+Write-Host "  Preflight: ship stale lane worktrees (validate + Linear verify → PR) → per PR: checks → merge main → validate → merge → Linear Done → sync → lane reset (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
 Write-Host ""
 Test-GhCli
 

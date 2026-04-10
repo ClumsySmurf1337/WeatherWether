@@ -2,7 +2,8 @@ param(
     [int[]]$LaneIndexes = @(1, 2, 3),
     [string]$MainRepoRoot = "",
     [string]$AgentRoot = "",
-    [switch]$SkipValidate
+    [switch]$SkipValidate,
+    [switch]$SkipLinearVerify
 )
 
 Set-StrictMode -Version Latest
@@ -27,6 +28,9 @@ foreach ($idx in $LaneIndexes) {
     }
     if ($SkipValidate) {
         $splat.SkipValidate = $true
+    }
+    if ($SkipLinearVerify) {
+        $splat.SkipLinearVerify = $true
     }
     & (Join-Path $PSScriptRoot "lane-ship.ps1") @splat
     if ($LASTEXITCODE -ne 0) {
