@@ -8,7 +8,10 @@ param(
     [string]$HeadBranchPattern = "^agent/cursor-lane-\d+$",
     [bool]$SyncWorktreesAfter = $true,
     [switch]$SkipResetLaneBranches,
-    [switch]$SkipChangelog
+    [switch]$SkipChangelog,
+    [int[]]$PreflightShipLaneIndexes = @(1, 2, 3),
+    [switch]$SkipPreflightShip,
+    [string]$AgentRoot = ""
 )
 
 Set-StrictMode -Version Latest
@@ -16,7 +19,16 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $repoRoot
+$mainResolved = (Resolve-Path -LiteralPath $repoRoot).Path
 . "$repoRoot\tools\tasks\load-repo-env.ps1"
+. "$repoRoot\tools\tasks\lane-ship-lib.ps1"
+
+if ([string]::IsNullOrWhiteSpace($AgentRoot)) {
+    $AgentRoot = $env:WHETHER_AGENT_ROOT
+}
+if ([string]::IsNullOrWhiteSpace($AgentRoot)) {
+    $AgentRoot = "D:\Agents\WeatherWether"
+}
 
 $teamKey = $env:LINEAR_TEAM_KEY
 if ([string]::IsNullOrWhiteSpace($teamKey)) {
@@ -32,10 +44,40 @@ function Test-GhCli {
 
 Write-Host ""
 Write-Host "  WHETHER — QA AGENT (lane PRs)" -ForegroundColor Cyan
-Write-Host "  Open PRs → checks → merge main → validate → merge PR → Linear Done → sync worktrees → reset lane branches (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
+Write-Host "  Preflight: ship stale lane worktrees (uncommitted / unpushed) → open PRs → checks → merge main → validate → merge PR → Linear Done → sync → lane reset (unless -SkipResetLaneBranches)." -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "=== QA batch: open PRs whose head matches $HeadBranchPattern ===`n"
 Test-GhCli
+
+if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
+    Write-Host "=== Pre-flight: lane worktrees that need ship (lanes $($PreflightShipLaneIndexes -join ', ')) ===`n" -ForegroundColor Cyan
+    foreach ($laneIdx in $PreflightShipLaneIndexes) {
+        $wtPath = Join-Path $AgentRoot "wt-agent-cursor-lane-$laneIdx"
+        if (-not (Test-Path -LiteralPath $wtPath)) {
+            Write-Host "Lane $laneIdx : worktree not found — skip ($wtPath)" -ForegroundColor DarkGray
+            continue
+        }
+        try {
+            $st = Get-LaneWorktreeShipState -RepoPath $wtPath
+        }
+        catch {
+            Write-Warning "Lane $laneIdx : could not inspect git state — skip. ($($_.Exception.Message))"
+            continue
+        }
+        if (-not $st.NeedsShip) {
+            Write-Host "Lane $laneIdx : OK (nothing to ship)." -ForegroundColor DarkGray
+            continue
+        }
+        Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); unpushed=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
+        & "$repoRoot\tools\tasks\lane-ship.ps1" -LaneIndex $laneIdx -MainRepoRoot $mainResolved -AgentRoot $AgentRoot
+        if ($LASTEXITCODE -ne 0) {
+            throw "Pre-flight lane-ship failed for lane $laneIdx (exit $LASTEXITCODE). Fix the worktree, then re-run npm run qa:agent."
+        }
+        Write-Host ""
+    }
+    Write-Host "=== Pre-flight ship pass complete ===`n" -ForegroundColor Green
+}
+
+Write-Host "=== QA batch: open PRs whose head matches $HeadBranchPattern ===`n"
 
 $raw = gh pr list --state open --json number,headRefName,title 2>$null
 if ($LASTEXITCODE -ne 0) {
@@ -54,8 +96,13 @@ $lanePrs = @($list | Where-Object { $_.headRefName -match $HeadBranchPattern } |
     })
 
 if ($lanePrs.Count -eq 0) {
-    Write-Host "No open lane PRs (heads like agent/cursor-lane-1). Nothing to do."
-    Write-Host "Tip: create PRs with lane-ship.ps1 or gh pr create from each worktree."
+    Write-Host "No open lane PRs (heads like agent/cursor-lane-1). Nothing left to merge."
+    if ($SkipPreflightShip) {
+        Write-Host "Tip: you used -SkipPreflightShip — stale work may still need: npm run lane:ship:lanes" -ForegroundColor DarkYellow
+    }
+    else {
+        Write-Host "Tip: if work is still only local, check lane worktrees and .weather-lane-issue.txt (Linear id for ship)." -ForegroundColor DarkGray
+    }
     exit 0
 }
 
