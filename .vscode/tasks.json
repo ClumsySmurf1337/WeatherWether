@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Weather Whether — Lane 1 (gameplay)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-terminal.ps1\" -LaneIndex 1 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Lane 2 (ui)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-terminal.ps1\" -LaneIndex 2 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Lane 3 (levels)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-terminal.ps1\" -LaneIndex 3 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — All lane terminals (parallel)",
+      "dependsOn": [
+        "Weather Whether — Lane 1 (gameplay)",
+        "Weather Whether — Lane 2 (ui)",
+        "Weather Whether — Lane 3 (levels)"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -35,7 +35,7 @@ async function main(): Promise<void> {
   ]);
 
   const today = fmtDate(new Date());
-  console.log(`# Whether Daily Standup (${today})`);
+  console.log(`# Weather Whether Daily Standup (${today})`);
   console.log("");
   console.log("## Done Recently");
   done.nodes.forEach((issue) => console.log(`- ${issue.identifier} ${issue.title}`));
