@@ -1,0 +1,912 @@
+[
+    {
+      "title": "[REWRITE] Terrain enum expansion to 14 types",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/weather/weather_type.gd defines all 14 Terrain enum values per GAME_DESIGN.md §6",
+        "Helper functions: is_walkable(), is_conductive(), is_death_tile() implemented and unit-tested",
+        "All references to old 6-value enum removed from codebase",
+        "test/test_weather_cards.gd passes after update"
+      ]
+    },
+    {
+      "title": "[REWRITE] WeatherCard Resource and canonical card enum",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/weather/weather_card.gd extends Resource with type, display_name, description, icon, cost, radius, is_directional",
+        "WeatherType.Card enum exported from weather_type.gd matches the 6 cards in GAME_DESIGN.md §5",
+        "Resources for each card created at resources/cards/card_rain.tres through card_fog.tres",
+        "Inspector loading verified in Godot editor"
+      ]
+    },
+    {
+      "title": "[REWRITE] WeatherSystem pure-function interaction matrix (37 active transitions)",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "scripts/weather/weather_system.gd implements WeatherSystem.apply(grid, w, h, card_type, pos) as a pure function returning a new grid",
+        "All 37 active transitions from GAME_DESIGN.md §5 matrix implemented and tested",
+        "Function never mutates input grid - verified with shared-reference test",
+        "Unit tests cover all 37 transitions plus 47 (none) cells in test/test_weather_cards.gd"
+      ]
+    },
+    {
+      "title": "[REWRITE] Lightning flood-fill chain through conductive tiles",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "Lightning targeting any conductive tile (WATER, WET_GRASS, ICE, MUD) flood-fills connected conductive region",
+        "All tiles in the connected region become SCORCHED in a single apply() call",
+        "Lightning on ICE shatters single tile to EMPTY (no chain)",
+        "Test cases cover: single conductive tile, large connected region, ice shatter, non-conductive target"
+      ]
+    },
+    {
+      "title": "[REWRITE] Wind 3-tile cross effect for fog/steam dispersal",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "WIND card affects target tile + 4 cardinal neighbors (3-tile cross, max 5 tiles)",
+        "Each tile in the cross independently checks WIND row of interaction matrix",
+        "Out-of-bounds neighbors silently skipped",
+        "Test cases cover: center placement, edge placement, corner placement, mixed terrain in cross"
+      ]
+    },
+    {
+      "title": "[REWRITE] Fog 3x3 area effect with START/GOAL/STONE exclusion",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "FOG card covers a 3x3 area centered on target with FOG_COVERED",
+        "STONE, START, and GOAL tiles inside the 3x3 area are excluded (not covered)",
+        "Out-of-bounds positions silently skipped",
+        "Test cases cover: clear 3x3, mixed area with STONE, START/GOAL preservation, edge clipping"
+      ]
+    },
+    {
+      "title": "[CORE] GridManager v2 with queue API + undo/redo stack",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/grid/grid_manager.gd refactored to support queue_card(), unqueue_last(), clear_queue(), get_queue()",
+        "Undo and redo stacks track grid mutations from sequence playback",
+        "Signals: grid_changed, card_queued, card_unqueued, sequence_started, sequence_finished",
+        "Pure logic separated from rendering - GridManager has no TileMapLayer dependencies"
+      ]
+    },
+    {
+      "title": "[CORE] LevelData Resource (v2 schema with start/goal/cards/par)",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/level/level_data.gd implements full v2 schema per GAME_DESIGN.md §7",
+        "All fields exported: id, world, level_number, display_name, hint_text, width, height, initial_terrain, start_position, goal_positions, available_cards, max_moves, par_moves, target_difficulty, min_solution_length, unique_solution",
+        "Resource saves and loads round-trip without data loss",
+        "Validation: start_position must be walkable, goal_positions reachable per solver"
+      ]
+    },
+    {
+      "title": "[CORE] LevelLoader JSON read/write",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/level/level_loader.gd implements load_from_json(path) returning LevelData",
+        "save_to_json(level, path) writes round-trip-stable JSON",
+        "Schema validation: missing/invalid fields produce clear error messages",
+        "Test cases cover: valid level, malformed JSON, missing required fields, schema version mismatch"
+      ]
+    },
+    {
+      "title": "[CORE] WorldData and WorldLoader for world meta + path JSON",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/level/world_data.gd Resource with id, name, mood, level_count, music_path, ambient_path",
+        "scripts/level/world_loader.gd loads worlds + level lists for each world",
+        "Per-world path JSON loaded from levels/worldN/path.json with normalized node coordinates",
+        "Test: all 6 worlds load without error"
+      ]
+    },
+    {
+      "title": "[CORE] EventBus autoload (level_started, sequence_started, etc.)",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/autoload/event_bus.gd registered as autoload in project.godot",
+        "Signals defined: level_started, level_completed, level_failed, card_queued, card_unqueued, sequence_started, sequence_finished, character_died, no_path_forward",
+        "All signals strongly typed with parameter signatures",
+        "Documented in scripts/autoload/event_bus.gd header comment"
+      ]
+    },
+    {
+      "title": "[CORE] AudioManager autoload with Music/SFX/Ambient buses",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/autoload/audio_manager.gd registered as autoload",
+        "Three audio buses configured: Master > Music, SFX, Ambient",
+        "play_music(track_path), play_sfx(sound_path), play_ambient(layer_path) APIs implemented",
+        "Crossfade between music tracks on world change",
+        "Volume controls bound to SaveManager settings"
+      ]
+    },
+    {
+      "title": "[CORE] SaveManager autoload — schema v1 with atomic writes",
+      "priority": 1,
+      "labels": ["Core-Engine", "QA-Testing"],
+      "acceptance": [
+        "scripts/autoload/save_manager.gd implements full schema from GAME_DESIGN.md §11",
+        "Atomic writes via .tmp + rename pattern",
+        "Schema version field present, migration stub for future versions",
+        "Save triggered on: level complete, settings change, app pause/focus loss",
+        "Test coverage: round-trip, atomic write failure, missing file, corrupt file, version migration"
+      ]
+    },
+    {
+      "title": "[CORE] GameManager state machine (BOOT/MENU/PLAYING/PAUSED/COMPLETE/FAILED)",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/core/game_manager.gd state enum and signal-driven transitions",
+        "Level loading orchestration: load LevelData, init GridManager, init CharacterController, render UI",
+        "Win/lose detection routes to LevelComplete or LevelFailed UI",
+        "State transitions logged for debugging"
+      ]
+    },
+    {
+      "title": "[MECH] Sequence queue model — players queue cards, commit on PLAY",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "Player can tap a card to select, tap a tile to add to queue with numbered ghost preview",
+        "Tapping a queued card removes it from queue",
+        "Queue is immutable once PLAY SEQUENCE is committed",
+        "Queue strip widget renders queued cards with order numbers",
+        "Tile preview overlay shows projected post-sequence state"
+      ]
+    },
+    {
+      "title": "[MECH] Sequence playback orchestration (card-by-card resolve with anims)",
+      "priority": 1,
+      "labels": ["Core-Engine", "UI-UX"],
+      "acceptance": [
+        "On PLAY SEQUENCE, cards animate from queue to target tiles one at a time",
+        "Each card triggers WeatherSystem.apply() and visual effect",
+        "Inter-card pause configurable (default 100ms)",
+        "Walk phase begins 250ms after final card resolves",
+        "Speed toggle (1x/2x) functional during playback"
+      ]
+    },
+    {
+      "title": "[MECH] BFS PuzzleSolver with state hashing and 200k cap",
+      "priority": 1,
+      "labels": ["Puzzle-Design", "QA-Testing"],
+      "acceptance": [
+        "scripts/puzzle/puzzle_solver.gd implements BFS with PuzzleState hash deduplication",
+        "MAX_STATES cap of 200000 prevents runaway on bad levels",
+        "Returns SolverResult with is_solvable, solution, min_moves, states_explored, elapsed_ms",
+        "Performance: solves a 5x5 / 6-card test level in under 2 seconds on dev hardware",
+        "Test cases: trivial level, multi-step level, unsolvable level, state cap behavior"
+      ]
+    },
+    {
+      "title": "[MECH] PuzzleSolver goal predicate uses A* path existence",
+      "priority": 1,
+      "labels": ["Puzzle-Design"],
+      "acceptance": [
+        "Default goal predicate runs A* from start to goal on walkable tiles after each candidate state",
+        "Win = path exists; the solver does NOT require character to walk - just verify path",
+        "Custom goal predicates supported via Callable parameter",
+        "Test: levels with no path are correctly marked unsolvable"
+      ]
+    },
+    {
+      "title": "[MECH] SolverResult difficulty_score() and par_moves derivation",
+      "priority": 2,
+      "labels": ["Puzzle-Design"],
+      "acceptance": [
+        "scripts/puzzle/solver_result.gd implements difficulty_score() returning 1-10",
+        "Score factors: min_moves length, branching (states_explored), unique_solution flag",
+        "par_moves = solver.min_moves used by star rating system",
+        "Cached on LevelData when level is validated by tools/dev/validate_levels script"
+      ]
+    },
+    {
+      "title": "[MECH] A* pathfinder over walkable terrain with cardinal moves + tie-break",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/character/pathfinder.gd implements pure A* with cardinal-only movement",
+        "Walkable predicate uses WeatherType.is_walkable()",
+        "Tie-breaking prefers straight-line paths over zigzag for visual clarity",
+        "Returns Array[Vector2i] of tile positions or empty array if no path",
+        "Test cases: trivial path, blocked path, multi-route, identical-cost tiebreak"
+      ]
+    },
+    {
+      "title": "[MECH] Character controller — idle, walk, death state machine",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "scripts/character/character_controller.gd state machine: idle, surprised, walk_n/s/e/w, cheer, drown, burn, electrocute, freeze, fall",
+        "Walks supplied path tile-by-tile at 250ms per step",
+        "Direction sprite chosen based on next tile delta",
+        "Death state plays appropriate animation, holds final frame",
+        "Win state plays cheer animation, emits character_won signal"
+      ]
+    },
+    {
+      "title": "[MECH] Death detection — drown/burn/fall (v1 active set)",
+      "priority": 1,
+      "labels": ["Core-Engine", "Puzzle-Design"],
+      "acceptance": [
+        "Before each walk step, character_controller checks tile type",
+        "WATER -> drown state, EMPTY or off-grid -> fall state, SCORCHED -> burn state",
+        "On death, character_died signal emitted with cause enum",
+        "GameManager catches signal and transitions to FAILED state",
+        "v1.5 anim sets (electrocute, freeze) have stub triggers behind feature flag"
+      ]
+    },
+    {
+      "title": "[MECH] Sequence undo and full-queue cancel",
+      "priority": 1,
+      "labels": ["Core-Engine", "UI-UX"],
+      "acceptance": [
+        "UNDO button removes the most recently queued card from queue",
+        "CANCEL button clears the entire queue with confirm tap",
+        "Tile preview overlay updates after each undo/cancel",
+        "Queue strip widget animates removal smoothly",
+        "Disabled when queue is empty"
+      ]
+    },
+    {
+      "title": "[MECH] Move counter = queue size, max enforcement",
+      "priority": 1,
+      "labels": ["Core-Engine"],
+      "acceptance": [
+        "MOVES display shows level.max_moves at start, decrements as queue fills",
+        "When queue.size == max_moves, card hand grays out (no more queueing allowed)",
+        "Undoing a card re-enables hand",
+        "PLAY SEQUENCE button disabled when queue is empty"
+      ]
+    },
+    {
+      "title": "[MECH] Star rating computation (clear / under max / at par)",
+      "priority": 2,
+      "labels": ["Puzzle-Design"],
+      "acceptance": [
+        "Star rule per GAME_DESIGN.md §7: 1=clear, 2=moves<=max-1, 3=moves<=par",
+        "Stars passed to LevelComplete screen on win",
+        "Best stars saved to SaveManager per level",
+        "New high score detected and badge shown"
+      ]
+    },
+    {
+      "title": "[MECH] Hint system tier 1 (insight) + tier 2 (next move from solver)",
+      "priority": 2,
+      "labels": ["Puzzle-Design", "UI-UX"],
+      "acceptance": [
+        "Tier 1 insight pulled from LevelData.hint_text, shown on goal banner always",
+        "Tier 2 hint runs solver, compares to player queue, returns next divergence move",
+        "HintPopup shows the suggested card + tile to play it on",
+        "Hint is free in v1, no cost to use",
+        "Auto-show after configurable inactivity (default 60s)"
+      ]
+    },
+    {
+      "title": "[MECH] No Path Forward soft-lose detection and recovery",
+      "priority": 1,
+      "labels": ["Core-Engine", "UI-UX"],
+      "acceptance": [
+        "After sequence resolves, A* checks for path from start to any goal",
+        "If no path, NoPathForward modal is shown instead of starting walk",
+        "Modal offers Undo Last and Restart options",
+        "Character does NOT play death animation - this is a soft lose, not a death"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 1 path layout JSON (winding map of 22 nodes)",
+      "priority": 2,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world1/path.json with 22 nodes in winding path layout",
+        "Each node has: level_number, normalized x (0-1), normalized y (0-1)",
+        "Path visually flows from bottom-left to top-right of biome bg",
+        "No nodes outside playable area",
+        "Loaded by world_select scene without error"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 2 path layout JSON",
+      "priority": 2,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world2/path.json with 22 nodes",
+        "Visually distinct path shape from W1",
+        "Loads without error"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 3 path layout JSON",
+      "priority": 2,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world3/path.json with 22 nodes",
+        "Visually distinct path shape from prior worlds",
+        "Loads without error"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 4 path layout JSON",
+      "priority": 2,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world4/path.json with 22 nodes",
+        "Visually distinct path shape from prior worlds",
+        "Loads without error"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 5 path layout JSON",
+      "priority": 3,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world5/path.json with 22 nodes",
+        "Visually distinct path shape from prior worlds",
+        "Loads without error"
+      ]
+    },
+    {
+      "title": "[LEVEL] World 6 path layout JSON",
+      "priority": 3,
+      "labels": ["Level-Design"],
+      "acceptance": [
+        "levels/world6/path.json with 22 nodes",
+        "Visually distinct path shape from prior worlds",
+        "Loads without error"
+      ]
+    },
+    {
+      "title": "[UI] UIManager autoload with push/pop transitions",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/ui_manager.gd registered as autoload",
+        "push_screen(scene_path), pop_screen(), replace_screen() APIs",
+        "Screen transitions use timings from GAME_DESIGN.md §13 (push 280ms ease-out, pop 200ms ease-in)",
+        "Modal overlays use slide-up 220ms ease-out",
+        "Reduce-motion setting halves all transition durations"
+      ]
+    },
+    {
+      "title": "[UI] UI theme tokens (colors, fonts, sizing)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/ui_theme.gd defines color constants from UI_SCREENS.md color tokens table",
+        "Font references: display, body, numbers",
+        "Sizing constants: tile size, touch target min, side margin, vertical rhythm",
+        "All UI scenes pull from this single source - no hardcoded hex"
+      ]
+    },
+    {
+      "title": "[UI] Splash screen scene + auto-advance",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/splash.tscn with wordmark and parallax cloud bg",
+        "Auto-advance to Home after 1500ms",
+        "Tap-to-skip implemented",
+        "Save system loads in background during splash"
+      ]
+    },
+    {
+      "title": "[UI] Home screen — Continue / Select Level / Settings + progress strip",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/home.tscn matches UI_SCREENS.md Screen 2",
+        "Three vertical buttons: CONTINUE (primary), SELECT LEVEL, SETTINGS",
+        "Progress strip shows N/132 levels and total stars from SaveManager",
+        "CONTINUE button label changes: BEGIN (new save), CONTINUE (in-progress), FREEPLAY (100% complete)",
+        "Painterly hero art at top 40%"
+      ]
+    },
+    {
+      "title": "[UI] World Select screen (2x3 painterly grid)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/world_select.tscn with 2x3 grid of world cards per UI_SCREENS.md Screen 3",
+        "Each card shows painterly biome art, world number+name, star count",
+        "Locked worlds dimmed with padlock icon",
+        "Tap unlocked card -> push level_select",
+        "Tap locked card -> shake animation + denied sound"
+      ]
+    },
+    {
+      "title": "[UI] Level Select world map with winding path nodes",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/level_select.tscn loads world_bg_wN.png as scrollable background",
+        "22 level nodes positioned per worldN/path.json",
+        "Node states: completed (green), current (blue pulsing), locked (silhouette)",
+        "Camera centers on current level on entry",
+        "Vertical drag scrolls the map"
+      ]
+    },
+    {
+      "title": "[UI] Gameplay screen — header, hint banner, queue strip, grid, hand, controls",
+      "priority": 1,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/gameplay.tscn matches UI_SCREENS.md Screen 5 layout exactly",
+        "Header: back arrow, level title+insight, pause icon",
+        "Hint banner shows MOVES counter and insight text",
+        "Queue strip, grid, card hand, bottom controls all wired",
+        "Sequence playback sub-state hides queue/cancel and shows speed toggle"
+      ]
+    },
+    {
+      "title": "[UI] Card hand widget (tap-to-select, lift, glow)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/widgets/card_view.gd implements 4 visual states: default, pressed, disabled, glow",
+        "Tap-to-select: card lifts 8px with glow",
+        "Long-press shows description tooltip",
+        "Exhausted cards (in queue) at 30% opacity"
+      ]
+    },
+    {
+      "title": "[UI] Queue strip widget (numbered placement, drag reorder)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/widgets/queue_strip.gd shows queued cards with order numbers (1, 2, 3...)",
+        "Tap a queued card to remove",
+        "Drag to reorder within queue",
+        "Empty state shows 'tap a card, tap a tile' hint text"
+      ]
+    },
+    {
+      "title": "[UI] Grid view widget (TileMapLayer with state-driven tile changes)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/widgets/grid_view.gd renders GridManager state via TileMapLayer",
+        "Listens to grid_changed signal and updates tiles incrementally",
+        "Tile preview overlay (semi-transparent) shows projected post-sequence state",
+        "Touch input maps screen position to tile Vector2i"
+      ]
+    },
+    {
+      "title": "[UI] Character view widget (sprite, animation state, position tween)",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scripts/ui/widgets/character_view.gd binds to CharacterController state",
+        "Plays appropriate animation per state (idle, walk_dir, cheer, death anims)",
+        "Tweens position smoothly during walk phase",
+        "Death animation holds final frame until level_failed handled"
+      ]
+    },
+    {
+      "title": "[UI] Level Complete screen with star reveal animation",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/level_complete.tscn matches UI_SCREENS.md Screen 6",
+        "Stars animate in one at a time (200ms apart) with sparkle particles",
+        "Title and tagline change by star count",
+        "Stat panel: moves, best, par",
+        "NEXT LEVEL button advances to next level (or NEXT WORLD on world end)"
+      ]
+    },
+    {
+      "title": "[UI] Level Failed modal with death-specific copy and try again",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/level_failed.tscn modal overlay with red border",
+        "Title varies by death cause: drown, burn, fall",
+        "TRY AGAIN restores initial board, clears queue",
+        "UNDO LAST restores board with all-but-last cards re-queued",
+        "HINT button opens HintPopup over this modal"
+      ]
+    },
+    {
+      "title": "[UI] No Path Forward modal",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/no_path.tscn modal overlay with amber border",
+        "No death animation - this is a soft lose",
+        "UNDO LAST and RESTART options",
+        "Background gameplay state preserved, returnable"
+      ]
+    },
+    {
+      "title": "[UI] Pause modal — resume / restart / settings / quit",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/pause.tscn modal with PAUSED title",
+        "RESUME closes modal, returns to exact gameplay state",
+        "RESTART LEVEL reloads level",
+        "SETTINGS pushes settings screen modally",
+        "QUIT TO WORLD MAP pops to level_select"
+      ]
+    },
+    {
+      "title": "[UI] Settings screen — audio sliders, visual toggles, gameplay options, reset",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/settings.tscn with sections: Audio, Visual, Gameplay, Account, About",
+        "Audio sliders: master, music, sfx (live update)",
+        "Visual toggles: color blind mode dropdown, reduce motion, show grid overlay",
+        "Gameplay: hint timeout dropdown, confirm sequence toggle",
+        "Reset progress button with double-confirm"
+      ]
+    },
+    {
+      "title": "[UI] Hint popup with optimal next move display",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/popups/hint_popup.tscn modal",
+        "Calls solver, identifies first divergence from player queue",
+        "Shows: card sprite, arrow, target tile coordinate",
+        "GOT IT button highlights the suggested tile briefly on the board behind"
+      ]
+    },
+    {
+      "title": "[UI] Confirm Sequence popup (when setting enabled)",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "scenes/ui/popups/confirm_sequence.tscn modal",
+        "Only shown if settings.confirm_sequence == true",
+        "Shows queued cards in order with PLAY and CANCEL options",
+        "PLAY commits sequence, CANCEL returns to planning"
+      ]
+    },
+    {
+      "title": "[UI] Touch input — tap thresholds, drag detection, multi-touch ignore",
+      "priority": 2,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "Tap detection with 16px movement threshold (drag if exceeded)",
+        "Long-press at 500ms",
+        "Multi-touch ignored except in pinch-zoom (future)",
+        "Touch target minimum 144x144 px enforced in all interactive scenes"
+      ]
+    },
+    {
+      "title": "[UI] Mouse + keyboard parity (click maps to tap, ESC = pause, Z = undo)",
+      "priority": 3,
+      "labels": ["UI-UX"],
+      "acceptance": [
+        "Left click maps to tap",
+        "ESC opens pause modal",
+        "Z = undo, Shift+Z = redo, Enter = play sequence, Delete = cancel queue",
+        "Arrow keys navigate card hand selection",
+        "Space toggles play sequence"
+      ]
+    },
+    {
+      "title": "[QA] Test coverage for WeatherSystem interaction matrix (40+ cases)",
+      "priority": 1,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "test/test_weather_cards.gd covers all 37 active state transitions",
+        "Plus 3+ multi-tile test cases per area-effect card (wind, fog, lightning)",
+        "Total minimum 40 test functions",
+        "All tests pass via npm run validate"
+      ]
+    },
+    {
+      "title": "[QA] Test coverage for PuzzleSolver (trivial / multi-step / unsolvable / cap)",
+      "priority": 1,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "test/test_puzzle_solver.gd covers: trivial 1-move solve, multi-step 5+ move solve, unsolvable level, state cap behavior",
+        "Hash collision sanity test (different states != same hash)",
+        "Performance test: 5x5 grid with 6 cards solves under 2s",
+        "All tests pass via npm run validate"
+      ]
+    },
+    {
+      "title": "[QA] Test coverage for SaveManager schema + atomic writes + migrations",
+      "priority": 1,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "test/test_save_load.gd covers: save round-trip, atomic write failure recovery, missing file load, corrupt file load, schema version migration stub",
+        "Settings persistence test",
+        "Per-level stats persistence test"
+      ]
+    },
+    {
+      "title": "[QA] Test coverage for A* pathfinder edge cases",
+      "priority": 2,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "test/test_pathfinder.gd covers: trivial path, blocked path (no solution), multi-route shortest path, identical-cost tiebreak preference",
+        "Edge cases: start == goal, start unreachable, goal off-grid"
+      ]
+    },
+    {
+      "title": "[QA] Test coverage for sequence playback (queue → resolve → walk)",
+      "priority": 2,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "Integration test runs full level cycle headless",
+        "Queue cards, commit, verify resolved board state, verify walk path",
+        "Test win and each loss state (drown, burn, fall)",
+        "Test no-path soft lose"
+      ]
+    },
+    {
+      "title": "[QA] validate_all_levels.gd walks every level JSON and runs solver",
+      "priority": 1,
+      "labels": ["QA-Testing", "Core-Engine"],
+      "acceptance": [
+        "scripts/validate_all_levels.gd discovers all levels/worldN/level_*.json files",
+        "Runs PuzzleSolver on each",
+        "Exits non-zero if any level is unsolvable",
+        "Writes report to results/level_validation.json with par_moves per level",
+        "Integrated into npm run validate pipeline"
+      ]
+    },
+    {
+      "title": "[QA] CI green-on-main gate: no merge if validate or tests fail",
+      "priority": 2,
+      "labels": ["QA-Testing", "Release-Ops"],
+      "acceptance": [
+        ".github/workflows/ci.yml runs gut tests + validate_all_levels on every PR",
+        "PR cannot be merged if either fails",
+        "Branch protection rule enforced for main",
+        "Status check labels visible in PR UI"
+      ]
+    },
+    {
+      "title": "[QA] External playtest checkpoint at 25% / 50% / 75% / 100% content",
+      "priority": 3,
+      "labels": ["QA-Testing"],
+      "acceptance": [
+        "Producer agent schedules 4 external playtest sessions over content production",
+        "Each session: 3-5 testers, video recorded, notes captured in docs/playtests/",
+        "Findings triaged into Linear within 48 hours",
+        "Difficulty curve audit performed after each session"
+      ]
+    },
+    {
+      "title": "[ART] Replace ART_DIRECTION.md with pixel-art + painterly key art direction",
+      "priority": 2,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "docs/ART_DIRECTION.md fully replaced per Pass 2 spec",
+        "Pixel art rules (16x16 base, no AA, integer scale)",
+        "Painterly key art exception spelled out",
+        "32-color palette referenced from styleguide assets"
+      ]
+    },
+    {
+      "title": "[ART] Replace ANIMATION_DIRECTION_2D.md with character + death + weather anim spec",
+      "priority": 2,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "docs/ANIMATION_DIRECTION_2D.md fully replaced",
+        "Character animation spec for all 12 states",
+        "Per-card weather effect timings",
+        "5 death animation specs",
+        "Reduce-motion fallback rules"
+      ]
+    },
+    {
+      "title": "[ART] Replace ASSET_PROMPTS_GEMINI.md with prompts for new mechanics",
+      "priority": 2,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "docs/ASSET_PROMPTS_GEMINI.md fully replaced",
+        "Pixel art prompts for tiles, cards, character, VFX",
+        "Painterly prompts for world cards, world backgrounds, hero art, sunrise scenes",
+        "Each prompt includes style anchors and rejection criteria"
+      ]
+    },
+    {
+      "title": "[ART] Generate 14 terrain tile sprites at 16x16 pixel art",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "All 14 terrain types per ASSET_MANIFEST.md §1 produced",
+        "Animated tiles (water, scorched, steam, fog_covered, goal) have multi-frame strips",
+        "All sprites use the 32-color palette",
+        "Pixel-perfect, no anti-aliasing"
+      ]
+    },
+    {
+      "title": "[ART] Generate 6 weather card sprites with 4 states each (24 files)",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "All 6 cards with default/pressed/disabled/glow states",
+        "Plus 6 standalone icon sprites for HUD/queue strip",
+        "Per ASSET_MANIFEST.md §2",
+        "Color-coded per UI theme (rain=cyan, sun=amber, etc.)"
+      ]
+    },
+    {
+      "title": "[ART] Generate Sky character — idle/walk/cheer + 5 death anims",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "All 12 character animations per ASSET_MANIFEST.md §3",
+        "24x24 pixel art, hooded gender-neutral figure",
+        "Walk in all 4 cardinal directions",
+        "All 5 death animations even though only 3 ship in v1 (drown, burn, fall)"
+      ]
+    },
+    {
+      "title": "[ART] Generate weather VFX sprite sheets",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "12 VFX sprite sheets per ASSET_MANIFEST.md §4",
+        "Rain, sun, frost, wind, lightning bolt+chain, fog, splash, flame, sparkle, dust, confetti",
+        "All loop or one-shot per spec"
+      ]
+    },
+    {
+      "title": "[ART] Generate UI sprites — buttons, frames, icons, stars",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "All UI sprites per ASSET_MANIFEST.md §5",
+        "4 button states (default/pressed/disabled/primary)",
+        "9-slice frames for panels",
+        "All icons at 24x24"
+      ]
+    },
+    {
+      "title": "[ART] Commission or generate 6 painterly world cards (240x160)",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "One per world: downpour, heatwave, coldsnap, galeforce, thunderstorm, whiteout",
+        "Painterly style (NOT pixel art - the exception)",
+        "240x160 source size",
+        "Recognizable at thumbnail size"
+      ]
+    },
+    {
+      "title": "[ART] Commission or generate 6 painterly world backgrounds (360x800)",
+      "priority": 3,
+      "labels": ["Art-Visual"],
+      "acceptance": [
+        "Tall vertical biome paintings, one per world",
+        "Same scene as world card but extended for vertical scroll",
+        "Path through the scene must accommodate 22 level nodes",
+        "Painterly style matching world cards"
+      ]
+    },
+    {
+      "title": "[AUDIO] Compose 6 world music loops + menu loop + win sting (8 tracks)",
+      "priority": 4,
+      "labels": ["Audio-Music"],
+      "acceptance": [
+        "8 OGG Vorbis tracks per ASSET_MANIFEST.md §7",
+        "Each world music ~2:30 with clean loop point",
+        "Mood matches world reference (see ASSET_MANIFEST.md table)",
+        "Mastered for mobile speaker playback"
+      ]
+    },
+    {
+      "title": "[AUDIO] Generate 30 SFX files with ElevenLabs SFX",
+      "priority": 4,
+      "labels": ["Audio-Music"],
+      "acceptance": [
+        "30 WAV files per ASSET_MANIFEST.md §7 SFX list",
+        "Card placement, weather resolution, footsteps, deaths, win/lose, UI",
+        "Normalized to -3dB peak"
+      ]
+    },
+    {
+      "title": "[AUDIO] Record 6 ambient layers (rain, cicadas, wind, etc.)",
+      "priority": 4,
+      "labels": ["Audio-Music"],
+      "acceptance": [
+        "6 OGG ambient loops per ASSET_MANIFEST.md §7",
+        "Designed to sit underneath music without clashing",
+        "Long enough loops (60s+) to feel non-repetitive"
+      ]
+    },
+    {
+      "title": "[RELEASE] GitHub Actions: Windows + Linux + Android export matrix",
+      "priority": 3,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        ".github/workflows/build.yml exports for Windows, Linux, Android in matrix",
+        "Uses barichello/godot-ci:4.6 image",
+        "Artifacts uploaded per platform",
+        "Triggered on version tags"
+      ]
+    },
+    {
+      "title": "[RELEASE] Steam Cloud save sync configuration",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Steam Cloud configured in Steamworks for save_default.json path",
+        "Tested across 2+ machines",
+        "Conflict resolution policy documented"
+      ]
+    },
+    {
+      "title": "[RELEASE] Steam page draft (capsule, screenshots, trailer placeholder)",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Steam store page draft with capsule art, header capsule, library hero",
+        "5+ screenshots from gameplay",
+        "Trailer placeholder (final trailer is separate task)",
+        "Description copy reviewed"
+      ]
+    },
+    {
+      "title": "[RELEASE] Privacy policy + EULA + acknowledgements page",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Privacy policy URL hosted (no PII collected -> simple template)",
+        "EULA accessible from settings",
+        "Acknowledgements page lists all OSS dependencies and licenses"
+      ]
+    },
+    {
+      "title": "[RELEASE] Crash reporter integration (Sentry or similar)",
+      "priority": 4,
+      "labels": ["Release-Ops", "QA-Testing"],
+      "acceptance": [
+        "Crash reporter configured for Windows/Android exports",
+        "PII scrubbing verified",
+        "Alerts route to producer agent on crash spike"
+      ]
+    },
+    {
+      "title": "[RELEASE] Analytics event taxonomy + integration (PostHog free tier)",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Event taxonomy defined: level_started, level_completed, level_failed, hint_used, settings_changed",
+        "PostHog SDK integrated with opt-in toggle in settings",
+        "Free tier limits respected"
+      ]
+    },
+    {
+      "title": "[RELEASE] Steam Next Fest demo build (World 1 only)",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Demo build limited to World 1 (22 levels)",
+        "Save file isolated from full game",
+        "Demo branch in Steamworks",
+        "Demo banner in main menu"
+      ]
+    },
+    {
+      "title": "[RELEASE] Launch trailer storyboard + final cut",
+      "priority": 4,
+      "labels": ["Release-Ops"],
+      "acceptance": [
+        "Storyboard reviewed and approved",
+        "Trailer footage captured from final builds",
+        "Final cut at 30s and 60s versions",
+        "Uploaded to Steam, YouTube, social"
+      ]
+    }
+  ]

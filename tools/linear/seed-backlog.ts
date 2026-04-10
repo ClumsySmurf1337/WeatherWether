@@ -94,11 +94,7 @@ async function main(): Promise<void> {
 
   const client = dryRun ? null : new LinearClient({ apiKey: apiKey as string });
   const files = [
-    "docs/backlog/core-engine.json",
-    "docs/backlog/puzzle-mechanics.json",
-    "docs/backlog/world-batches.json",
-    "docs/backlog/ux-and-animation.json",
-    "docs/backlog/outline-master.json"
+    "docs/backlog/system-rework.json"
   ];
 
   const fileIssues = files.flatMap(loadIssues);

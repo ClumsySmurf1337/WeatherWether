@@ -1,8 +1,15 @@
 {
-  "description": "PM phase ordering for Whether — foundation before content, mechanics before levels/UI. Tune labels/title prefixes to match your Linear taxonomy. See docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md.",
+  "description": "PM phase ordering for Weather Whether v2. Foundation rewrite (sequence model + walking character) before core engine, mechanics before levels/UI. See docs/GAME_DESIGN.md and docs/SPEC_DIFF.md.",
   "defaultOrder": 50,
   "defaultLinearPriority": 3,
   "phases": [
+    {
+      "id": "p-1-rewrite",
+      "order": -1,
+      "linearPriority": 1,
+      "matchLabels": ["core-engine"],
+      "matchTitlePrefixes": ["[rewrite]"]
+    },
     {
       "id": "p0-core-grid",
       "order": 0,

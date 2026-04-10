@@ -17,6 +17,7 @@
     "qa:repair-merge": "pwsh -NoProfile -File tools/tasks/qa-merge-conflicts.ps1",
     "worktrees:sync": "pwsh -NoProfile -File tools/tasks/sync-agent-worktrees.ps1",
     "linear:seed": "tsx tools/linear/seed-backlog.ts",
+    "linear:wipe": "tsx tools/linear/wipe-team.ts",
     "linear:standup": "tsx tools/linear/daily-standup.ts",
     "linear:bootstrap": "tsx tools/linear/bootstrap-workspace.ts",
     "linear:dispatch": "tsx tools/linear/dispatch-tasks.ts",

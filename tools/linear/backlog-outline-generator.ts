@@ -248,12 +248,12 @@ export function generateOutlineBacklog(): BacklogIssue[] {
   }
 
   const worlds: WorldSpec[] = [
-    { number: 1, name: "Downpour", levels: 15, mechanics: "Rain-only routing" },
-    { number: 2, name: "Heatwave", levels: 15, mechanics: "Rain + Sun ordering" },
-    { number: 3, name: "ColdSnap", levels: 20, mechanics: "Rain + Sun + Frost chains" },
-    { number: 4, name: "GaleForce", levels: 20, mechanics: "Wind with prior systems" },
-    { number: 5, name: "Thunderstorm", levels: 20, mechanics: "Lightning risk/reward" },
-    { number: 6, name: "Whiteout", levels: 20, mechanics: "Fog + full toolkit uncertainty" }
+    { number: 1, name: "Downpour", levels: 22, mechanics: "Rain-only routing" },
+    { number: 2, name: "Heatwave", levels: 22, mechanics: "Rain + Sun ordering" },
+    { number: 3, name: "ColdSnap", levels: 22, mechanics: "Rain + Sun + Frost chains" },
+    { number: 4, name: "GaleForce", levels: 22, mechanics: "Wind with prior systems" },
+    { number: 5, name: "Thunderstorm", levels: 22, mechanics: "Lightning risk/reward" },
+    { number: 6, name: "Whiteout", levels: 22, mechanics: "Fog + full toolkit uncertainty" }
   ];
 
   for (const world of worlds) {
