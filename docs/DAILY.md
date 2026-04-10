@@ -13,6 +13,7 @@ This doc is the **single operator contract**: what runs once a day, how **PM** u
 | **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three lane agents in parallel**. Lane terminals **auto-close** when each lane finishes. |
 | **2** | **When lane PRs exist and CI is ready** | **Weather Whether — QA agent (lane PRs)** — ships stale lanes if needed, merges **`agent/cursor-lane-*`** PRs, Linear **Done**, **`worktrees:sync`**, lane reset. Use **`npm run qa:lane-prs:quick`** if checks are already green. |
 | **3** | **Next cycle** | Go back to **step 1** (and **step 2** whenever you need merges). |
+| **1+2** | **Optional one-shot** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — runs the **step 1** Task, then the **step 2** Task in order (wait for all three lane agents to finish, then **`qa:agent`**). |
 
 **Same flow from the integrated terminal** (if you prefer typing instead of the one-click Task for step 1):
 
@@ -137,7 +138,7 @@ npm run daily:full:lean           # validate-only tail; no lane prep
 npm run daily:full:apply:lanes    # apply producer + lane prep
 ```
 
-**Cursor / VS Code Tasks** (`.vscode/tasks.json`): **Weather Whether — Daily full (apply + lane prep)**, **Weather Whether — All lane terminals (parallel)**, **Weather Whether — Daily apply:lanes, then parallel lane agents** (daily then lanes), **Weather Whether — QA agent (lane PRs)**.
+**Cursor / VS Code Tasks** (`.vscode/tasks.json`): **Weather Whether — Daily full (apply + lane prep)**, **Weather Whether — All lane terminals (parallel)**, **Weather Whether — Daily apply:lanes, then parallel lane agents** (daily then lanes), **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)**, **Weather Whether — QA agent (lane PRs)**.
 
 ---
 

@@ -83,6 +83,15 @@
       "problemMatcher": []
     },
     {
+      "label": "Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)",
+      "dependsOn": [
+        "Weather Whether — Daily apply:lanes, then parallel lane agents",
+        "Weather Whether — QA agent (lane PRs)"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
       "label": "Weather Whether — QA agent (lane PRs)",
       "type": "shell",
       "command": "npm run qa:agent",
