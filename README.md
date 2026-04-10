@@ -50,7 +50,10 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 
 - `npm run daily:full` (or `pwsh ./tools/tasks/daily-full.ps1`) — one pass: prerequisites, `npm ci`, Linear PM preview, Godot validation; add `-ApplyProducer` to apply Linear promote/dispatch (see `docs/DAILY.md`)
 - `npm run cursor:session` / `cursor:session:apply` — Linear producer + validate + parallel lanes; add `-CreateWorktrees` **`-SpawnAgentCli`** to launch **`cursor-agent`** (fallback: **`cursor agent`**) per worktree (see `docs/CURSOR_CLI_AND_WORKTREES.md`)
-- `npm run cursor:resume` — recover after interruption; refresh assignments, sync worktrees, relaunch lanes using `linear:resume-pickup`
+- `npm run cursor:resume:editor` — recover after interruption **without** extra PowerShell popups: refresh assignments, sync worktrees, ensure lane worktrees, then run **Tasks → Weather Whether — All lane terminals (parallel)** in this window
+- `npm run cursor:resume` — same prep, but spawns **one external `pwsh` per lane** running `cursor-agent` (use if you prefer separate windows)
+- `npm run cursor:go:editor` — full PM kickoff + same integrated-terminal hint (no external lane popups)
+- `npm run cursor:open-lanes` — optional: open **new Cursor windows** on each lane worktree (does not conflict with resume; skip if you use integrated Tasks)
 - `npm run qa:pr -- -PullRequestNumber <N>` — wait on CI, local validate, `gh pr merge`, **Linear Done** via local API key (see `docs/GITHUB_AUTOMERGE.md`); add **`-SyncMainBeforeValidate`** to merge `main` first (conflicts → **`cursor-agent`** / **`cursor agent`**)
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
@@ -59,7 +62,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `npm run linear:apply-deps -- --apply` — write real Linear `blocks` relations from dependency heuristics
 - `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` — force-start first role issue (Todo first, otherwise Backlog) for build testing
 - `npm run linear:kickoff-lanes -- --apply` — force-start one issue each for gameplay/UI/level lanes
-- `npm run cursor:go` — full kickoff (PM prepare + dependency edges + Todo feed + lane kickoff + session launch)
+- `npm run cursor:go` — full kickoff (PM prepare + dependency edges + Todo feed + lane kickoff + **external** `pwsh` per lane)
 - `npm run linear:resume-pickup -- --role=gameplay-programmer --apply` — resume existing in-progress lane work first, otherwise claim a Todo issue
 - `npm run worktrees:sync` — merge `origin/main` into each `wt-*` under the agent root
 - `tools/tasks/daily.ps1` quick health/status checks

@@ -13,6 +13,7 @@
     "cursor:go": "pwsh -NoProfile -File tools/tasks/cursor-go.ps1",
     "cursor:go:editor": "pwsh -NoProfile -File tools/tasks/cursor-go.ps1 -EditorLaneTerminals",
     "cursor:resume": "pwsh -NoProfile -File tools/tasks/cursor-resume.ps1",
+    "cursor:resume:editor": "pwsh -NoProfile -File tools/tasks/cursor-resume.ps1 -EditorLaneTerminals",
     "cursor:open-lanes": "pwsh -NoProfile -File tools/tasks/open-cursor-lane-windows.ps1",
     "linear:complete-from-pr": "tsx tools/linear/complete-linear-from-pr.ts",
     "qa:pr": "pwsh -NoProfile -File tools/tasks/qa-pr-handoff-local.ps1",

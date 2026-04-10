@@ -37,6 +37,10 @@
 
 Use Cursor’s **Cloud Agents** UI (dashboard above) or **multiple local** chats/worktrees; when in doubt, run **one Cloud** + **two local** worktrees rather than maxing Cloud cost.
 
+## Integrated lane terminals (one Cursor window)
+
+Prefer **no floating PowerShell popups**: run **`npm run cursor:resume:editor`** or **`npm run cursor:go:editor`**, then in this repo use **Tasks → Weather Whether — All lane terminals (parallel)** (see `.vscode/tasks.json`). Each task runs **`run-lane-terminal.ps1`** (`linear:resume-pickup` from the main repo, then **`cursor-agent`** in the worktree). **`npm run cursor:open-lanes`** is optional and only adds **extra Cursor windows** on the same worktrees — it does not break resume.
+
 ## Practical limit
 
 Above **3–4 parallel implementation agents**, integration tax rises. Keep a **Producer** pass (`linear:producer`) to serialize merges.

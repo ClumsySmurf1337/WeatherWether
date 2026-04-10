@@ -22,6 +22,8 @@ $electron = Get-CursorElectronLaunch
 $roles = @("gameplay-programmer", "ui-developer", "level-designer")
 
 Write-Host "=== Open lane worktrees in new Cursor windows ===`n"
+Write-Host "Note: Safe to run after ``npm run cursor:resume`` — this only opens IDE folders; it does not cancel Linear or lane agents.`n"
+Write-Host "If you use **integrated** lane terminals (``cursor:resume:editor`` + Tasks), you usually skip this.`n"
 Write-Host "Agent root: $agentRoot`n"
 
 for ($i = 1; $i -le $LaneCount; $i++) {
@@ -49,4 +51,4 @@ for ($i = 1; $i -le $LaneCount; $i++) {
 Write-Host "3. Prefer Cursor Agent in the sidebar on the In Progress issue."
 Write-Host "   Optional same-terminal CLI: open tools/tasks/prompts/lane-agent-prompt.md, replace {{ROLE}}, then:"
 Write-Host '   cursor-agent "<pasted prompt text>"'
-Write-Host "`nTip: ``npm run cursor:go`` / ``cursor:resume`` run PM/sync then spawn **pwsh** windows that invoke **``cursor-agent``** (fallback **``cursor agent``**). This script only opens **new Cursor windows** on each worktree folder — use it when you want IDE workspaces instead of extra PowerShell popups.`n"
+Write-Host "`nTip: ``npm run cursor:go`` / ``npm run cursor:resume`` spawn **pwsh** popups; **``npm run cursor:go:editor``** / **``npm run cursor:resume:editor``** + Tasks avoid that. This script only opens **new Cursor windows** on each worktree — use when you want separate IDE windows instead.`n"

@@ -372,7 +372,7 @@ If the `wipe-team` script exists by the time you read this (it'll be in Pass 2),
 
 Any agent (Cursor, Claude Code, Codex) currently in a worktree needs to know the spec changed mid-stream. Three patterns work:
 
-**Pattern 1: Stop and resume.** Cleanest. Cancel running agents, pull main, restart with `npm run cursor:resume`. The resume flow re-reads `CLAUDE.md` and `.cursor/rules/*.mdc` on launch, so it picks up the new design spine automatically.
+**Pattern 1: Stop and resume.** Cleanest. Cancel running agents, pull main, restart with **`npm run cursor:resume:editor`** (then Tasks → All lane terminals) or **`npm run cursor:resume`** (external pwsh per lane). The lane prompts re-read `CLAUDE.md` and `.cursor/rules/*.mdc`, so agents pick up the new design spine on the next run.
 
 **Pattern 2: In-flight nudge.** If an agent is mid-task and you don't want to interrupt it, drop a comment in its terminal: `STOP. The design has changed. Pull main, read docs/GAME_DESIGN.md and docs/SPEC_DIFF.md, then re-evaluate your current task against the new spec. If your current task is now obsolete, mark the Linear issue Cancelled and pick up a new one with linear:resume-pickup.`
 

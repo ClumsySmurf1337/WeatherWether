@@ -11,11 +11,6 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $repoRoot
 
-function Get-AgentWorktreePath([string]$branchName, [string]$root) {
-    $folder = ($branchName -replace "[^a-zA-Z0-9._-]", "-").Trim("-")
-    return Join-Path $root "wt-$folder"
-}
-
 Write-Host "=== Cursor GO (PM prep -> deps -> todo -> lanes -> session) ===`n"
 if ($EditorLaneTerminals) {
     Write-Host "(Editor lane terminals: step 5 uses Cursor Tasks — no external PowerShell popups.)`n"
@@ -35,40 +30,7 @@ npm run linear:kickoff-lanes -- --apply
 
 if ($EditorLaneTerminals) {
     Write-Host "`n[5/5] Lane worktrees + sync (open terminals via Cursor Task next)"
-    $agentRoot = $env:WHETHER_AGENT_ROOT
-    if ([string]::IsNullOrWhiteSpace($agentRoot)) {
-        $agentRoot = "D:\Agents\WeatherWether"
-    }
-    $roles = @("gameplay-programmer", "ui-developer", "level-designer")
-    for ($i = 1; $i -le $LaneCount; $i++) {
-        $branch = "agent/cursor-lane-$i"
-        $wtPath = Get-AgentWorktreePath $branch $agentRoot
-        if (-not (Test-Path -LiteralPath $wtPath)) {
-            Write-Host "  Creating worktree: $wtPath"
-            & "$repoRoot\tools\tasks\new-agent-worktree.ps1" -BranchName $branch
-        } else {
-            Write-Host "  Exists: $wtPath"
-        }
-    }
-    Write-Host "`n  Syncing worktrees with origin/main..."
-    & "$repoRoot\tools\tasks\sync-agent-worktrees.ps1"
-
-    Write-Host "`n--- Lane map ---"
-    for ($i = 1; $i -le $LaneCount; $i++) {
-        $branch = "agent/cursor-lane-$i"
-        $role = $roles[($i - 1) % $roles.Length]
-        $wtPath = Get-AgentWorktreePath $branch $agentRoot
-        Write-Host "  Lane $i  $role"
-        Write-Host "           $wtPath"
-    }
-
-    Write-Host "`n>>> Open 3 integrated terminals IN THIS CURSOR WINDOW:"
-    Write-Host "    1) Ctrl+Shift+P"
-    Write-Host "    2) Tasks: Run Task"
-    Write-Host "    3) Pick:  Weather Whether — All lane terminals (parallel)"
-    Write-Host ""
-    Write-Host "    Each task runs: resume-pickup (main repo .env.local) -> cd worktree -> ``cursor-agent`` (lane prompt; fallback ``cursor agent``)."
-    Write-Host "    No manual typing in the terminal. If 3 parallel agents fight for one Cursor UI, run lanes one at a time from Tasks.`n"
+    & "$repoRoot\tools\tasks\prepare-editor-lane-worktrees.ps1" -LaneCount $LaneCount
 } elseif (-not $SkipSessionLaunch) {
     Write-Host "`n[5/5] Launch parallel Cursor session (external PowerShell + cursor-agent)"
     & "$repoRoot\tools\tasks\cursor-autonomous-session.ps1" -ApplyProducer -CreateWorktrees -SyncWorktrees -SpawnAgentCli -LaneCount $LaneCount

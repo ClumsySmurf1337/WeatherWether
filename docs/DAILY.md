@@ -33,6 +33,23 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 
 ---
 
+## Cheat sheet — validate, play, lanes (most days)
+
+| Goal | Command |
+|------|---------|
+| **Tests + level validation** (local “did the project build?”) | `pwsh ./tools/tasks/validate.ps1` |
+| **Godot import + build scaffold** (export presets still in Godot UI) | `pwsh ./tools/tasks/build.ps1` |
+| **Run the game** | `pwsh ./tools/tasks/launch.ps1` |
+| **Full health pass** (npm ci + Linear PM dry-run + validate) | `npm run daily:full` |
+| **Resume lanes — terminals inside this Cursor window** (neatest) | `npm run cursor:resume:editor` → then **Tasks: Run Task** → **Weather Whether — All lane terminals (parallel)** |
+| **Resume lanes — one external PowerShell window per lane** | `npm run cursor:resume` |
+| **Full PM kickoff — editor terminals** | `npm run cursor:go:editor` → same **All lane terminals** task |
+| **Full PM kickoff — external pwsh** | `npm run cursor:go` |
+
+**`cursor:open-lanes` after `cursor:resume`?** It does **not** break Linear or undo resume-pickup. It only opens **extra Cursor IDE windows** (one folder per worktree). Skip it if you already use **integrated Tasks** in one window; use it when you want **separate Cursor windows** per lane instead.
+
+---
+
 ## One command — run almost everything
 
 From repo root (PowerShell):
@@ -141,7 +158,9 @@ That is how **multiple agents build in parallel** without stomping the same tree
 | Kick off first build issue by role | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` |
 | Kick off default 3 lanes (gameplay/ui/level) | `npm run linear:kickoff-lanes -- --apply` |
 | One command kickoff (prepare+deps+todo+lanes+session) | `npm run cursor:go` (add `-- -SkipSessionLaunch` to prep only) |
-| Resume after interruption/shutdown | `npm run cursor:resume` |
+| Resume after interruption/shutdown (integrated terminals — recommended) | `npm run cursor:resume:editor` → **Tasks → All lane terminals** |
+| Resume after interruption (external PowerShell per lane) | `npm run cursor:resume` |
+| Open each lane worktree in a **new Cursor window** (optional; additive) | `npm run cursor:open-lanes` |
 | PM all-in-one prep (bootstrap + labels + organize + assignments) | `npm run linear:pm-prepare` |
 | Promote backlog only | `npm run linear:promote -- --apply` |
 | Dispatch only | `npm run linear:dispatch -- --apply` |

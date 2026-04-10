@@ -41,7 +41,15 @@ npm run cursor:go:editor
 Then: **Ctrl+Shift+P** → **Tasks: Run Task** → **Weather Whether — All lane terminals (parallel)**.  
 Each task runs `linear:resume-pickup` from the **main repo** (`.env.local`), `cd`s into the worktree, then runs **`cursor-agent`** with the lane prompt automatically (no typing in the terminal; fallback **`cursor agent`**). If three parallel agents conflict in one Cursor window, run **Lane 1 / 2 / 3** tasks separately.
 
-Resume after shutdown/interruption (rebuild handoffs + relaunch resume-first lanes):
+Resume after shutdown/interruption (refresh assignments + sync worktrees + relaunch lanes):
+
+```powershell
+npm run cursor:resume:editor
+```
+
+Then **Tasks → Weather Whether — All lane terminals (parallel)** (integrated terminals; no extra `pwsh` windows).
+
+External PowerShell per lane (older flow):
 
 ```powershell
 npm run cursor:resume

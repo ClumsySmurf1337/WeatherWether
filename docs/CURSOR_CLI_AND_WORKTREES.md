@@ -35,7 +35,8 @@ Or `cd` into the worktree and run **`npm run qa:repair-merge`**. This runs **`gi
 
 Recovery after interruption/shutdown:
 
-- `npm run cursor:resume` (refresh PM assignments, sync worktrees, relaunch lanes; each lane runs `linear:resume-pickup` so In Progress work is continued first).
+- **`npm run cursor:resume:editor`** — refresh PM assignments, sync worktrees, ensure lane worktrees; then use **Tasks → Weather Whether — All lane terminals** so **`cursor-agent`** runs in **integrated** terminals (recommended).
+- **`npm run cursor:resume`** — same prep, but spawns **one external PowerShell window per lane** (older flow).
 
 2. **After a PR exists and GitHub CI is green:** local QA (or you) runs:  
    `npm run qa:pr -- -PullRequestNumber <N>`  
