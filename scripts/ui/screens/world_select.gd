@@ -4,9 +4,9 @@ extends Control
 ## Screen 3 — World Select (`docs/UI_SCREENS.md`).
 ## 2×3 grid of world cards with lock state driven by save progress.
 
-const WORLD_NAMES: PackedStringArray = PackedStringArray([
-	"DOWNPOUR", "HEATWAVE", "COLD SNAP", "GALE FORCE", "THUNDERSTORM", "WHITEOUT"
-])
+const WORLD_NAMES: Array[String] = [
+	"DOWNPOUR", "HEATWAVE", "COLD SNAP", "GALE FORCE", "THUNDERSTORM", "WHITEOUT",
+]
 
 @onready var _back_button: Button = %BackButton
 @onready var _title: Label = $Margin/VBox/Header/Title

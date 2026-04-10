@@ -145,6 +145,23 @@ if ($LASTEXITCODE -eq 0 -and $existingJson) {
     }
 }
 
+git fetch origin main 2>$null | Out-Null
+$mainRef = "origin/main"
+git rev-parse --verify $mainRef *>$null 2>&1
+if ($LASTEXITCODE -ne 0) {
+    $mainRef = "origin/master"
+    git rev-parse --verify $mainRef *>$null 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not resolve origin/main or origin/master to compare for PR."
+    }
+}
+$commitsAhead = [int](git rev-list --count "${mainRef}..HEAD" 2>$null)
+if ($commitsAhead -eq 0) {
+    Write-Host "No commits on $branch ahead of $mainRef — skipping PR (branch matches main; work may already be merged)." -ForegroundColor Yellow
+    Write-Host "For new lane work: reset the lane branch from main (e.g. npm run lane:next-cycle) and ensure the agent commits locally." -ForegroundColor DarkGray
+    exit 0
+}
+
 $title = "${LinearId}: lane work"
 $body = "Linear: $LinearId`n`nShipped via tools/tasks/lane-ship.ps1"
 Write-Host "Creating PR to main..." -ForegroundColor Cyan
