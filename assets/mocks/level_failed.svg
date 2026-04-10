@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:2}.t{font:11px monospace;fill:#e8eef7}.s{font:10px monospace;fill:#aab8c8}.title{font:bold 22px monospace;fill:#cc4422}.btn{fill:#5fc97e;stroke:#fff;stroke-width:2}.btn2{fill:#142844;stroke:#3a5f8a;stroke-width:2}</style>
+<rect class="bg" width="360" height="640"/>
+<rect x="0" y="0" width="360" height="240" fill="#0a1628"/>
+<rect x="100" y="60" width="160" height="120" fill="#1a2840" stroke="#3a2810"/>
+<rect x="140" y="100" width="80" height="60" fill="#2e5c8a"/>
+<rect x="172" y="92" width="16" height="14" fill="#3a4a6a" opacity="0.4"/>
+<text class="s" x="120" y="200" fill="#aab8c8">Sky drowned in deep water</text>
+<rect class="panel" x="20" y="260" width="320" height="320"/>
+<text class="title" x="98" y="304">LEVEL FAILED</text>
+<text class="s" x="100" y="328">W1 · L05 — Lighthouse</text>
+<rect x="40" y="350" width="280" height="80" fill="#0a1628" stroke="#3a5f8a"/>
+<text class="s" x="56" y="372" fill="#cc4422">✗ Reason: Sky drowned</text>
+<text class="s" x="56" y="390">Try frosting the water tile first</text>
+<text class="s" x="56" y="406">to create a safe ice bridge.</text>
+<text class="s" x="56" y="422">Or use a different path.</text>
+<rect class="btn" x="40" y="446" width="280" height="48"/>
+<text class="t" x="138" y="476" fill="#0a1628" font-weight="bold">↻ TRY AGAIN</text>
+<rect class="btn2" x="40" y="504" width="135" height="40"/>
+<text class="s" x="80" y="529">💡 HINT</text>
+<rect class="btn2" x="185" y="504" width="135" height="40"/>
+<text class="s" x="218" y="529">⌂ WORLD MAP</text>
+<rect class="btn2" x="40" y="552" width="280" height="20"/>
+<text class="s" x="118" y="566">⏩ Skip to next level (uses token)</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.faded{opacity:0.35}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:2}.t{font:11px monospace;fill:#e8eef7}.s{font:10px monospace;fill:#aab8c8}.title{font:bold 18px monospace;fill:#f5e89c}.btn{fill:#5fc97e;stroke:#fff;stroke-width:2}.btn2{fill:#142844;stroke:#3a5f8a;stroke-width:2}</style>
+<rect class="bg" width="360" height="640"/>
+<g class="faded">
+<rect x="10" y="10" width="340" height="48" class="panel"/>
+<rect x="20" y="80" width="280" height="280" fill="#1a2840"/>
+<rect x="40" y="100" width="40" height="40" fill="#7ab355"/>
+<rect x="80" y="100" width="40" height="40" fill="#7ab355"/>
+<rect x="120" y="100" width="40" height="40" fill="#2e5c8a"/>
+<rect x="160" y="100" width="40" height="40" fill="#2e5c8a"/>
+<rect x="200" y="100" width="40" height="40" fill="#7ab355"/>
+<rect x="240" y="100" width="40" height="40" fill="#7ab355"/>
+<rect x="40" y="140" width="40" height="40" fill="#7ab355"/>
+<rect x="80" y="140" width="40" height="40" fill="#a8d8e8"/>
+<rect x="120" y="140" width="40" height="40" fill="#a8d8e8"/>
+<rect x="160" y="140" width="40" height="40" fill="#7ab355"/>
+<rect x="200" y="140" width="40" height="40" fill="#5c3a1f"/>
+<rect x="240" y="140" width="40" height="40" fill="#7ab355"/>
+<rect x="10" y="450" width="340" height="180" class="panel"/>
+</g>
+<rect x="0" y="0" width="360" height="640" fill="#000" opacity="0.55"/>
+<rect class="panel" x="50" y="160" width="260" height="380"/>
+<text class="title" x="130" y="198">PAUSED</text>
+<line x1="70" y1="214" x2="290" y2="214" stroke="#3a5f8a" stroke-width="1"/>
+<rect class="btn" x="70" y="232" width="220" height="44"/>
+<text class="t" x="138" y="260" fill="#0a1628" font-weight="bold">▶ RESUME</text>
+<rect class="btn2" x="70" y="288" width="220" height="40"/>
+<text class="s" x="138" y="312">↻ RESTART LEVEL</text>
+<rect class="btn2" x="70" y="338" width="220" height="40"/>
+<text class="s" x="148" y="362">💡 HINT</text>
+<rect class="btn2" x="70" y="388" width="220" height="40"/>
+<text class="s" x="138" y="412">⚙ SETTINGS</text>
+<rect class="btn2" x="70" y="438" width="220" height="40"/>
+<text class="s" x="120" y="462">⌂ QUIT TO WORLD MAP</text>
+<text class="s" x="100" y="510" fill="#5a6678">Progress is saved automatically</text>
+</svg>

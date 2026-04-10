@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:2}.t{font:11px monospace;fill:#e8eef7}.s{font:9px monospace;fill:#aab8c8}.title{font:bold 12px monospace;fill:#f5e89c}.lbl{font:bold 10px monospace;fill:#5fc97e}</style>
+<rect class="bg" width="760" height="420"/>
+<text class="title" x="20" y="26">WEATHER RESOLVE STORYBOARD — 4 STATES</text>
+<text class="s" x="20" y="42">animation_director.gd: PLANNING → RESOLVING → WALKING → COMPLETE</text>
+
+<!-- PANEL 1: PLANNING -->
+<g transform="translate(20,60)">
+<rect class="panel" width="170" height="340"/>
+<text class="lbl" x="48" y="20">1. PLANNING</text>
+<text class="s" x="14" y="34">Player queues cards</text>
+<g transform="translate(15,44)">
+<rect width="140" height="140" fill="#1a2840"/>
+<rect x="0" y="0" width="28" height="28" fill="#7ab355"/><rect x="28" y="0" width="28" height="28" fill="#7ab355"/><rect x="56" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="84" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="112" y="0" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="28" width="28" height="28" fill="#7ab355"/><rect x="28" y="28" width="28" height="28" fill="#7ab355"/><rect x="56" y="28" width="28" height="28" fill="#2e5c8a"/><rect x="84" y="28" width="28" height="28" fill="#7ab355"/><rect x="112" y="28" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="56" width="28" height="28" fill="#2a4a2a"/><circle cx="14" cy="70" r="9" fill="none" stroke="#f5e89c" stroke-width="1"/><rect x="10" y="64" width="8" height="12" fill="#3a4a6a"/>
+<rect x="28" y="56" width="28" height="28" fill="#7ab355"/><rect x="56" y="56" width="28" height="28" fill="#7ab355"/><rect x="84" y="56" width="28" height="28" fill="#7ab355"/><rect x="112" y="56" width="28" height="28" fill="#3a3a3a"/><path d="M120,80 L132,68 L132,80 Z" fill="#cc2222"/>
+<rect x="0" y="84" width="28" height="28" fill="#7ab355"/><rect x="28" y="84" width="28" height="28" fill="#7ab355"/><rect x="56" y="84" width="28" height="28" fill="#7ab355"/><rect x="84" y="84" width="28" height="28" fill="#7ab355"/><rect x="112" y="84" width="28" height="28" fill="#7ab355"/>
+</g>
+<text class="s" x="14" y="208">Queue: [FROST, FROST]</text>
+<rect x="14" y="216" width="40" height="22" fill="#7ad8e8" stroke="#fff"/><text class="s" x="20" y="230" fill="#0a1628">FROST</text>
+<rect x="58" y="216" width="40" height="22" fill="#7ad8e8" stroke="#fff"/><text class="s" x="64" y="230" fill="#0a1628">FROST</text>
+<text class="s" x="14" y="256">State: PLANNING</text>
+<text class="s" x="14" y="270">Idle bob loop (1 Hz)</text>
+<text class="s" x="14" y="284">No animations playing</text>
+<text class="s" x="14" y="304">Sky waits at START</text>
+<text class="s" x="14" y="318">Tap PLAY to commit</text>
+</g>
+
+<!-- PANEL 2: RESOLVING -->
+<g transform="translate(210,60)">
+<rect class="panel" width="170" height="340"/>
+<text class="lbl" x="46" y="20">2. RESOLVING</text>
+<text class="s" x="14" y="34">Cards apply in order</text>
+<g transform="translate(15,44)">
+<rect width="140" height="140" fill="#1a2840"/>
+<rect x="0" y="0" width="28" height="28" fill="#7ab355"/><rect x="28" y="0" width="28" height="28" fill="#7ab355"/><rect x="56" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="84" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="112" y="0" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="28" width="28" height="28" fill="#7ab355"/><rect x="28" y="28" width="28" height="28" fill="#7ab355"/><rect x="56" y="28" width="28" height="28" fill="#a8d8e8"/><line x1="60" y1="32" x2="80" y2="52" stroke="#fff" stroke-width="1"/><rect x="84" y="28" width="28" height="28" fill="#7ab355"/><rect x="112" y="28" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="56" width="28" height="28" fill="#2a4a2a"/><circle cx="14" cy="70" r="9" fill="none" stroke="#f5e89c" stroke-width="1"/><rect x="10" y="64" width="8" height="12" fill="#3a4a6a"/>
+<rect x="28" y="56" width="28" height="28" fill="#7ab355"/><rect x="56" y="56" width="28" height="28" fill="#a8d8e8"/><line x1="60" y1="60" x2="80" y2="80" stroke="#fff" stroke-width="1"/><rect x="84" y="56" width="28" height="28" fill="#7ab355"/><rect x="112" y="56" width="28" height="28" fill="#3a3a3a"/><path d="M120,80 L132,68 L132,80 Z" fill="#cc2222"/>
+<rect x="0" y="84" width="28" height="28" fill="#7ab355"/><rect x="28" y="84" width="28" height="28" fill="#7ab355"/><rect x="56" y="84" width="28" height="28" fill="#7ab355"/><rect x="84" y="84" width="28" height="28" fill="#7ab355"/><rect x="112" y="84" width="28" height="28" fill="#7ab355"/>
+<rect x="56" y="28" width="28" height="56" fill="#fff" opacity="0.4"/>
+</g>
+<text class="s" x="14" y="208">Queue resolving:</text>
+<rect x="14" y="216" width="40" height="22" fill="#3a3a3a" stroke="#5a6678"/><text class="s" x="22" y="230" fill="#888">done</text>
+<rect x="58" y="216" width="40" height="22" fill="#7ad8e8" stroke="#f5e89c" stroke-width="2"/><text class="s" x="64" y="230" fill="#0a1628">▶FROST</text>
+<text class="s" x="14" y="256">State: RESOLVING</text>
+<text class="s" x="14" y="270">Frost effect 700ms</text>
+<text class="s" x="14" y="284">Water → ICE commits</text>
+<text class="s" x="14" y="298">at frame 4 (467ms)</text>
+<text class="s" x="14" y="312">150ms inter-card pause</text>
+<text class="s" x="14" y="326">Sky still IDLE</text>
+</g>
+
+<!-- PANEL 3: WALKING -->
+<g transform="translate(400,60)">
+<rect class="panel" width="170" height="340"/>
+<text class="lbl" x="50" y="20">3. WALKING</text>
+<text class="s" x="14" y="34">Sky auto-walks A* path</text>
+<g transform="translate(15,44)">
+<rect width="140" height="140" fill="#1a2840"/>
+<rect x="0" y="0" width="28" height="28" fill="#7ab355"/><rect x="28" y="0" width="28" height="28" fill="#7ab355"/><rect x="56" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="84" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="112" y="0" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="28" width="28" height="28" fill="#7ab355"/><rect x="28" y="28" width="28" height="28" fill="#7ab355"/><rect x="56" y="28" width="28" height="28" fill="#a8d8e8"/><rect x="84" y="28" width="28" height="28" fill="#7ab355"/><rect x="112" y="28" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="56" width="28" height="28" fill="#2a4a2a"/>
+<rect x="28" y="56" width="28" height="28" fill="#7ab355"/><rect x="56" y="56" width="28" height="28" fill="#a8d8e8"/><rect x="84" y="56" width="28" height="28" fill="#7ab355"/><rect x="112" y="56" width="28" height="28" fill="#3a3a3a"/><path d="M120,80 L132,68 L132,80 Z" fill="#cc2222"/>
+<rect x="0" y="84" width="28" height="28" fill="#7ab355"/><rect x="28" y="84" width="28" height="28" fill="#7ab355"/><rect x="56" y="84" width="28" height="28" fill="#7ab355"/><rect x="84" y="84" width="28" height="28" fill="#7ab355"/><rect x="112" y="84" width="28" height="28" fill="#7ab355"/>
+<circle cx="14" cy="70" r="2" fill="#f5e89c"/><circle cx="42" cy="70" r="2" fill="#f5e89c"/><circle cx="70" cy="70" r="2" fill="#f5e89c"/><circle cx="98" cy="70" r="2" fill="#f5e89c"/><circle cx="126" cy="70" r="2" fill="#f5e89c"/>
+<rect x="62" y="62" width="10" height="14" fill="#3a4a6a"/><circle cx="64" cy="66" r="0.6" fill="#fff"/><circle cx="69" cy="66" r="0.6" fill="#fff"/>
+</g>
+<text class="s" x="14" y="208">Path: 5 tiles, 1250ms</text>
+<text class="s" x="14" y="224">Walk cycle 250ms/tile</text>
+<rect x="14" y="234" width="124" height="6" fill="#0a1628" stroke="#3a5f8a"/>
+<rect x="14" y="234" width="62" height="6" fill="#5fc97e"/>
+<text class="s" x="14" y="262">State: WALKING</text>
+<text class="s" x="14" y="276">CharController.step()</text>
+<text class="s" x="14" y="290">walk_E anim playing</text>
+<text class="s" x="14" y="304">Tile 3/5 (mid-walk)</text>
+<text class="s" x="14" y="320">No deaths detected</text>
+</g>
+
+<!-- PANEL 4: COMPLETE -->
+<g transform="translate(590,60)">
+<rect class="panel" width="170" height="340"/>
+<text class="lbl" x="48" y="20">4. COMPLETE</text>
+<text class="s" x="14" y="34">Sky reaches goal · cheer</text>
+<g transform="translate(15,44)">
+<rect width="140" height="140" fill="#1a2840"/>
+<rect x="0" y="0" width="28" height="28" fill="#7ab355"/><rect x="28" y="0" width="28" height="28" fill="#7ab355"/><rect x="56" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="84" y="0" width="28" height="28" fill="#2e5c8a"/><rect x="112" y="0" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="28" width="28" height="28" fill="#7ab355"/><rect x="28" y="28" width="28" height="28" fill="#7ab355"/><rect x="56" y="28" width="28" height="28" fill="#a8d8e8"/><rect x="84" y="28" width="28" height="28" fill="#7ab355"/><rect x="112" y="28" width="28" height="28" fill="#7ab355"/>
+<rect x="0" y="56" width="28" height="28" fill="#2a4a2a"/>
+<rect x="28" y="56" width="28" height="28" fill="#7ab355"/><rect x="56" y="56" width="28" height="28" fill="#a8d8e8"/><rect x="84" y="56" width="28" height="28" fill="#7ab355"/><rect x="112" y="56" width="28" height="28" fill="#3a3a3a"/>
+<rect x="116" y="58" width="10" height="16" fill="#3a4a6a"/><circle cx="118" cy="62" r="0.6" fill="#fff"/><circle cx="123" cy="62" r="0.6" fill="#fff"/>
+<line x1="114" y1="58" x2="110" y2="50" stroke="#3a4a6a" stroke-width="1"/><line x1="128" y1="58" x2="132" y2="50" stroke="#3a4a6a" stroke-width="1"/>
+<circle cx="120" cy="80" r="1" fill="#f5e89c"/><circle cx="116" cy="78" r="1" fill="#f5e89c"/><circle cx="124" cy="78" r="1" fill="#f5e89c"/>
+<rect x="0" y="84" width="28" height="28" fill="#7ab355"/><rect x="28" y="84" width="28" height="28" fill="#7ab355"/><rect x="56" y="84" width="28" height="28" fill="#7ab355"/><rect x="84" y="84" width="28" height="28" fill="#7ab355"/><rect x="112" y="84" width="28" height="28" fill="#7ab355"/>
+</g>
+<text class="s" x="14" y="208">Goal reached!</text>
+<g transform="translate(20,216)">
+<polygon points="10,0 12,7 19,7 14,12 16,18 10,15 4,18 6,12 1,7 8,7" fill="#f5e89c"/>
+<polygon points="40,0 42,7 49,7 44,12 46,18 40,15 34,18 36,12 31,7 38,7" fill="#f5e89c"/>
+<polygon points="70,0 72,7 79,7 74,12 76,18 70,15 64,18 66,12 61,7 68,7" fill="none" stroke="#5a6678"/>
+</g>
+<text class="s" x="14" y="262">State: COMPLETE</text>
+<text class="s" x="14" y="276">Cheer anim 1000ms</text>
+<text class="s" x="14" y="290">EventBus emits</text>
+<text class="s" x="14" y="304">level_completed</text>
+<text class="s" x="14" y="320">→ Level Complete UI</text>
+</g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:2}.t{font:11px monospace;fill:#e8eef7}.s{font:10px monospace;fill:#aab8c8}.title{font:bold 22px monospace;fill:#f5e89c}.btn{fill:#5fc97e;stroke:#fff;stroke-width:2}.btn2{fill:#142844;stroke:#3a5f8a;stroke-width:2}</style>
+<rect class="bg" width="360" height="640"/>
+<rect x="0" y="0" width="360" height="280" fill="#f0b340" opacity="0.3"/>
+<rect x="0" y="180" width="360" height="100" fill="#c08040" opacity="0.4"/>
+<text x="50" y="120" class="s" fill="#fff">[painterly sunrise scene]</text>
+<text x="50" y="140" class="s" fill="#fff">level_complete_sunrise_w1.png</text>
+<rect class="panel" x="20" y="240" width="320" height="280"/>
+<text class="title" x="68" y="284">LEVEL COMPLETE</text>
+<text class="s" x="120" y="304">W1 · L05 — Lighthouse</text>
+<g transform="translate(110,330)">
+<polygon points="20,0 25,15 40,15 28,24 33,40 20,30 7,40 12,24 0,15 15,15" fill="#f5e89c" stroke="#fff" stroke-width="1"/>
+<polygon points="70,0 75,15 90,15 78,24 83,40 70,30 57,40 62,24 50,15 65,15" fill="#f5e89c" stroke="#fff" stroke-width="1"/>
+<polygon points="120,0 125,15 140,15 128,24 133,40 120,30 107,40 112,24 100,15 115,15" fill="none" stroke="#5a6678" stroke-width="2"/>
+</g>
+<rect x="40" y="392" width="280" height="48" fill="#0a1628" stroke="#3a5f8a"/>
+<text class="s" x="56" y="412">Moves used: 6 / par 5</text>
+<text class="s" x="56" y="430">Time: 1:24 · Best: 1:18</text>
+<rect class="btn" x="40" y="456" width="280" height="44"/>
+<text class="t" x="120" y="484" fill="#0a1628" font-weight="bold">▶ NEXT LEVEL</text>
+<rect class="btn2" x="40" y="510" width="135" height="40"/>
+<text class="s" x="74" y="535">↻ RETRY</text>
+<rect class="btn2" x="185" y="510" width="135" height="40"/>
+<text class="s" x="218" y="535">⌂ WORLD MAP</text>
+</svg>

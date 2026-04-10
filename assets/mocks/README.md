@@ -4,10 +4,34 @@
 
 ## Files
 
-- `tiles.svg` — All 14 v2 terrain types in a labeled grid. Shows the target color, basic pattern, and the readability cue (cracks on ice, droplets on wet grass, etc.) for every tile from `GAME_DESIGN.md` §4.
-- `cards.svg` — All 6 weather cards (Rain, Sun, Frost, Wind, Lightning, Fog) at 96×144 with the per-card color from `ART_DIRECTION.md` §4 and the icon shape language.
-- `character.svg` — All 9 active Sky character states + 2 v1.5 deferred states + the hidden state. Shows hood silhouette, body proportions, and per-state pose intent. Frame counts and timings live in `ANIMATION_DIRECTION_2D.md` §4.
-- `level_mockup.svg` — Full gameplay screen mockup at the target mobile aspect ratio (360×640). Shows the HUD bar, 7×7 grid with mixed terrain + Sky at start + lighthouse goal, queue strip with 3/5 cards committed, hand of 5 card types, and the PLAY SEQUENCE button. This is the canonical layout reference for `ui/screens/gameplay.tscn`.
+- `tiles.svg` — All 14 v2 terrain types in a labeled grid with locked
+  colors and the colorblind-safe pattern cue per tile.
+- `cards.svg` — All 6 weather cards (Rain, Sun, Frost, Wind, Lightning,
+  Fog) at 96×144 with the per-card color from ART_DIRECTION.md §4.
+- `character.svg` — All 10 Sky character states (idle, walk, surprised,
+  cheer, drown, burn, fall, electrocute v1.5, freeze v1.5, hidden).
+- `level_mockup.svg` — Full 360×640 mobile gameplay screen layout. HUD,
+  7×7 grid, queue strip, hand, PLAY SEQUENCE button. Canonical reference
+  for ui/screens/gameplay.tscn.
+- `world_select.svg` — 360×640 world picker with 6 world cards in a 2×3
+  grid showing locked / unlocked / in-progress states. Reference for
+  ui/screens/world_select.tscn.
+- `level_select.svg` — 360×800 vertical scrolling world map with 22
+  level nodes connected by a winding path, showing cleared / current /
+  locked states. Reference for ui/screens/level_select.tscn.
+- `level_complete.svg` — Win screen with painterly sunrise placeholder,
+  3-star rating, stats, NEXT LEVEL button. Reference for
+  ui/screens/level_complete.tscn.
+- `level_failed.svg` — Loss screen with cause illustration, reason text,
+  TRY AGAIN button, hint and skip options. Reference for
+  ui/screens/level_failed.tscn.
+- `pause_menu.svg` — Modal pause overlay with RESUME, RESTART, HINT,
+  SETTINGS, QUIT options over a darkened gameplay background. Reference
+  for ui/popups/pause_menu.tscn.
+- `weather_resolve_sequence.svg` — 760×420 4-panel storyboard showing
+  PLANNING → RESOLVING → WALKING → COMPLETE state transitions with
+  per-panel timing notes. Canonical reference for the gameplay-programmer
+  agent implementing scripts/animation/animation_director.gd.
 
 ## How agents should use these
 

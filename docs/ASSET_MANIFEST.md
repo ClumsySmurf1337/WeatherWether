@@ -394,10 +394,16 @@ during implementation. NOT shippable game assets.
 | File | Purpose |
 |---|---|
 | README.md | Contract — what mocks are, how agents use them, what they exclude |
-| level_mockup.svg | Full 360x640 mobile gameplay screen layout reference |
-| tiles.svg | All 14 v2 terrain types with locked colors and pattern cues |
-| cards.svg | All 6 weather cards with locked per-card colors |
+| tiles.svg | All 14 v2 terrain types with locked colors and colorblind-safe pattern cues |
+| cards.svg | All 6 weather cards at 96×144 with per-card colors from ART_DIRECTION.md §4 |
 | character.svg | All 10 Sky character states (idle, walk, surprised, cheer, drown, burn, fall, electrocute v1.5, freeze v1.5, hidden) |
+| level_mockup.svg | Full 360×640 mobile gameplay screen layout (HUD, grid, queue, hand, PLAY SEQUENCE) |
+| world_select.svg | 360×640 world picker with 6 world cards showing locked/unlocked/in-progress states |
+| level_select.svg | 360×800 vertical scrolling world map with 22 level nodes and winding path |
+| level_complete.svg | Win screen with painterly sunrise placeholder, 3-star rating, stats, NEXT LEVEL |
+| level_failed.svg | Loss screen with cause illustration, reason text, TRY AGAIN, hint, skip options |
+| pause_menu.svg | Modal pause overlay with RESUME, RESTART, HINT, SETTINGS, QUIT over darkened gameplay |
+| weather_resolve_sequence.svg | 760×420 4-panel storyboard of PLANNING → RESOLVING → WALKING → COMPLETE transitions |
 
 Updates to the mock pack happen via Linear tickets against assets/mocks/.
 Real pixel art is generated separately per docs/ART_DIRECTION.md and

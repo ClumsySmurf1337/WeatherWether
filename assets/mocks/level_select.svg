@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 800" shape-rendering="crispEdges">
+<style>.bg{fill:#1a3050}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:2}.t{font:10px monospace;fill:#e8eef7}.s{font:8px monospace;fill:#aab8c8}.title{font:bold 14px monospace;fill:#f5e89c}.ln{font:bold 11px monospace;fill:#0a1628}.lock{font:8px monospace;fill:#5a6678}</style>
+<rect class="bg" width="360" height="800"/>
+<path d="M0,0 L360,0 L360,800 L0,800 Z" fill="url(#g)" opacity="0.6"/>
+<defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2e5c8a"/><stop offset="1" stop-color="#1a3050"/></linearGradient></defs>
+<rect class="panel" x="10" y="10" width="340" height="46"/><text x="20" y="30" class="title">← W1 · DOWNPOUR</text><text class="s" x="20" y="46">Rain only · 22 levels</text><text class="s" x="280" y="30">★ 45/66</text>
+<path d="M180,90 Q120,130 180,170 Q240,210 180,250 Q120,290 180,330 Q240,370 180,410 Q120,450 180,490 Q240,530 180,570 Q120,610 180,650 Q240,690 180,730" stroke="#3a5f8a" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
+<g><circle cx="180" cy="90" r="18" fill="#5fc97e" stroke="#fff" stroke-width="2"/><text class="ln" x="176" y="94">1</text><text class="s" x="200" y="94">★★★</text></g>
+<g><circle cx="120" cy="130" r="18" fill="#5fc97e" stroke="#fff" stroke-width="2"/><text class="ln" x="116" y="134">2</text><text class="s" x="80" y="134">★★★</text></g>
+<g><circle cx="240" cy="170" r="18" fill="#5fc97e" stroke="#fff" stroke-width="2"/><text class="ln" x="236" y="174">3</text><text class="s" x="260" y="174">★★☆</text></g>
+<g><circle cx="120" cy="210" r="18" fill="#5fc97e" stroke="#fff" stroke-width="2"/><text class="ln" x="116" y="214">4</text><text class="s" x="80" y="214">★★★</text></g>
+<g><circle cx="240" cy="250" r="18" fill="#f0b340" stroke="#fff" stroke-width="3"/><text class="ln" x="236" y="254">5</text><text class="s" x="262" y="254">PLAYING</text></g>
+<g><circle cx="120" cy="290" r="18" fill="#3a5f8a" stroke="#5a6678" stroke-width="2"/><rect x="116" y="286" width="8" height="8" fill="#5a6678"/></g>
+<g><circle cx="240" cy="330" r="18" fill="#3a5f8a" stroke="#5a6678" stroke-width="2"/><rect x="236" y="326" width="8" height="8" fill="#5a6678"/></g>
+<g><circle cx="120" cy="370" r="18" fill="#3a5f8a" stroke="#5a6678" stroke-width="2"/><rect x="116" y="366" width="8" height="8" fill="#5a6678"/></g>
+<g><circle cx="240" cy="410" r="18" fill="#3a5f8a" stroke="#5a6678" stroke-width="2"/><rect x="236" y="406" width="8" height="8" fill="#5a6678"/></g>
+<g><circle cx="120" cy="450" r="18" fill="#3a5f8a" stroke="#5a6678" stroke-width="2"/><rect x="116" y="446" width="8" height="8" fill="#5a6678"/></g>
+<text class="lock" x="155" y="494">11–22 locked</text>
+<g><circle cx="240" cy="530" r="14" fill="#3a5f8a" stroke="#5a6678" stroke-width="1"/></g>
+<g><circle cx="120" cy="570" r="14" fill="#3a5f8a" stroke="#5a6678" stroke-width="1"/></g>
+<g><circle cx="240" cy="610" r="14" fill="#3a5f8a" stroke="#5a6678" stroke-width="1"/></g>
+<g><circle cx="180" cy="730" r="22" fill="#3a5f8a" stroke="#f5e89c" stroke-width="3"/><text class="title" x="170" y="738">W</text></g>
+<text class="s" x="156" y="770">WORLD BOSS</text>
+<rect class="panel" x="10" y="780" width="340" height="14"/><text class="s" x="20" y="792">↓ Scroll · Tap node to play</text>
+</svg>
