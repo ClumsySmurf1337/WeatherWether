@@ -1,19 +1,27 @@
 extends Node
 
-## Autoload: owns the UI canvas, screen stack (push/pop), and root replacement (Splash → Home).
-## See `docs/UI_SCREENS.md` and `docs/CODE_REWRITE_PLAN.md` §UI files.
+## Autoload: owns the UI canvas, screen stack (push/pop), modal overlay, and
+## root replacement (Splash → Home). See `docs/UI_SCREENS.md` and
+## `docs/CODE_REWRITE_PLAN.md` §UI files.
 
 const SCENE_SPLASH: PackedScene = preload("res://scenes/ui/splash.tscn")
 const SCENE_HOME: PackedScene = preload("res://scenes/ui/home.tscn")
 const SCENE_WORLD_SELECT: PackedScene = preload("res://scenes/ui/world_select.tscn")
 const SCENE_SETTINGS: PackedScene = preload("res://scenes/ui/settings.tscn")
 const SCENE_GAMEPLAY_PLACEHOLDER: PackedScene = preload("res://scenes/ui/gameplay_placeholder.tscn")
+const SCENE_LEVEL_COMPLETE: PackedScene = preload("res://scenes/ui/level_complete.tscn")
+const SCENE_LEVEL_FAILED: PackedScene = preload("res://scenes/ui/level_failed.tscn")
+const SCENE_NO_PATH: PackedScene = preload("res://scenes/ui/no_path.tscn")
+const SCENE_PAUSE: PackedScene = preload("res://scenes/ui/pause.tscn")
 
 const SAVE_DEFAULT_PATH: String = "user://save_default.json"
 
 var _canvas: CanvasLayer
 var _host: Control
+var _modal_layer: CanvasLayer
+var _modal_host: Control
 var _stack: Array[Control] = []
+var _active_modal: Control = null
 
 
 func _ready() -> void:
@@ -28,11 +36,23 @@ func _ready() -> void:
 	_host.theme = UITheme.create_base_theme()
 	_canvas.add_child(_host)
 
+	_modal_layer = CanvasLayer.new()
+	_modal_layer.layer = 110
+	add_child(_modal_layer)
+
+	_modal_host = Control.new()
+	_modal_host.name = &"UIModalHost"
+	_modal_host.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_modal_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_modal_host.theme = UITheme.create_base_theme()
+	_modal_layer.add_child(_modal_host)
+
 	replace_root(SCENE_SPLASH)
 
 
-## Clears the stack and shows a single full-screen UI (e.g. Splash → Home, or Home → Gameplay stub).
+## Clears the stack and shows a single full-screen UI (e.g. Splash → Home).
 func replace_root(scene: PackedScene) -> void:
+	dismiss_modal()
 	for child: Node in _host.get_children():
 		_host.remove_child(child)
 		child.queue_free()
@@ -61,12 +81,42 @@ func pop_screen() -> void:
 	top.queue_free()
 
 
+## Shows a modal overlay above everything (Level Failed, No Path, Pause).
+## Returns the instantiated modal Control so the caller can connect signals.
+func show_modal(scene: PackedScene) -> Control:
+	dismiss_modal()
+	var inst: Control = scene.instantiate() as Control
+	_set_full_rect(inst)
+	_modal_host.add_child(inst)
+	_modal_host.mouse_filter = Control.MOUSE_FILTER_STOP
+	_active_modal = inst
+	return inst
+
+
+## Dismisses the current modal overlay if one is active.
+func dismiss_modal() -> void:
+	if _active_modal != null:
+		if _active_modal.get_parent() == _modal_host:
+			_modal_host.remove_child(_active_modal)
+		_active_modal.queue_free()
+		_active_modal = null
+		_modal_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func has_active_modal() -> bool:
+	return _active_modal != null
+
+
 func go_to_home() -> void:
 	replace_root(SCENE_HOME)
 
 
 func go_to_gameplay_placeholder() -> void:
 	replace_root(SCENE_GAMEPLAY_PLACEHOLDER)
+
+
+func go_to_level_complete() -> void:
+	replace_root(SCENE_LEVEL_COMPLETE)
 
 
 static func has_save_file() -> bool:
