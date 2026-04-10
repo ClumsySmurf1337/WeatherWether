@@ -230,6 +230,7 @@ foreach ($p in $lanePrs) {
         $splat.SyncMainBeforeValidate = $true
     }
     if ($NoMerge) { $splat.NoMerge = $true }
+    $splat.AgentRoot = $AgentRoot
 
     & "$repoRoot\tools\tasks\qa-pr-handoff-local.ps1" @splat
     if ($LASTEXITCODE -ne 0) {
