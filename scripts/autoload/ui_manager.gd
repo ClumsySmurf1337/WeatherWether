@@ -7,6 +7,7 @@ extends Node
 const SCENE_SPLASH: PackedScene = preload("res://scenes/ui/splash.tscn")
 const SCENE_HOME: PackedScene = preload("res://scenes/ui/home.tscn")
 const SCENE_WORLD_SELECT: PackedScene = preload("res://scenes/ui/world_select.tscn")
+const SCENE_LEVEL_SELECT: PackedScene = preload("res://scenes/ui/level_select.tscn")
 const SCENE_SETTINGS: PackedScene = preload("res://scenes/ui/settings.tscn")
 const SCENE_GAMEPLAY_PLACEHOLDER: PackedScene = preload("res://scenes/ui/gameplay_placeholder.tscn")
 const SCENE_LEVEL_COMPLETE: PackedScene = preload("res://scenes/ui/level_complete.tscn")
@@ -117,6 +118,21 @@ func go_to_gameplay_placeholder() -> void:
 
 func go_to_level_complete() -> void:
 	replace_root(SCENE_LEVEL_COMPLETE)
+
+
+func push_level_select(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary) -> void:
+	var inst: Control = SCENE_LEVEL_SELECT.instantiate() as Control
+	_set_full_rect(inst)
+	var screen: LevelSelectScreen = inst as LevelSelectScreen
+	if screen != null:
+		screen.configure(world, world_name, highest_unlocked, level_stars)
+		screen.level_selected.connect(_on_level_selected)
+	_host.add_child(inst)
+	_stack.append(inst)
+
+
+func _on_level_selected(_world: int, _level: int) -> void:
+	go_to_gameplay_placeholder()
 
 
 static func has_save_file() -> bool:
