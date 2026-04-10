@@ -100,3 +100,4 @@ func test_json_round_trip() -> void:
 func test_load_missing_file_returns_null() -> void:
 	var loaded: LevelData = LevelLoader.load_from_json("user://does_not_exist_12345.json")
 	assert_null(loaded)
+	assert_push_error("file not found")

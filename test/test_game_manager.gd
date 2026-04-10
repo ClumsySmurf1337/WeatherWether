@@ -30,7 +30,7 @@ func _make_grid(w: int, h: int, fill: int) -> Array:
 	return g
 
 
-func _set(grid: Array, pos: Vector2i, w: int, val: int) -> void:
+func _set_grid_cell(grid: Array, pos: Vector2i, w: int, val: int) -> void:
 	grid[pos.y * w + pos.x] = val
 
 
@@ -38,8 +38,8 @@ func test_load_level_transitions_to_planning() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var level: LevelData = _make_level(grid, 3, 1, [], Vector2i(0, 0), [Vector2i(2, 0)])
 	gm.load_level(level)
 	assert_eq(gm.current_state, GS.PLANNING)
@@ -52,8 +52,8 @@ func test_queue_card_emits_and_increments() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var cards: Array[int] = [C.RAIN]
 	var level: LevelData = _make_level(grid, 3, 1, cards, Vector2i(0, 0), [Vector2i(2, 0)])
 	gm.load_level(level)
@@ -68,8 +68,8 @@ func test_undo_removes_from_queue() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var cards: Array[int] = [C.RAIN, C.SUN]
 	var level: LevelData = _make_level(grid, 3, 1, cards, Vector2i(0, 0), [Vector2i(2, 0)])
 	gm.load_level(level)
@@ -83,9 +83,9 @@ func test_play_sequence_transitions_to_resolving() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(1, 0), 3, T.WATER)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), 3, T.WATER)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var cards: Array[int] = [C.FROST]
 	var level: LevelData = _make_level(grid, 3, 1, cards, Vector2i(0, 0), [Vector2i(2, 0)])
 	gm.load_level(level)
@@ -99,8 +99,8 @@ func test_pause_and_resume() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var level: LevelData = _make_level(grid, 3, 1, [], Vector2i(0, 0), [Vector2i(2, 0)])
 	gm.load_level(level)
 	gm.pause()
@@ -114,9 +114,9 @@ func test_star_rating_three_stars_at_par() -> void:
 	var gm := GameManager.new()
 	add_child(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), 3, T.START)
-	_set(grid, Vector2i(1, 0), 3, T.WATER)
-	_set(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), 3, T.WATER)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
 	var cards: Array[int] = [C.FROST]
 	var level: LevelData = _make_level(grid, 3, 1, cards, Vector2i(0, 0), [Vector2i(2, 0)])
 	level.par_moves = 1

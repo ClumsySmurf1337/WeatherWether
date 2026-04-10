@@ -13,7 +13,7 @@ func _make_grid(w: int, h: int, fill: int) -> Array:
 	return g
 
 
-func _set(grid: Array, pos: Vector2i, w: int, val: int) -> void:
+func _set_grid_cell(grid: Array, pos: Vector2i, w: int, val: int) -> void:
 	grid[pos.y * w + pos.x] = val
 
 
@@ -27,8 +27,8 @@ func test_walk_happy_path_reaches_goal() -> void:
 	var w := 3
 	var h := 1
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(2, 0), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(2, 0), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
@@ -51,9 +51,9 @@ func test_death_on_water_is_drown() -> void:
 	var w := 3
 	var h := 1
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(1, 0), w, T.WATER)
-	_set(grid, Vector2i(2, 0), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), w, T.WATER)
+	_set_grid_cell(grid, Vector2i(2, 0), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
@@ -71,9 +71,9 @@ func test_death_on_scorched_is_burn() -> void:
 	var w := 3
 	var h := 1
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(1, 0), w, T.SCORCHED)
-	_set(grid, Vector2i(2, 0), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), w, T.SCORCHED)
+	_set_grid_cell(grid, Vector2i(2, 0), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
@@ -91,9 +91,9 @@ func test_death_on_empty_is_fall() -> void:
 	var w := 3
 	var h := 1
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(1, 0), w, T.EMPTY)
-	_set(grid, Vector2i(2, 0), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), w, T.EMPTY)
+	_set_grid_cell(grid, Vector2i(2, 0), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
@@ -110,9 +110,9 @@ func test_death_on_steam_is_fall() -> void:
 	var w := 3
 	var h := 1
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(1, 0), w, T.STEAM)
-	_set(grid, Vector2i(2, 0), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), w, T.STEAM)
+	_set_grid_cell(grid, Vector2i(2, 0), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
@@ -150,8 +150,8 @@ func test_facing_updates_during_walk() -> void:
 	var w := 2
 	var h := 2
 	var grid := _make_grid(w, h, T.DRY_GRASS)
-	_set(grid, Vector2i(0, 0), w, T.START)
-	_set(grid, Vector2i(1, 1), w, T.GOAL)
+	_set_grid_cell(grid, Vector2i(0, 0), w, T.START)
+	_set_grid_cell(grid, Vector2i(1, 1), w, T.GOAL)
 
 	var cc := CharacterController.new(Vector2i(0, 0))
 	var path: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1)]
