@@ -1,0 +1,24 @@
+{
+  "id": "w6_l10",
+  "world": 6,
+  "level_number": 10,
+  "display_name": "Whiteout Crossing",
+  "hint_text": "Wind clears a wide path through fog.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    12,  1, 11, 11, 10, 10,
+    10, 10, 11, 11, 10, 10,
+    10, 10, 11, 11,  1, 10,
+    10, 10, 10,  1,  3, 10,
+    10, 10, 10,  1,  1, 13
+  ],
+  "start_position": [0, 0],
+  "goal_positions": [[5, 4]],
+  "available_cards": [3, 0, 2],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 5,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
