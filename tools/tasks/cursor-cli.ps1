@@ -42,10 +42,27 @@ function Get-CursorTerminalAgentSubcommand {
     return "agent"
 }
 
+# cursor-agent.ps1 stops for "Workspace Trust" unless you pass e.g. --trust, --yolo, or -f.
+# Lane / merge scripts default to non-interactive: prepend trust flags. Opt out with CURSOR_AGENT_INTERACTIVE=1 or CURSOR_AGENT_NO_TRUST=1.
+function Get-CursorAgentAutomationTrustArgs {
+    if ($env:CURSOR_AGENT_INTERACTIVE -eq "1" -or $env:CURSOR_AGENT_INTERACTIVE -eq "true") {
+        return @()
+    }
+    if ($env:CURSOR_AGENT_NO_TRUST -eq "1" -or $env:CURSOR_AGENT_NO_TRUST -eq "true") {
+        return @()
+    }
+    $custom = $env:CURSOR_AGENT_TRUST_ARGS
+    if ($null -ne $custom -and $custom.Trim().Length -gt 0) {
+        return @($custom.Trim() -split '\s+')
+    }
+    return @("--trust")
+}
+
 function Invoke-CursorTerminalAgent([string]$Prompt) {
     $agentExe = Get-CursorAgentCliExecutable
     if ($agentExe) {
-        & $agentExe @($Prompt)
+        $trust = Get-CursorAgentAutomationTrustArgs
+        & $agentExe @($trust + @($Prompt))
         return $LASTEXITCODE
     }
     $exe = Get-CursorCliExecutable
@@ -53,7 +70,12 @@ function Invoke-CursorTerminalAgent([string]$Prompt) {
         throw "No terminal agent: put cursor-agent on PATH or set CURSOR_AGENT_CLI_BIN; or install cursor and set CURSOR_CLI_BIN."
     }
     $sub = Get-CursorTerminalAgentSubcommand
-    & $exe @($sub, $Prompt)
+    $cliTrust = $env:CURSOR_CLI_AGENT_TRUST_ARGS
+    $extra = @()
+    if ($null -ne $cliTrust -and $cliTrust.Trim().Length -gt 0) {
+        $extra = @($cliTrust.Trim() -split '\s+')
+    }
+    & $exe @(@($sub) + $extra + @($Prompt))
     return $LASTEXITCODE
 }
 

@@ -20,8 +20,12 @@ $prompt = Get-Content -LiteralPath $PromptFile -Raw
 Set-Location -LiteralPath $resolvedWork
 
 if ($CliExe) {
-    Write-Host "Running: $CliExe <prompt> in $resolvedWork (forced -CliExe)"
-    & $CliExe @($prompt)
+    $forcedArgs = @($prompt)
+    if ($CliExe -like '*cursor-agent*') {
+        $forcedArgs = @(Get-CursorAgentAutomationTrustArgs) + @($prompt)
+    }
+    Write-Host "Running: $CliExe in $resolvedWork (forced -CliExe; trust flags applied if path matches cursor-agent)"
+    & $CliExe @forcedArgs
     exit $LASTEXITCODE
 }
 
@@ -33,7 +37,7 @@ if ($agentExe) {
     $sub = Get-CursorTerminalAgentSubcommand
     Write-Host "Running: $wrap $sub <prompt> in $resolvedWork (fallback; prefer cursor-agent on PATH)"
 }
-Write-Host "(See tools/tasks/cursor-cli.ps1: CURSOR_AGENT_CLI_BIN, CURSOR_CLI_AGENT_SUBCOMMAND.)" -ForegroundColor DarkGray
+Write-Host "(Trust: default ``--trust`` for cursor-agent; CURSOR_AGENT_TRUST_ARGS / CURSOR_AGENT_NO_TRUST / CURSOR_AGENT_INTERACTIVE — see cursor-cli.ps1.)" -ForegroundColor DarkGray
 
 $code = Invoke-CursorTerminalAgent -Prompt $prompt
 exit $code

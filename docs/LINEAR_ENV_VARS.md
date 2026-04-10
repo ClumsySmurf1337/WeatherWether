@@ -62,6 +62,10 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 | `GITHUB_TOKEN` | For GitHub MCP / future PR automation (repo `contents` + `pull_requests` if auto-merge) |
 | `CURSOR_CLI_BIN` | Full path to **`cursor`** if not on PATH (editor wrapper; folder open + fallback terminal agent) |
 | `CURSOR_AGENT_CLI_BIN` | Full path to **`cursor-agent`** if not on PATH (preferred terminal agent for lane / merge scripts) |
+| `CURSOR_AGENT_TRUST_ARGS` | Space-separated flags passed **before** the prompt so **`cursor-agent`** skips the Workspace Trust prompt (default in scripts: **`--trust`**). Example override: **`--yolo`** |
+| `CURSOR_AGENT_NO_TRUST` | If **`1`** / **`true`**, do **not** auto-append trust flags (you want the interactive trust prompt) |
+| `CURSOR_AGENT_INTERACTIVE` | If **`1`** / **`true`**, same as **`CURSOR_AGENT_NO_TRUST`** (no auto **`--trust`**) |
+| `CURSOR_CLI_AGENT_TRUST_ARGS` | Optional space-separated flags inserted after **`cursor <subcommand>`** when using the **`cursor`** fallback (only if set; no default) |
 | `CURSOR_CLI_AGENT_SUBCOMMAND` | When **`cursor-agent`** is missing, scripts run **`cursor <subcommand> <prompt>`** — default subcommand is **`agent`** |
 | `CURSOR_AGENT_BIN` | Legacy **`agent`** shim path if `cursor` is unavailable (`Get-CursorCliExecutable` only) |
 | `LINEAR_PM_AUTO_ASSIGN` | If `false`, `linear:pm-organize -- --apply` skips setting assignees (priorities still update unless `--assign-only`) |
