@@ -9,7 +9,9 @@ param(
     [string]$MergeMode = "squash",
     [string]$AgentRoot = "",
     [int]$ChecksPollMaxSeconds = 900,
-    [int]$ChecksPollIntervalSeconds = 15
+    [int]$ChecksPollIntervalSeconds = 15,
+    [int]$ChecksWatchMaxRounds = 8,
+    [int]$ChecksWatchRetrySleepSeconds = 25
 )
 
 Set-StrictMode -Version Latest
@@ -94,7 +96,7 @@ function Wait-PrChecksRegisteredAndWatch {
         [int]$MaxWaitSeconds,
         [int]$PollSeconds
     )
-    Write-Host "[1] Waiting for GitHub checks on PR #$PrNumber (remote CI)..."
+    Write-Host "[remote CI] Waiting for GitHub checks on PR #$PrNumber..."
     $deadline = (Get-Date).AddSeconds($MaxWaitSeconds)
     while ((Get-Date) -lt $deadline) {
         $json = gh pr view $PrNumber --json statusCheckRollup 2>$null
@@ -122,14 +124,9 @@ function Wait-PrChecksRegisteredAndWatch {
 Write-Host "=== Local QA handoff: PR #$PullRequestNumber ===`n"
 Test-GhCli
 
-if (-not $SkipChecksWatch) {
-    Wait-PrChecksRegisteredAndWatch -PrNumber $PullRequestNumber -MaxWaitSeconds $ChecksPollMaxSeconds -PollSeconds $ChecksPollIntervalSeconds
-} else {
-    Write-Host "[1] Skipped gh pr checks --watch (-SkipChecksWatch)"
-}
-
+## Fail fast: local validate before waiting on GitHub (catches parse errors in seconds).
 if (-not $SkipLocalValidate) {
-    Write-Host "`n[2] Checkout PR branch and run local validate.ps1"
+    Write-Host "[1] Checkout PR branch and run local validate.ps1 (before remote CI)"
     $headJson = gh pr view $PullRequestNumber --json headRefName 2>$null
     if ($LASTEXITCODE -ne 0) {
         throw "gh pr view (headRefName) failed."
@@ -191,8 +188,33 @@ if (-not $SkipLocalValidate) {
     $validateProjectPath = (Get-Location).Path
     Write-Host "  validate.ps1 using Godot project: $validateProjectPath" -ForegroundColor DarkGray
     & "$repoRoot\tools\tasks\validate.ps1" -GodotProjectPath $validateProjectPath
+    Set-Location -LiteralPath $repoRoot
 } else {
-    Write-Host "`n[2] Skipped local validate (-SkipLocalValidate)"
+    Write-Host "[1] Skipped local validate (-SkipLocalValidate)"
+}
+
+if (-not $SkipChecksWatch) {
+    Write-Host "`n[2] Wait for GitHub Actions (re-watch after failures so post-fix pushes can re-run CI)"
+    $round = 0
+    while ($true) {
+        $round++
+        try {
+            Wait-PrChecksRegisteredAndWatch -PrNumber $PullRequestNumber -MaxWaitSeconds $ChecksPollMaxSeconds -PollSeconds $ChecksPollIntervalSeconds
+            break
+        } catch {
+            $msg = $_.Exception.Message
+            if ($round -ge $ChecksWatchMaxRounds) {
+                throw
+            }
+            if ($msg -notmatch 'checks failed') {
+                throw
+            }
+            Write-Host "  PR checks failed (round $round / $ChecksWatchMaxRounds). Fix, push to the PR branch, then waiting ${ChecksWatchRetrySleepSeconds}s for a new Actions run..." -ForegroundColor Yellow
+            Start-Sleep -Seconds $ChecksWatchRetrySleepSeconds
+        }
+    }
+} else {
+    Write-Host "`n[2] Skipped gh pr checks --watch (-SkipChecksWatch)"
 }
 
 if (-not $NoMerge) {
