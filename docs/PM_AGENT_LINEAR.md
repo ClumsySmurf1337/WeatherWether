@@ -1,4 +1,4 @@
-# PM agent + Linear (Whether)
+# PM agent + Linear (Weather Whether)
 
 This repo combines **scripted** Linear operations with **agent** behavior modeled on the DeedWise PM pattern (`docs/Examples/DeedWise — Project Manager Agent.md`): phase ordering, role routing, and **assignment markdown** per lane.
 

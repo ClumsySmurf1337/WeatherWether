@@ -5,7 +5,7 @@ Use these prompts to generate **design references**, not final shipping assets.
 ## Prompt 1: World Mood Board
 
 ```text
-Create a cohesive 2D puzzle game visual mood board for a mobile-first game called "Whether".
+Create a cohesive 2D puzzle game visual mood board for a mobile-first game called "Weather Whether".
 Theme: weather as puzzle mechanics (rain, sun, frost, wind, lightning, fog).
 Style: clean stylized 2D, readable at small mobile sizes, premium indie aesthetic.
 Output panels:

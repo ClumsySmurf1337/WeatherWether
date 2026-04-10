@@ -1,10 +1,10 @@
 ---
-description: Whether-specific architecture and scope controls
+description: Weather Whether architecture and scope controls
 globs: ["scripts/**/*.gd", "scenes/**/*.tscn", "levels/**/*.json"]
 alwaysApply: true
 ---
 
-# Whether Architecture Rules
+# Weather Whether Architecture Rules
 
 ## Core concept (align all features)
 

@@ -1,6 +1,6 @@
-# GitHub CI + local QA merge (default for Whether)
+# GitHub CI + local QA merge (default for Weather Whether)
 
-This repo **does not** auto-merge PRs or move Linear issues to Done from GitHub Actions. **Whether CI** only validates (Godot headless on Ubuntu, GUT, levels). Merge and Linear completion are **local** so your **QA agent / you** stay in control and use **`.env.local`** (no `LINEAR_API_KEY` in GitHub required for that path).
+This repo **does not** auto-merge PRs or move Linear issues to Done from GitHub Actions. **Weather Whether CI** only validates (Godot headless on Ubuntu, GUT, levels). Merge and Linear completion are **local** so your **QA agent / you** stay in control and use **`.env.local`** (no `LINEAR_API_KEY` in GitHub required for that path).
 
 ## What runs on GitHub
 

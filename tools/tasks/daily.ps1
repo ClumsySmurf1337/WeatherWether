@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
-Write-Host "== Whether Daily Check =="
+Write-Host "== Weather Whether Daily Check =="
 & "$repoRoot\tools\install\check-prereqs.ps1"
 if (-not $SkipDdriveCheck) {
     try {

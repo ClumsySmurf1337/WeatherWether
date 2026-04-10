@@ -26,7 +26,7 @@ Use this when you want **high-fidelity UI/UX screens** to design against before 
 Use verbatim or tweak adjectives; keep the constraints.
 
 ```text
-Design a premium mobile game UI for "Whether" — a puzzle game where you sequence weather powers (rain, sun, frost, wind, lightning, fog) on a grid.
+Design a premium mobile game UI for "Weather Whether" — a puzzle game where you sequence weather powers (rain, sun, frost, wind, lightning, fog) on a grid.
 
 Brand feeling: calm, clever, atmospheric — "cozy brain teaser" not arcade loud. Think Monument Valley polish meets readable board-game clarity.
 
@@ -50,7 +50,7 @@ Deliver: high-fidelity UI screens suitable for App Store / Play Store and Steam 
 **Main menu**
 
 ```text
-Screen: Main menu. Logo wordmark "Whether" with a subtle weather motif (abstract, not cheesy). Buttons: Play, Continue, Settings, Credits. Optional: tiny forecast-style decorative element that does not compete with buttons. CTA hierarchy obvious in 2 seconds.
+Screen: Main menu. Logo wordmark "Weather Whether" with a subtle weather motif (abstract, not cheesy). Buttons: Play, Continue, Settings, Credits. Optional: tiny forecast-style decorative element that does not compete with buttons. CTA hierarchy obvious in 2 seconds.
 ```
 
 **World / level select**

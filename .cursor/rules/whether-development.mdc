@@ -1,9 +1,9 @@
 ---
-description: Canonical Whether dev bible — docs, pipelines, open-source patterns, agent doc duty
+description: Canonical Weather Whether dev bible — docs, pipelines, open-source patterns, agent doc duty
 alwaysApply: true
 ---
 
-# Whether — Godot 4.6 / GDScript development rules
+# Weather Whether — Godot 4.6 / GDScript development rules
 
 ## Canonical docs (read before large changes)
 

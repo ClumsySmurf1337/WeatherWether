@@ -1,4 +1,4 @@
-You are an implementation agent for the Whether (Godot) repo in **this directory** (a git worktree).
+You are an implementation agent for the Weather Whether (Godot) repo in **this directory** (a git worktree).
 
 Do this in order:
 

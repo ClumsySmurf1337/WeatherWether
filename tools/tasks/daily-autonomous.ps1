@@ -6,7 +6,7 @@ Set-Location $repoRoot
 
 . "$repoRoot\tools\tasks\load-repo-env.ps1"
 
-Write-Host "=== Whether autonomous daily lane ==="
+Write-Host "=== Weather Whether autonomous daily lane ==="
 
 Write-Host "`n[1] D-drive and tooling health"
 & "$repoRoot\tools\tasks\daily.ps1" -SkipDdriveCheck

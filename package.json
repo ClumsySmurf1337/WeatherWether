@@ -2,7 +2,7 @@
   "name": "weatherwether-tooling",
   "private": true,
   "version": "0.1.0",
-  "description": "Tooling and automation scripts for Whether",
+  "description": "Tooling and automation scripts for Weather Whether",
   "engines": {
     "node": ">=22"
   },

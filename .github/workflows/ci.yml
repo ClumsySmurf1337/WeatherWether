@@ -1,4 +1,4 @@
-name: Whether CI
+name: Weather Whether CI
 
 on:
   push:

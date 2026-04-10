@@ -1,6 +1,6 @@
-# Whether
+# Weather Whether
 
-Whether is a mobile-first weather puzzle game built with Godot 4.6 and GDScript, with Windows/Steam delivery first and mobile lanes prepared from day one.
+Weather Whether is a mobile-first weather puzzle game built with Godot 4.6 and GDScript, with Windows/Steam delivery first and mobile lanes prepared from day one.
 
 ## Quick Start (Win11)
 

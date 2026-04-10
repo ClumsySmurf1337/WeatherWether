@@ -1,6 +1,6 @@
 # Blueprint Gap Audit
 
-**Revalidated:** 2026-04-09 · **GitHub:** Whether CI on **`ci.yml`** — `npm ci`, Godot **4.6.2** Linux headless (`/usr/local/bin/godot`), import, GUT, level validation (PR + `main`). **No** GitHub auto-merge or Linear Done in Actions (local **`qa:pr`** only).
+**Revalidated:** 2026-04-09 · **GitHub:** Weather Whether CI on **`ci.yml`** — `npm ci`, Godot **4.6.2** Linux headless (`/usr/local/bin/godot`), import, GUT, level validation (PR + `main`). **No** GitHub auto-merge or Linear Done in Actions (local **`qa:pr`** only).
 
 Source blueprint:
 
@@ -122,7 +122,7 @@ Details: `docs/AGENT_CATALOG.md`.
 1. **`export_presets.cfg`** + **`build.yml`** real export + artifact upload (Windows/Steam first).
 2. **`scripts/level_loader.gd`** (or agreed name) + **godot-ldtk-importer** addon — see `OPEN_SOURCE_AND_PIPELINE.md`.
 3. **Puzzle solver** hooked to real level data; **validate_all_levels** fails CI on bad levels.
-4. **Branch protection** on `main` requiring **Whether CI** + local **`qa:pr`** discipline.
+4. **Branch protection** on `main` requiring **Weather Whether CI** + local **`qa:pr`** discipline.
 5. **PR ↔ Linear** auto-comment / link (optional).
 6. **Visual/screenshot QA** loop (optional).
 

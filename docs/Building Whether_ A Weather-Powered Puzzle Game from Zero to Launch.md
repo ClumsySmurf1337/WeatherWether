@@ -1,6 +1,6 @@
-Building “Whether”: a weather-powered puzzle game from zero to launch 
+Building “Weather Whether”: a weather-powered puzzle game from zero to launch 
 
-Your game should be a grid-based weather-sequencing puzzle called “Whether.” The core mechanic: players choose the order and placement of weather events — rain, sun, wind, frost, lightning, fog — to transform a tile grid and open a path from start to goal. Each weather element physically changes the board through state transitions (water freezes to ice bridges, sun evaporates water to steam platforms, wind pushes objects). The “whether/weather” wordplay lives in the core loop: every puzzle is a decision about *whether* to deploy each weather card and *when*. Build it in Godot 4.6 with GDScript, develop in Cursor with the godot-tools extension and a Godot MCP server, and target Steam first, then iOS and Android. Below is everything you need to make this real. 
+Your game should be a grid-based weather-sequencing puzzle called “Weather Whether.” The core mechanic: players choose the order and placement of weather events — rain, sun, wind, frost, lightning, fog — to transform a tile grid and open a path from start to goal. Each weather element physically changes the board through state transitions (water freezes to ice bridges, sun evaporates water to steam platforms, wind pushes objects). The “whether/weather” wordplay lives in the core loop: every puzzle is a decision about *whether* to deploy each weather card and *when*. Build it in Godot 4.6 with GDScript, develop in Cursor with the godot-tools extension and a Godot MCP server, and target Steam first, then iOS and Android. Below is everything you need to make this real. 
 
 The puzzle game landscape reveals a clear blueprint 
 

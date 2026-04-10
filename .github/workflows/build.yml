@@ -1,4 +1,4 @@
-name: Whether Build
+name: Weather Whether Build
 
 on:
   workflow_dispatch:

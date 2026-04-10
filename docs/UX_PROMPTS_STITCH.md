@@ -7,7 +7,7 @@ Use these prompts to generate UX wireframes and references for implementation.
 ## Prompt 1: Onboarding + Main Menu
 
 ```text
-Design a mobile-first UX flow for a premium puzzle game called Whether.
+Design a mobile-first UX flow for a premium puzzle game called Weather Whether.
 Create wireframes for:
 1) First launch onboarding
 2) Main menu

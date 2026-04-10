@@ -11,7 +11,7 @@ Set-Location $repoRoot
 
 . "$repoRoot\tools\tasks\load-repo-env.ps1"
 
-Write-Host "=== Whether DAILY FULL (audit + validate + Linear PM preview) ===`n"
+Write-Host "=== Weather Whether DAILY FULL (audit + validate + Linear PM preview) ===`n"
 
 $skipDdrive = -not $StrictDdrive
 Write-Host "[1/5] Prerequisites + D-drive policy (SkipDdriveCheck=$skipDdrive)"

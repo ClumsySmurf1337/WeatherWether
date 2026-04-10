@@ -188,9 +188,9 @@ pwsh ./tools/tasks/validate.ps1
 
 ### Visual QA (godogen-style) and this repo
 
-[godogen](https://github.com/htdt/godogen) runs Godot, captures **screenshots**, and feeds them to vision models for a closed-loop visual QA pass — powerful for “does it look right”, not just “does it compile”. It targets **Godot 4 + C#** and **Claude Code** skills, which is a different stack than Whether’s **GDScript** + Cursor tooling.
+[godogen](https://github.com/htdt/godogen) runs Godot, captures **screenshots**, and feeds them to vision models for a closed-loop visual QA pass — powerful for “does it look right”, not just “does it compile”. It targets **Godot 4 + C#** and **Claude Code** skills, which is a different stack than Weather Whether’s **GDScript** + Cursor tooling.
 
-**Current Whether flow:** headless **GUT** tests and **level solver validation** via `validate.ps1` (see `tools/tasks/validate.ps1`) — deterministic, CI-friendly, no screenshot pipeline yet.
+**Current Weather Whether flow:** headless **GUT** tests and **level solver validation** via `validate.ps1` (see `tools/tasks/validate.ps1`) — deterministic, CI-friendly, no screenshot pipeline yet.
 
 **Recommended:** keep validate + CI as the **required** gate before `linear:close`; treat **screenshot → model review** as an **optional** follow-on (manual captures, Playwright against an export, or a small Godot capture script) when you want godogen-like polish without rewriting the project in C#. The blueprint also references godogen for inspiration: `docs/The Complete AI Multi-Agent Blueprint for Shipping Whether_ Parallel Agents, Orchestration, and Indie Game Development Toolkit.md`.
 

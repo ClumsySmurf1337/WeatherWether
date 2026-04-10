@@ -1,4 +1,4 @@
-You are the **QA / integration** agent for the Whether Godot repo. This git checkout has **merge conflicts** after merging **`{{BASEREF}}`**.
+You are the **QA / integration** agent for the Weather Whether Godot repo. This git checkout has **merge conflicts** after merging **`{{BASEREF}}`**.
 
 ## Your job
 
