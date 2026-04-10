@@ -19,7 +19,7 @@ This script (`tools/tasks/qa-pr-handoff-local.ps1`):
 1. **`gh pr checks --watch`** — waits for remote CI.
 2. **Checkout PR branch** — **`gh pr checkout`** in the main repo, **unless** the PR head is **`agent/cursor-lane-N`**: then the script uses your linked worktree **`wt-agent-cursor-lane-N`** under **`WHETHER_AGENT_ROOT`** (default `D:\Agents\WeatherWether`), because Git cannot check out the same branch in two worktrees.
 3. **`tools/tasks/validate.ps1 -GodotProjectPath`** (current PR checkout) — local Godot import, **GUT** (`res://test`), and level validation for that tree (main repo or lane worktree).
-4. **`gh pr merge --squash --delete-branch`** — merge from your machine (needs `gh` auth + branch rules).
+4. **`gh pr merge --squash --delete-branch`** — merge from your machine (needs `gh` auth + branch rules). Then **`tools/tasks/git-sync-main.ps1`** runs from the **main** repo: **`git fetch origin`** (so **every** worktree sees the new **`origin/main`**) and fast-forwards local **`main`**. That makes the next PR’s **merge `main` into branch** step use an up-to-date base.
 5. **`npm run linear:complete-from-pr`** — reads PR title/body for **`WEA-###`**, moves issue(s) to **Done** via **local** Linear API key.
 
 Flags: **`-SkipChecksWatch`**, **`-SkipLocalValidate`**, **`-SyncMainBeforeValidate`** (merge **`origin/main`** into the PR first; opens **`cursor-agent`** / **`cursor agent`** on conflict — see **`npm run qa:repair-merge`**), **`-NoMerge`** (skips merge and Linear Done), **`-AgentRoot`** (where **`wt-agent-cursor-lane-*`** live; batch passes this automatically).

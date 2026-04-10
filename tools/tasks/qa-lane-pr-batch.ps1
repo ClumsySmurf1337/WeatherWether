@@ -201,24 +201,7 @@ foreach ($p in $lanePrs) {
         }
     }
 
-    Set-Location $repoRoot
-    git fetch origin --prune 2>$null
-    $onBase = $false
-    foreach ($b in @("main", "master")) {
-        git show-ref --verify --quiet "refs/heads/$b" 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            git checkout $b
-            if ($LASTEXITCODE -eq 0) { $onBase = $true; break }
-        }
-        git show-ref --verify --quiet "refs/remotes/origin/$b" 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            git checkout -B $b "origin/$b"
-            if ($LASTEXITCODE -eq 0) { $onBase = $true; break }
-        }
-    }
-    if ($onBase) {
-        git pull --ff-only 2>$null
-    }
+    & "$repoRoot\tools\tasks\git-sync-main.ps1" -RepoRoot $repoRoot -Reason "before QA handoff PR #$n"
 
     $splat = @{
         PullRequestNumber = $n
@@ -238,16 +221,7 @@ foreach ($p in $lanePrs) {
     }
     if (-not $NoMerge) {
         Set-Location $repoRoot
-        foreach ($baseName in @("main", "master")) {
-            git show-ref --verify --quiet "refs/heads/$baseName" 2>$null
-            if ($LASTEXITCODE -eq 0) {
-                git checkout $baseName
-                if ($LASTEXITCODE -eq 0) {
-                    git pull --ff-only 2>$null
-                    break
-                }
-            }
-        }
+        # main already synced in qa-pr-handoff-local after gh pr merge; changelog only here
         Append-ChangelogLaneEntry -PrNumber $n -HeadRef $p.headRefName -Title $p.title
     }
     Write-Host ""

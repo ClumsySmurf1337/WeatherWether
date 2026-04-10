@@ -122,6 +122,7 @@ if (-not $NoMerge) {
     if ($LASTEXITCODE -ne 0) {
         throw "gh pr merge failed (branch protection, conflicts, or not mergeable)."
     }
+    & "$repoRoot\tools\tasks\git-sync-main.ps1" -RepoRoot $repoRoot -Reason "after merge PR #$PullRequestNumber (fetch refreshes origin/main for every linked worktree)"
 } else {
     Write-Host "`n[3] Skipped merge (-NoMerge) — Linear Done step skipped (merge first, then run linear:complete-from-pr with PR text)."
 }
