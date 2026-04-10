@@ -32,6 +32,13 @@
   PLANNING → RESOLVING → WALKING → COMPLETE state transitions with
   per-panel timing notes. Canonical reference for the gameplay-programmer
   agent implementing scripts/animation/animation_director.gd.
+- `gameplay_desktop.svg` — 1920×1080 desktop/Steam layout reference for
+  ui/screens/gameplay.tscn. Three-column landscape with left sidebar
+  menu, center 7×7 grid at 100px tiles, right sidebar queue/hand/play
+  button, keyboard shortcut overlays, hover state demonstration.
+- `world_select_desktop.svg` — 1920×1080 desktop world picker with 3×2
+  grid, painterly biome thumbnails, keyboard focus indicator, shortcut
+  hints. Reference for desktop layout of ui/screens/world_select.tscn.
 
 ## How agents should use these
 

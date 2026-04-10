@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:3}.t{font:18px monospace;fill:#e8eef7}.s{font:14px monospace;fill:#aab8c8}.title{font:bold 28px monospace;fill:#f5e89c}.btn{fill:#5fc97e;stroke:#fff;stroke-width:3}.kbd{font:bold 12px monospace;fill:#f5e89c}.hint{font:11px monospace;fill:#aab8c8}</style>
+<rect class="bg" width="1920" height="1080"/>
+
+<!-- LEFT SIDEBAR (240px) -->
+<rect class="panel" x="20" y="20" width="240" height="1040"/>
+<text class="title" x="40" y="70">W1 · L05</text>
+<text class="s" x="40" y="98">Lighthouse Keeper</text>
+<text class="t" x="40" y="140" fill="#f5e89c">★★☆</text>
+<text class="hint" x="40" y="162">Best: 1:18  ·  Par: 5</text>
+<line x1="40" y1="190" x2="240" y2="190" stroke="#3a5f8a" stroke-width="1"/>
+<text class="s" x="40" y="220">PROGRESS</text>
+<rect x="40" y="232" width="180" height="14" fill="#0a1628" stroke="#3a5f8a"/>
+<rect x="40" y="232" width="36" height="14" fill="#5fc97e"/>
+<text class="hint" x="40" y="266">5 / 22 levels</text>
+<line x1="40" y1="290" x2="240" y2="290" stroke="#3a5f8a" stroke-width="1"/>
+<rect x="40" y="310" width="200" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="60" y="342">⏸ MENU</text><text class="kbd" x="200" y="342">ESC</text>
+<rect x="40" y="372" width="200" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="60" y="404">↻ RESTART</text><text class="kbd" x="200" y="404">R</text>
+<rect x="40" y="434" width="200" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="60" y="466">💡 HINT</text><text class="kbd" x="200" y="466">H</text>
+<rect x="40" y="496" width="200" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="60" y="528">⚙ SETTINGS</text>
+<rect x="40" y="558" width="200" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="60" y="590">⌂ WORLD MAP</text>
+<line x1="40" y1="640" x2="240" y2="640" stroke="#3a5f8a" stroke-width="1"/>
+<text class="s" x="40" y="668">CARDS USED</text>
+<text class="hint" x="40" y="690">RAIN ×0 of 3</text>
+<text class="hint" x="40" y="708">SUN ×0 of 2</text>
+<text class="hint" x="40" y="726">FROST ×2 of 2</text>
+<text class="hint" x="40" y="744">LIGHT ×0 of 1</text>
+<text class="hint" x="40" y="762">FOG ×0 of 1</text>
+<line x1="40" y1="790" x2="240" y2="790" stroke="#3a5f8a" stroke-width="1"/>
+<text class="s" x="40" y="818">MOVES: 2 / 5</text>
+<text class="hint" x="40" y="840">par 5 = 3 stars</text>
+
+<!-- CENTER GRID — 7x7 at 100px tiles, centered ~290..990 horizontal, 180..880 vertical -->
+<g transform="translate(380,180)">
+<rect x="-20" y="-20" width="740" height="740" fill="#1a2840" stroke="#3a5f8a" stroke-width="2"/>
+<!-- Row 0 -->
+<rect x="0" y="0" width="100" height="100" fill="#7ab355"/><rect x="100" y="0" width="100" height="100" fill="#7ab355"/><rect x="200" y="0" width="100" height="100" fill="#6a6a6a"/><rect x="300" y="0" width="100" height="100" fill="#6a6a6a"/><rect x="400" y="0" width="100" height="100" fill="#6a6a6a"/><rect x="500" y="0" width="100" height="100" fill="#7ab355"/><rect x="600" y="0" width="100" height="100" fill="#7ab355"/>
+<!-- Row 1 -->
+<rect x="0" y="100" width="100" height="100" fill="#7ab355"/><rect x="100" y="100" width="100" height="100" fill="#2e5c8a"/><rect x="200" y="100" width="100" height="100" fill="#2e5c8a"/><rect x="300" y="100" width="100" height="100" fill="#2e5c8a"/><rect x="400" y="100" width="100" height="100" fill="#7ab355"/><rect x="500" y="100" width="100" height="100" fill="#7ab355"/><rect x="600" y="100" width="100" height="100" fill="#7ab355"/>
+<!-- Row 2 START -->
+<rect x="0" y="200" width="100" height="100" fill="#2a4a2a"/><circle cx="50" cy="250" r="32" fill="none" stroke="#f5e89c" stroke-width="3"/><circle cx="50" cy="250" r="6" fill="#f5e89c"/>
+<rect x="100" y="200" width="100" height="100" fill="#7ab355"/><rect x="200" y="200" width="100" height="100" fill="#5c3a1f"/><rect x="300" y="200" width="100" height="100" fill="#7ab355"/>
+<!-- ICE tiles (frosted earlier) -->
+<rect x="400" y="200" width="100" height="100" fill="#a8d8e8"/><line x1="412" y1="220" x2="448" y2="260" stroke="#fff" stroke-width="2"/><line x1="460" y1="216" x2="488" y2="280" stroke="#fff" stroke-width="2"/>
+<rect x="500" y="200" width="100" height="100" fill="#a8d8e8"/><line x1="512" y1="220" x2="548" y2="260" stroke="#fff" stroke-width="2"/><line x1="560" y1="216" x2="588" y2="280" stroke="#fff" stroke-width="2"/>
+<rect x="600" y="200" width="100" height="100" fill="#7ab355"/>
+<!-- Row 3 -->
+<rect x="0" y="300" width="100" height="100" fill="#7ab355"/><rect x="100" y="300" width="100" height="100" fill="#7ab355"/><rect x="200" y="300" width="100" height="100" fill="#3d7a3d"/><circle cx="220" cy="335" r="3" fill="#a8d8e8"/><circle cx="270" cy="370" r="3" fill="#a8d8e8"/><rect x="300" y="300" width="100" height="100" fill="#2e5c8a"/><rect x="400" y="300" width="100" height="100" fill="#2e5c8a"/><rect x="500" y="300" width="100" height="100" fill="#7ab355"/><rect x="600" y="300" width="100" height="100" fill="#7ab355"/>
+<!-- Row 4 -->
+<rect x="0" y="400" width="100" height="100" fill="#6a6a6a"/><rect x="100" y="400" width="100" height="100" fill="#7ab355"/><rect x="200" y="400" width="100" height="100" fill="#7ab355"/><rect x="300" y="400" width="100" height="100" fill="#5c3a1f"/><rect x="400" y="400" width="100" height="100" fill="#7ab355"/><rect x="500" y="400" width="100" height="100" fill="#3a2810"/><rect x="600" y="400" width="100" height="100" fill="#6a6a6a"/>
+<!-- Row 5 -->
+<rect x="0" y="500" width="100" height="100" fill="#6a6a6a"/><rect x="100" y="500" width="100" height="100" fill="#2e5c8a"/><rect x="200" y="500" width="100" height="100" fill="#2e5c8a"/><rect x="300" y="500" width="100" height="100" fill="#7ab355"/><rect x="400" y="500" width="100" height="100" fill="#7ab355"/><rect x="500" y="500" width="100" height="100" fill="#7ab355"/>
+<!-- GOAL tile with hover indicator -->
+<rect x="600" y="500" width="100" height="100" fill="#3a3a3a"/><rect x="650" y="520" width="6" height="60" fill="#8a6a3a"/><path d="M656,520 L692,530 L656,540 Z" fill="#cc2222"/>
+<!-- Row 6 -->
+<rect x="0" y="600" width="100" height="100" fill="#7ab355"/><rect x="100" y="600" width="100" height="100" fill="#7ab355"/><rect x="200" y="600" width="100" height="100" fill="#7ab355"/><rect x="300" y="600" width="100" height="100" fill="#7ab355"/><rect x="400" y="600" width="100" height="100" fill="#7ab355"/><rect x="500" y="600" width="100" height="100" fill="#7ab355"/><rect x="600" y="600" width="100" height="100" fill="#7ab355"/>
+<!-- Sky character at start tile -->
+<rect x="32" y="216" width="36" height="48" fill="#3a4a6a"/><circle cx="42" cy="232" r="2.5" fill="#fff"/><circle cx="58" cy="232" r="2.5" fill="#fff"/>
+<!-- Grid lines -->
+<g stroke="#1a2840" stroke-width="1" opacity="0.4"><line x1="0" y1="0" x2="700" y2="0"/><line x1="0" y1="100" x2="700" y2="100"/><line x1="0" y1="200" x2="700" y2="200"/><line x1="0" y1="300" x2="700" y2="300"/><line x1="0" y1="400" x2="700" y2="400"/><line x1="0" y1="500" x2="700" y2="500"/><line x1="0" y1="600" x2="700" y2="600"/><line x1="0" y1="700" x2="700" y2="700"/><line x1="0" y1="0" x2="0" y2="700"/><line x1="100" y1="0" x2="100" y2="700"/><line x1="200" y1="0" x2="200" y2="700"/><line x1="300" y1="0" x2="300" y2="700"/><line x1="400" y1="0" x2="400" y2="700"/><line x1="500" y1="0" x2="500" y2="700"/><line x1="600" y1="0" x2="600" y2="700"/><line x1="700" y1="0" x2="700" y2="700"/></g>
+<!-- Hover indicator on tile B3 (water tile, where player will queue frost) -->
+<rect x="100" y="100" width="100" height="100" fill="none" stroke="#f5e89c" stroke-width="4"/>
+<text x="106" y="118" font="bold 12px monospace" fill="#f5e89c" font-size="14">B3</text>
+<!-- Cursor icon at hover position -->
+<polygon points="160,160 160,184 168,178 174,190 180,188 174,176 184,176" fill="#fff" stroke="#0a1628" stroke-width="2"/>
+</g>
+
+<!-- RIGHT SIDEBAR (560px wide) -->
+<rect class="panel" x="1340" y="20" width="560" height="1040"/>
+<text class="s" x="1360" y="50">STEAM • 1920×1080</text>
+<text class="title" x="1360" y="92">QUEUE  3 / 5</text>
+<line x1="1360" y1="106" x2="1880" y2="106" stroke="#3a5f8a" stroke-width="1"/>
+<!-- Queue slots horizontal -->
+<rect x="1360" y="124" width="92" height="120" fill="#3aa8e8" stroke="#fff" stroke-width="3"/><text class="t" x="1372" y="160" fill="#fff">RAIN</text><text class="hint" x="1378" y="218" fill="#fff">slot 1</text>
+<rect x="1462" y="124" width="92" height="120" fill="#f0b340" stroke="#fff" stroke-width="3"/><text class="t" x="1480" y="160" fill="#fff">SUN</text><text class="hint" x="1480" y="218" fill="#fff">slot 2</text>
+<rect x="1564" y="124" width="92" height="120" fill="#a06fe8" stroke="#fff" stroke-width="3"/><text class="t" x="1574" y="160" fill="#fff">LITE</text><text class="hint" x="1574" y="218" fill="#fff">slot 3</text>
+<rect x="1666" y="124" width="92" height="120" fill="#142844" stroke="#3a5f8a" stroke-width="2" stroke-dasharray="6,4"/><text class="hint" x="1680" y="190" fill="#5a6678">empty</text>
+<rect x="1768" y="124" width="92" height="120" fill="#142844" stroke="#3a5f8a" stroke-width="2" stroke-dasharray="6,4"/><text class="hint" x="1782" y="190" fill="#5a6678">empty</text>
+<!-- Undo button -->
+<rect x="1360" y="262" width="500" height="46" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="1380" y="292">↶ UNDO LAST CARD</text><text class="kbd" x="1820" y="292">U</text>
+<line x1="1360" y1="332" x2="1880" y2="332" stroke="#3a5f8a" stroke-width="1"/>
+<text class="title" x="1360" y="372">HAND</text>
+<text class="hint" x="1430" y="372">Click card then click tile · or press 1-6</text>
+<!-- Hand: 5 cards in horizontal row -->
+<g transform="translate(1360,390)">
+<!-- RAIN -->
+<rect width="96" height="144" fill="#3aa8e8" stroke="#fff" stroke-width="3"/><text class="t" x="20" y="32" fill="#fff">RAIN</text><line x1="32" y1="62" x2="28" y2="86" stroke="#fff" stroke-width="3"/><line x1="48" y1="58" x2="44" y2="86" stroke="#fff" stroke-width="3"/><line x1="64" y1="62" x2="60" y2="86" stroke="#fff" stroke-width="3"/><text class="t" x="40" y="124" fill="#fff">×3</text><text class="kbd" x="40" y="142" fill="#f5e89c">[1]</text>
+<!-- SUN -->
+<g transform="translate(102,0)"><rect width="96" height="144" fill="#f0b340" stroke="#fff" stroke-width="3"/><text class="t" x="28" y="32" fill="#fff">SUN</text><circle cx="48" cy="80" r="14" fill="#fff"/><line x1="48" y1="52" x2="48" y2="62" stroke="#fff" stroke-width="3"/><line x1="48" y1="98" x2="48" y2="108" stroke="#fff" stroke-width="3"/><text class="t" x="40" y="124" fill="#fff">×2</text><text class="kbd" x="40" y="142" fill="#0a1628">[2]</text></g>
+<!-- FROST hover -->
+<g transform="translate(204,0)"><rect width="96" height="144" fill="#7ad8e8" stroke="#f5e89c" stroke-width="5"/><text class="t" x="22" y="32" fill="#0a1628">FROST</text><line x1="48" y1="55" x2="48" y2="105" stroke="#fff" stroke-width="3"/><line x1="28" y1="80" x2="68" y2="80" stroke="#fff" stroke-width="3"/><line x1="34" y1="66" x2="62" y2="94" stroke="#fff" stroke-width="3"/><text class="t" x="40" y="124" fill="#0a1628">×2</text><text class="kbd" x="40" y="142" fill="#0a1628">[3]</text></g>
+<!-- LIGHT -->
+<g transform="translate(306,0)"><rect width="96" height="144" fill="#a06fe8" stroke="#fff" stroke-width="3"/><text class="t" x="22" y="32" fill="#fff">LITE</text><path d="M52,54 L36,86 L48,86 L40,110 L60,76 L48,76 Z" fill="#f5e89c" stroke="#fff" stroke-width="2"/><text class="t" x="40" y="124" fill="#fff">×1</text><text class="kbd" x="40" y="142" fill="#f5e89c">[4]</text></g>
+<!-- FOG -->
+<g transform="translate(408,0)"><rect width="96" height="144" fill="#8a9bb4" stroke="#fff" stroke-width="3"/><text class="t" x="28" y="32" fill="#0a1628">FOG</text><path d="M22,70 Q36,60 50,70 T78,70" stroke="#fff" stroke-width="4" fill="none"/><path d="M18,86 Q34,76 50,86 T78,86" stroke="#fff" stroke-width="4" fill="none"/><text class="t" x="40" y="124" fill="#0a1628">×1</text><text class="kbd" x="40" y="142" fill="#0a1628">[5]</text></g>
+</g>
+<text class="hint" x="1360" y="568">Hovered card: FROST — click any tile to queue at that position</text>
+<line x1="1360" y1="600" x2="1880" y2="600" stroke="#3a5f8a" stroke-width="1"/>
+<text class="title" x="1360" y="640">SEQUENCE PREVIEW</text>
+<text class="hint" x="1360" y="668">Three cards queued. Frost the water tiles at B2 and C2 next.</text>
+<rect x="1360" y="688" width="500" height="80" fill="#0a1628" stroke="#3a5f8a"/>
+<text class="s" x="1380" y="714">1. RAIN → A1   (dry → wet grass)</text>
+<text class="s" x="1380" y="734">2. SUN → C4    (mud → dry grass)</text>
+<text class="s" x="1380" y="754">3. LIGHT → D3  (chains across water)</text>
+<line x1="1360" y1="800" x2="1880" y2="800" stroke="#3a5f8a" stroke-width="1"/>
+<!-- PLAY SEQUENCE button -->
+<rect class="btn" x="1360" y="820" width="500" height="100"/>
+<text class="title" x="1480" y="880" fill="#0a1628">▶ PLAY SEQUENCE</text>
+<text class="kbd" x="1810" y="888" fill="#0a1628" font-size="20">SPACE</text>
+<rect x="1360" y="940" width="240" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="1396" y="972">⏩ FAST  2x</text><text class="kbd" x="1560" y="972">F</text>
+<rect x="1620" y="940" width="240" height="50" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="t" x="1660" y="972">✗ CLEAR</text><text class="kbd" x="1820" y="972">C</text>
+
+<!-- BOTTOM KEYBOARD HINTS BAR -->
+<rect x="280" y="900" width="1040" height="56" fill="#142844" stroke="#3a5f8a" stroke-width="2"/>
+<text class="kbd" x="310" y="936">1-6</text><text class="hint" x="346" y="936">SELECT CARD</text>
+<text class="kbd" x="470" y="936">SPACE</text><text class="hint" x="528" y="936">PLAY SEQUENCE</text>
+<text class="kbd" x="688" y="936">U</text><text class="hint" x="710" y="936">UNDO</text>
+<text class="kbd" x="788" y="936">F</text><text class="hint" x="810" y="936">FAST 2x</text>
+<text class="kbd" x="900" y="936">H</text><text class="hint" x="922" y="936">HINT</text>
+<text class="kbd" x="990" y="936">R</text><text class="hint" x="1012" y="936">RESTART</text>
+<text class="kbd" x="1110" y="936">ESC</text><text class="hint" x="1148" y="936">PAUSE</text>
+
+<!-- CENTER GRID FLOATING TITLE -->
+<text class="hint" x="600" y="170">Click a tile to target the selected card. Hover shows preview.</text>
+<text class="hint" x="280" y="990" fill="#5a6678">Window: 1920×1080 · min supported 1280×720 · resizable · Steam overlay safe corners marked below</text>
+</svg>

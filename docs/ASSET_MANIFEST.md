@@ -404,6 +404,8 @@ during implementation. NOT shippable game assets.
 | level_failed.svg | Loss screen with cause illustration, reason text, TRY AGAIN, hint, skip options |
 | pause_menu.svg | Modal pause overlay with RESUME, RESTART, HINT, SETTINGS, QUIT over darkened gameplay |
 | weather_resolve_sequence.svg | 760×420 4-panel storyboard of PLANNING → RESOLVING → WALKING → COMPLETE transitions |
+| gameplay_desktop.svg | 1920×1080 desktop/Steam gameplay layout with three-column landscape, 100px grid, keyboard overlays |
+| world_select_desktop.svg | 1920×1080 desktop world picker with 3×2 grid, biome thumbnails, keyboard focus and shortcut hints |
 
 Updates to the mock pack happen via Linear tickets against assets/mocks/.
 Real pixel art is generated separately per docs/ART_DIRECTION.md and

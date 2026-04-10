@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" shape-rendering="crispEdges">
+<style>.bg{fill:#0a1628}.panel{fill:#142844;stroke:#3a5f8a;stroke-width:3}.t{font:18px monospace;fill:#e8eef7}.s{font:14px monospace;fill:#aab8c8}.title{font:bold 36px monospace;fill:#f5e89c}.wt{font:bold 22px monospace;fill:#fff}.lock{font:14px monospace;fill:#5a6678}.kbd{font:bold 12px monospace;fill:#f5e89c}</style>
+<rect class="bg" width="1920" height="1080"/>
+
+<!-- TOP HEADER BAR -->
+<rect class="panel" x="20" y="20" width="1880" height="100"/>
+<text class="title" x="60" y="80">WEATHER WHETHER · SELECT WORLD</text>
+<text class="s" x="60" y="104">Tap or click a world to enter · 22 levels each · 132 levels total</text>
+<text class="t" x="1640" y="68">★ 45 / 396</text>
+<text class="s" x="1640" y="92">11% complete</text>
+<text class="kbd" x="1820" y="68">ESC</text>
+<text class="s" x="1820" y="92" fill="#aab8c8">QUIT</text>
+
+<!-- 6 WORLDS in 3x2 grid, each card 580x420, gaps 20px -->
+<!-- Row 1 -->
+<g transform="translate(40,150)">
+<!-- W1 DOWNPOUR -->
+<rect class="panel" width="600" height="420"/>
+<rect x="20" y="20" width="560" height="240" fill="#3a6a8a"/>
+<text class="s" x="40" y="50" fill="#aab8c8">[painterly: coastal valley + lighthouse]</text>
+<text class="s" x="40" y="72" fill="#aab8c8">slate blue · sage · cream</text>
+<line x1="60" y1="180" x2="540" y2="180" stroke="#5a8aa8" stroke-width="2"/>
+<rect x="120" y="190" width="40" height="60" fill="#f5e89c"/>
+<text class="wt" x="40" y="296">W1 · DOWNPOUR</text>
+<text class="s" x="40" y="318">Mechanic: Rain only</text>
+<text class="s" x="40" y="338">"Gentle melancholy. Spring rain, fresh growth."</text>
+<text class="t" x="40" y="380" fill="#f5e89c">★★★ 22/22 CLEARED</text>
+<rect x="380" y="362" width="200" height="40" fill="#5fc97e" stroke="#fff" stroke-width="2"/>
+<text class="t" x="430" y="390" fill="#0a1628">▶ REPLAY</text>
+</g>
+
+<g transform="translate(660,150)">
+<!-- W2 HEATWAVE -->
+<rect class="panel" width="600" height="420"/>
+<rect x="20" y="20" width="560" height="240" fill="#c08040"/>
+<text class="s" x="40" y="50" fill="#fff">[painterly: olive hillside + heat shimmer]</text>
+<text class="s" x="40" y="72" fill="#fff">burnt sienna · ochre · gold</text>
+<text class="wt" x="40" y="296">W2 · HEATWAVE</text>
+<text class="s" x="40" y="318">Mechanic: + Sun (chains with rain)</text>
+<text class="s" x="40" y="338">"Drowsy warmth. Late afternoon haze."</text>
+<text class="t" x="40" y="380" fill="#f5e89c">★★☆ 18/22</text>
+<rect x="380" y="362" width="200" height="40" fill="#5fc97e" stroke="#fff" stroke-width="2"/>
+<text class="t" x="430" y="390" fill="#0a1628">▶ CONTINUE</text>
+</g>
+
+<g transform="translate(1280,150)">
+<!-- W3 COLD SNAP — currently selected, gold border -->
+<rect class="panel" width="600" height="420" stroke="#f5e89c" stroke-width="5"/>
+<rect x="20" y="20" width="560" height="240" fill="#7a9ab0"/>
+<text class="s" x="40" y="50" fill="#fff">[painterly: alpine valley + frozen river]</text>
+<text class="s" x="40" y="72" fill="#fff">ice blue · white · pale lavender</text>
+<text class="wt" x="40" y="296">W3 · COLD SNAP</text>
+<text class="s" x="40" y="318">Mechanic: + Frost (rain → ice bridges)</text>
+<text class="s" x="40" y="338">"Crystalline stillness after fresh snow."</text>
+<text class="t" x="40" y="380" fill="#f5e89c">☆☆☆ 5/22</text>
+<rect x="380" y="362" width="200" height="40" fill="#5fc97e" stroke="#fff" stroke-width="3"/>
+<text class="t" x="436" y="390" fill="#0a1628">▶ ENTER</text>
+</g>
+
+<!-- Row 2 -->
+<g transform="translate(40,610)">
+<!-- W4 GALE FORCE — locked -->
+<rect class="panel" width="600" height="420" fill-opacity="0.4"/>
+<rect x="20" y="20" width="560" height="240" fill="#5a6678" opacity="0.5"/>
+<circle cx="300" cy="140" r="48" fill="none" stroke="#5a6678" stroke-width="6"/>
+<rect x="284" y="124" width="32" height="28" fill="#5a6678"/>
+<text class="lock" x="40" y="296">W4 · GALE FORCE</text>
+<text class="lock" x="40" y="318">Mechanic: + Wind</text>
+<text class="lock" x="40" y="338">LOCKED — beat World 3 to unlock</text>
+<text class="lock" x="40" y="380">Preview: Wide moors, big wind</text>
+</g>
+
+<g transform="translate(660,610)">
+<!-- W5 THUNDERSTORM — locked -->
+<rect class="panel" width="600" height="420" fill-opacity="0.4"/>
+<rect x="20" y="20" width="560" height="240" fill="#5a6678" opacity="0.5"/>
+<circle cx="300" cy="140" r="48" fill="none" stroke="#5a6678" stroke-width="6"/>
+<rect x="284" y="124" width="32" height="28" fill="#5a6678"/>
+<text class="lock" x="40" y="296">W5 · THUNDERSTORM</text>
+<text class="lock" x="40" y="318">Mechanic: + Lightning</text>
+<text class="lock" x="40" y="338">LOCKED — beat World 4 to unlock</text>
+<text class="lock" x="40" y="380">Preview: Storm-lit dusk hills</text>
+</g>
+
+<g transform="translate(1280,610)">
+<!-- W6 WHITEOUT — locked -->
+<rect class="panel" width="600" height="420" fill-opacity="0.4"/>
+<rect x="20" y="20" width="560" height="240" fill="#5a6678" opacity="0.5"/>
+<circle cx="300" cy="140" r="48" fill="none" stroke="#5a6678" stroke-width="6"/>
+<rect x="284" y="124" width="32" height="28" fill="#5a6678"/>
+<text class="lock" x="40" y="296">W6 · WHITEOUT</text>
+<text class="lock" x="40" y="318">Mechanic: + Fog (full toolkit)</text>
+<text class="lock" x="40" y="338">LOCKED — beat World 5 to unlock</text>
+<text class="lock" x="40" y="380">Preview: Frozen tundra fog</text>
+</g>
+
+<!-- BOTTOM BAR -->
+<rect class="panel" x="20" y="1050" width="1880" height="14"/>
+<text class="kbd" x="60" y="1062">← →</text><text class="s" x="100" y="1062">SELECT</text><text class="kbd" x="200" y="1062">ENTER</text><text class="s" x="252" y="1062">PLAY</text><text class="kbd" x="320" y="1062">ESC</text><text class="s" x="358" y="1062">QUIT</text><text class="s" x="1700" y="1062">STEAM 1920×1080</text>
+</svg>
