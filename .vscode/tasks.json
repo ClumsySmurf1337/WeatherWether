@@ -74,10 +74,74 @@
       "problemMatcher": []
     },
     {
+      "label": "Weather Whether — Lane 1 Copilot (gameplay)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-copilot-terminal.ps1\" -LaneIndex 1 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes-copilot",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Lane 2 Copilot (ui)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-copilot-terminal.ps1\" -LaneIndex 2 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes-copilot",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Lane 3 Copilot (levels)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/tools/tasks/run-lane-copilot-terminal.ps1\" -LaneIndex 3 -MainRepoRoot \"${workspaceFolder}\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "lanes-copilot",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — All Copilot lane terminals (parallel)",
+      "dependsOn": [
+        "Weather Whether — Lane 1 Copilot (gameplay)",
+        "Weather Whether — Lane 2 Copilot (ui)",
+        "Weather Whether — Lane 3 Copilot (levels)"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
       "label": "Weather Whether — Daily apply:lanes, then parallel lane agents",
       "dependsOn": [
         "Weather Whether — Daily full (apply + lane prep)",
         "Weather Whether — All lane terminals (parallel)"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Daily apply:lanes, then parallel Copilot lanes",
+      "dependsOn": [
+        "Weather Whether — Daily full (apply + lane prep)",
+        "Weather Whether — All Copilot lane terminals (parallel)"
       ],
       "dependsOrder": "sequence",
       "problemMatcher": []
@@ -90,6 +154,33 @@
         "Weather Whether — QA agent (lane PRs)"
       ],
       "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Simple flow Copilot: daily+Copilot lanes+QA",
+      "dependsOn": [
+        "Weather Whether — Daily full (apply + lane prep)",
+        "Weather Whether — All Copilot lane terminals (parallel)",
+        "Weather Whether — QA agent (lane PRs)"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Simple flow Copilot (npm only)",
+      "type": "shell",
+      "command": "npm run workflow:simple:copilot",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "daily"
+      },
       "problemMatcher": []
     },
     {

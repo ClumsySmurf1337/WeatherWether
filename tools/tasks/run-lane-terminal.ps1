@@ -19,11 +19,9 @@ if ([string]::IsNullOrWhiteSpace($AgentRoot)) {
     $AgentRoot = "D:\Agents\WeatherWether"
 }
 
-$roles = @("gameplay-programmer", "ui-developer", "level-designer")
-$role = $roles[($LaneIndex - 1) % $roles.Length]
-
-$wtFolder = "wt-agent-cursor-lane-$LaneIndex"
-$wtPath = Join-Path $AgentRoot $wtFolder
+. (Join-Path $PSScriptRoot "lane-prompt-lib.ps1")
+$role = Get-WeatherLaneRoleForIndex -LaneIndex $LaneIndex
+$wtPath = Get-WeatherLaneWorktreePath -LaneIndex $LaneIndex -AgentRoot $AgentRoot
 
 if (-not (Test-Path -LiteralPath $wtPath)) {
     Write-Host "Worktree missing: $wtPath" -ForegroundColor Red
@@ -63,16 +61,8 @@ if (-not (Get-CursorAgentCliExecutable) -and -not (Get-CursorCliExecutable)) {
     exit 0
 }
 
-$templatePath = Join-Path $mainResolved "tools\tasks\prompts\lane-agent-prompt.md"
-if (-not (Test-Path -LiteralPath $templatePath)) {
-    throw "Missing lane prompt template: $templatePath"
-}
-$template = Get-Content -LiteralPath $templatePath -Raw
-$launcherNote = @"
-**Launcher:** `linear:resume-pickup` for role **$role** was already run from the main repo. Skip prompt step 1 if the correct issue is already **In Progress**; otherwise run it once from this worktree.
-
-"@
-$promptText = $launcherNote + "`n`n" + $template.Replace("{{ROLE}}", $role)
+$launcherNote = Build-WeatherLaneCursorLauncherNote -Role $role
+$promptText = Get-WeatherLaneAgentPromptText -MainRepoRoot $mainResolved -Role $role -LauncherNote $launcherNote
 
 Write-Host "Starting Cursor CLI agent (auto) in worktree — no terminal typing required." -ForegroundColor Yellow
 $agentExe = Get-CursorAgentCliExecutable

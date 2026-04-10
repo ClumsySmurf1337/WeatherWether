@@ -10,11 +10,14 @@ This doc is the **single operator contract**: what runs once a day, how **PM** u
 
 | Step | When | What to run |
 |------|------|-------------|
-| **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three lane agents in parallel**. Lane terminals **auto-close** when each lane finishes. |
+| **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three `cursor-agent` lanes** in parallel. Lane terminals **auto-close** when each lane finishes. |
+| **1b** | **Same, but GitHub Copilot Chat** | **Weather Whether — Daily apply:lanes, then parallel Copilot lanes** — same daily prep, then **three Copilot lane terminals** (writes **`WEATHER_COPILOT_LANE_PROMPT.md`** per worktree; you run **Copilot Agent** in each folder). See **`docs/COPILOT_LANES.md`**. |
 | **2** | **When lane PRs exist and CI is ready** | **Weather Whether — QA agent (lane PRs)** — ships stale lanes if needed, merges **`agent/cursor-lane-*`** PRs, Linear **Done**, **`worktrees:sync`**, lane reset. Use **`npm run qa:lane-prs:quick`** if checks are already green. |
 | **3** | **Next cycle** | Go back to **step 1** (and **step 2** whenever you need merges). |
-| **1+2** | **Optional one-shot** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — **flattened** sequence in **`.vscode/tasks.json`**: **Daily full** → **All lane terminals (parallel)** → **QA agent**, so the runner waits for **all three** lane shells to exit before **`qa:agent`** (avoids nested compound-task ordering glitches in some Cursor/VS Code builds). |
-| **CLI 1+2** | **Same without Tasks UI** | **`npm run workflow:simple`** — runs **`daily:full:apply:lanes`**, then **lanes 1–3 in parallel** (output in temp log files + echoed here), then **`qa:agent`**. Use **`-SkipQa`** to stop after lanes. |
+| **1+2** | **Optional one-shot (Cursor)** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — **Daily full** → **All lane terminals (parallel)** → **QA agent**. |
+| **1+2 Copilot** | **Optional one-shot (Copilot)** | **Weather Whether — Simple flow Copilot: daily+Copilot lanes+QA** — **Daily full** → **All Copilot lane terminals (parallel)** → **QA agent**. |
+| **CLI 1+2** | **Cursor, no Tasks UI** | **`npm run workflow:simple`** — **`daily:full:apply:lanes`**, **cursor-agent** lanes **1–3** in parallel, **`qa:agent`**. **`-- -SkipQa`** stops before QA. |
+| **CLI 1+2 Copilot** | **Copilot prep, no Tasks UI** | **`npm run workflow:simple:copilot`** — same daily + **Copilot** lane prep scripts, then **`qa:agent`**. |
 
 
 **Same flow from the integrated terminal:**
