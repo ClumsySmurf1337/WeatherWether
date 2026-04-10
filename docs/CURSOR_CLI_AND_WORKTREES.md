@@ -41,13 +41,13 @@ $env:CURSOR_AGENT_MODEL_DISABLE_FALLBACK = "1"
 
 See **`docs/LINEAR_ENV_VARS.md`** for the variable table.
 
-### GitHub Pro+, `gh`, Codex — same lane harness?
+### GitHub Copilot — not inside `cursor-agent`, but parallel lane script
 
-**Not as an automatic swap inside `cursor-agent`.** **`cursor-agent`** only talks to **Cursor’s** model/router. **GitHub Copilot** (Pro+, Business, etc.) uses **different** CLIs and auth (`gh copilot`, editor integration, or API keys) and does **not** plug into **`cursor-agent --model`** unless Cursor exposes a backend slug that maps to that service (then you’d add that slug to **`CURSOR_AGENT_MODELS`** like any other model).
+**`cursor-agent`** only uses **Cursor’s** router. Copilot does **not** plug into **`--model`** unless Cursor lists a Copilot-backed slug (then add it to **`CURSOR_AGENT_MODELS`**).
 
-Spawning **extra** “fleet” **PowerShell** windows that run **`gh …`** does not run the same prompt/tools pipeline as this repo’s **`run-lane-terminal.ps1`** (resume-pickup, trust flags, **`validate.ps1`**, **`lane-ship`**). You *can* run **Codex** or **Copilot** **manually** in parallel worktrees for experiments, but that is a **separate** workflow — not something we can wire as a drop-in second engine without a **new** script (different binary, different args, no shared tool-use contract with **`cursor-agent`**).
+For **full lane parity** when Cursor usage is exhausted, this repo runs **`tools/tasks/run-lane-copilot-terminal.ps1`**: same **resume-pickup** + **`WEATHER_COPILOT_LANE_PROMPT.md`** + **`lane-ship`**, using **`copilot -p … --no-ask-user`** ([blog](https://github.blog/ai-and-ml/github-copilot/run-multiple-agents-at-once-with-fleet-in-copilot-cli/)). See **`docs/COPILOT_LANES.md`**. Optional **`WEATHER_COPILOT_USE_FLEET`** enables **`/fleet`** inside a single worktree ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet)).
 
-**Practical split:** use **model chaining** above for all automated lanes; use **GitHub / Codex** in the **IDE** or a **dedicated** terminal when you want that subscription’s strengths; add any **Cursor-supported** slug for those backends into **`CURSOR_AGENT_MODELS`** if Cursor lists it.
+**Practical split:** **model chaining** for Cursor lanes; **Copilot CLI Tasks** or **`npm run workflow:simple:copilot`** when you want GitHub’s agent in the terminal from the same IDE.
 
 ## Merge conflicts → QA Cursor session
 

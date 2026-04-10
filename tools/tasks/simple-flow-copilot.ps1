@@ -24,7 +24,7 @@ Set-Location -LiteralPath $mainResolved
 Write-Host ""
 Write-Host "  WHETHER — SIMPLE FLOW COPILOT (daily + Copilot lane prep x3 + qa:agent)" -ForegroundColor Cyan
 Write-Host "  Repo: $mainResolved" -ForegroundColor DarkGray
-Write-Host "  Lanes write WEATHER_COPILOT_LANE_PROMPT.md; use Copilot Chat Agent in each worktree (see terminal output)." -ForegroundColor DarkGray
+Write-Host "  Lanes run GitHub Copilot CLI (non-interactive) in each worktree; see docs/COPILOT_LANES.md." -ForegroundColor DarkGray
 Write-Host ""
 
 Write-Host "[1/3] npm run daily:full:apply:lanes ..." -ForegroundColor Cyan
@@ -38,7 +38,7 @@ if (-not (Test-Path -LiteralPath $scriptPath)) {
     throw "Missing Copilot lane launcher: $scriptPath"
 }
 
-Write-Host "`n[2/3] Copilot lane prep 1–3 in parallel (resume-pickup + prompt files)..." -ForegroundColor Cyan
+Write-Host "`n[2/3] Copilot CLI lanes 1–3 in parallel (resume-pickup + copilot --no-ask-user)..." -ForegroundColor Cyan
 $tempDir = Join-Path $env:TEMP "whether-simple-flow-copilot-$([Guid]::NewGuid().ToString('N'))"
 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 $keepLogs = $false
@@ -80,7 +80,7 @@ try {
 
     if ($laneFailed) {
         $keepLogs = $true
-        throw "One or more Copilot lane prep scripts failed. Logs: $tempDir"
+        throw "One or more Copilot CLI lane scripts failed. Logs: $tempDir"
     }
 }
 finally {
@@ -94,7 +94,7 @@ finally {
 
 if (-not $SkipQa) {
     Write-Host "`n[3/3] npm run qa:agent ..." -ForegroundColor Cyan
-    Write-Host "  (Ship when worktrees have commits; Copilot Chat does not auto-exit like cursor-agent.)" -ForegroundColor DarkGray
+    Write-Host "  (Preflight ship merges PRs when branches are ahead of main.)" -ForegroundColor DarkGray
     npm run qa:agent
     if ($LASTEXITCODE -ne 0) {
         throw "qa:agent failed (exit $LASTEXITCODE)."

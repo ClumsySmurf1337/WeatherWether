@@ -30,5 +30,7 @@
 
 ## Copilot ↔ Cursor sync
 
-- **Cursor lane Tasks** run **`cursor-agent`** with the same task text written to **`WEATHER_COPILOT_LANE_PROMPT.md`** for Copilot lanes.
+- **Cursor lane Tasks** run **`cursor-agent`** with the same Markdown body as **`WEATHER_COPILOT_LANE_PROMPT.md`**.
+- **Copilot CLI lane Tasks** run **`copilot -p "<pointer>" --no-ask-user`** from the worktree; the pointer instructs the agent to read **this file** and **`WEATHER_COPILOT_LANE_PROMPT.md`** ([non-interactive pattern](https://github.blog/ai-and-ml/github-copilot/run-multiple-agents-at-once-with-fleet-in-copilot-cli/)).
+- Optional **`WEATHER_COPILOT_USE_FLEET`**: prepend **`/fleet`** for orchestrator-style subagents in one worktree ([`/fleet` docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet)).
 - Update **this file** when you change global agent rules so Copilot and Claude/Cursor stay consistent.

@@ -1,49 +1,50 @@
-# Copilot parallel lanes (Weather Whether)
+# Copilot CLI lanes (Weather Whether) — mirror of Cursor lanes
 
-This mirrors the **DeedWise** pattern: **same Linear resume + injected prompt per lane**, but the **execution surface** is **GitHub Copilot Chat (Agent)** or an optional **Copilot CLI** — not **`cursor-agent`**.
+This path is for when **Cursor `cursor-agent` hits usage limits** or you prefer **GitHub Copilot CLI** in the **integrated terminal** (still inside Cursor IDE). It mirrors **`run-lane-terminal.ps1`**: same **`linear:resume-pickup`**, same **`lane-agent-prompt.md`** body, same **auto-ship** via **`lane-ship.ps1`**.
 
-DeedWise today mostly **prints** paste-ready blocks (`switch-to-copilot.ps1`, VS Code extension) and relies on **`.github/copilot-instructions.md`** staying aligned with **`AGENTS.md`**. Here we write **`WEATHER_COPILOT_LANE_PROMPT.md`** per worktree and keep **`.github/copilot-instructions.md`** aligned with **`.claude/CLAUDE.md`** and **`docs/GAME_DESIGN.md`**.
+## How it runs (non-interactive)
 
-## Cursor lanes (unchanged)
+Per [Run multiple agents at once with `/fleet` in Copilot CLI](https://github.blog/ai-and-ml/github-copilot/run-multiple-agents-at-once-with-fleet-in-copilot-cli/) and [Copilot CLI `/fleet` concept](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet):
 
-- **Tasks →** **Weather Whether — Lane 1/2/3** → **`run-lane-terminal.ps1`** → **`cursor-agent`** + auto-ship when configured.
-- **Simple flow** → **`npm run workflow:simple`** or the matching compound Task.
+- Each lane executes **`copilot -p "<pointer>" --no-ask-user`** from **that lane’s worktree** (parallel **three** terminals = three independent agents, same pattern as three **`cursor-agent`** processes).
+- The **pointer** tells the agent to read **`WEATHER_COPILOT_LANE_PROMPT.md`** (full task spec) and **`.github/copilot-instructions.md`** so we avoid huge `-p` strings and Windows command-line limits.
 
-## Copilot lanes (new)
+Optional **`WEATHER_COPILOT_USE_FLEET=1`**: the pointer is sent as **`/fleet …`** so the **orchestrator** may split work into subagents **inside that worktree** ([`/fleet` behavior](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet)). Use only when you want decomposition; default is a **single** agent per lane (parallelism = **lane count**, like Cursor).
 
-- **Tasks →** **Weather Whether — Lane N Copilot** or **All Copilot lane terminals (parallel)** → **`run-lane-copilot-terminal.ps1`**:
-  1. Runs **`linear:resume-pickup`** from the **main** repo (same as Cursor lanes).
-  2. Writes **`WEATHER_COPILOT_LANE_PROMPT.md`** in the lane worktree (same task body as **`tools/tasks/prompts/lane-agent-prompt.md`**, plus Copilot-specific launcher notes).
-  3. Prints steps to open the worktree in **VS Code / Cursor**, use **Copilot Chat → Agent**, attach the prompt file + **`.github/copilot-instructions.md`**.
-- **Auto-ship is off by default** (Copilot does not exit like `cursor-agent`). After work: **`npm run lane:ship -- -LaneIndex N`** from main, or **`npm run qa:agent`** (preflight ship).
-- **Optional:** set **`WEATHER_COPILOT_CLI_RUN=1`** and install **[Copilot CLI](https://docs.github.com/copilot/how-tos/use-copilot-agents/use-copilot-cli)** (`copilot` on PATH or **`WEATHER_COPILOT_CLI`**). The script will run **`copilot -p "<full prompt>"`** (experimental; long prompts may need a future file-based flag).
+## Prerequisites
 
-## Simplified flows
+1. **Install [GitHub Copilot CLI](https://docs.github.com/copilot/how-tos/use-copilot-agents/use-copilot-cli)** and ensure **`copilot`** is on `PATH`, or set **`WEATHER_COPILOT_CLI`** to the executable path.
+2. **Authenticate** per GitHub docs (`gh auth` / Copilot login as required by your install).
+3. **`.env.local`** on the **main** repo for Linear (unchanged).
 
-| Flow | Task / command |
-|------|----------------|
-| Cursor | **Simple flow: daily+lanes+QA** or **`npm run workflow:simple`** |
-| Copilot | **Simple flow Copilot: daily+Copilot lanes+QA** or **`npm run workflow:simple:copilot`** |
+## Tasks / npm
 
-## VS Code settings (recommended for instruction sync)
+| Cursor (unchanged) | Copilot CLI |
+|--------------------|-------------|
+| **Weather Whether — Lane N** | **Weather Whether — Lane N Copilot** |
+| **All lane terminals (parallel)** | **All Copilot lane terminals (parallel)** |
+| **Daily apply:lanes, then parallel lane agents** | **Daily apply:lanes, then parallel Copilot lanes** |
+| **Simple flow: daily+lanes+QA** | **Simple flow Copilot: daily+Copilot lanes+QA** |
+| **`npm run workflow:simple`** | **`npm run workflow:simple:copilot`** |
 
-Same idea as DeedWise **`.vscode/settings.json`**: enable **instruction files** for Copilot Chat so **`.github/copilot-instructions.md`** loads automatically. Example:
+## Instruction sync
 
-```json
-"github.copilot.chat.codeGeneration.useInstructionFiles": true,
-"github.copilot.chat.codeGeneration.instructions": [
-  ".github/copilot-instructions.md",
-  ".claude/CLAUDE.md"
-]
-```
-
-Adjust if your editor schema differs.
+- **`.github/copilot-instructions.md`** ↔ **`.claude/CLAUDE.md`** and **`docs/GAME_DESIGN.md` v2** (same rule as before).
+- Optional VS Code/Cursor settings to load instruction files into **Copilot Chat** when you open Chat manually — not required for **CLI** lanes.
 
 ## Environment variables
 
 | Variable | Purpose |
 |----------|---------|
-| **`WEATHER_COPILOT_CLI_RUN`** | **`1`** / **`true`** — run **`copilot`** after writing the prompt file |
-| **`WEATHER_COPILOT_CLI`** | Full path to **`copilot`** if not on PATH |
+| **`WEATHER_COPILOT_CLI`** | Full path to **`copilot`** if not on `PATH` |
+| **`WEATHER_COPILOT_USE_FLEET`** | **`1`** / **`true`** — prefix CLI prompt with **`/fleet`** for orchestrator-style splits **within** that lane’s worktree |
+| **`WHETHER_AGENT_ROOT`** | Agent worktrees root (default `D:\Agents\WeatherWether`) |
 
-See also **`docs/LINEAR_ENV_VARS.md`** for Cursor lane vars.
+## Flags (advanced)
+
+- **`run-lane-copilot-terminal.ps1 -SkipCopilotRun`** — only write **`WEATHER_COPILOT_LANE_PROMPT.md`** (e.g. paste into **Copilot Chat** if CLI unavailable).
+- **`-SkipAutoShip`** — do not run **`lane-ship.ps1`** after the CLI exits (default is **auto-ship** when the worktree **needs ship**, same as Cursor).
+
+## Premium / billing
+
+GitHub bills **premium requests** for Copilot CLI LLM turns; **`/fleet`** may use **more** turns because of subagents ([billing note in docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet)). Prefer default (no `/fleet`) for steady lane usage; enable fleet when one lane benefits from explicit decomposition.
