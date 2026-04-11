@@ -46,6 +46,8 @@ const TILE_SOURCE_PX: int = 16
 const TILE_RENDER_SCALE: int = 4
 const TILE_RENDER_PX: int = TILE_SOURCE_PX * TILE_RENDER_SCALE
 
+static var _base_theme: Theme = null
+
 
 static func card_glow_color(weather_key: StringName) -> Color:
 	match weather_key:
@@ -254,3 +256,14 @@ static func create_base_theme() -> Theme:
 		theme.set_font(&"font", &"Label", body)
 		theme.set_font(&"font", &"Button", body)
 	return theme
+
+
+static func get_base_theme() -> Theme:
+	if _base_theme == null:
+		_base_theme = create_base_theme()
+	return _base_theme
+
+
+static func apply_base_theme(control: Control) -> void:
+	if control.theme == null:
+		control.theme = get_base_theme()

@@ -18,7 +18,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0392157, 0.0784314, 0.156863, 0.85)
 
 [node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -36,7 +35,6 @@ theme_override_constants/separation = 24
 [node name="PauseTitle" type="Label" parent="Center/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.960784, 0.909804, 0.611765, 1)
 theme_override_font_sizes/font_size = 56
 text = "PAUSED"
 horizontal_alignment = 1

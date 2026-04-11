@@ -11,6 +11,9 @@ signal level_selected(world: int, level: int)
 @onready var _subtitle_label: Label = %SubtitleLabel
 @onready var _scroll: ScrollContainer = %NodeScroll
 @onready var _path_container: Control = %PathContainer
+@onready var _background: ColorRect = $Background
+@onready var _header_bg: ColorRect = $Margin/VBox/HeaderBar/HeaderBg
+@onready var _biome_bg: ColorRect = %BiomeBg
 
 const NODE_RADIUS: float = 40.0
 const NODE_FONT_SIZE: int = 28
@@ -29,6 +32,12 @@ var _tween: Tween = null
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
+	var header_color := UITheme.bg_deep
+	header_color.a = 0.85
+	_header_bg.color = header_color
+	_biome_bg.color = UITheme.bg_panel_alt
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.configure_title_label(_title_label)
 	UITheme.configure_body_label(_subtitle_label)

@@ -32,12 +32,15 @@ signal card_selected(card_key: StringName)
 @onready var _speed_container: Control = %SpeedContainer
 @onready var _speed_button: Button = %SpeedButton
 @onready var _hand_row: HBoxContainer = %HandRow
+@onready var _background: ColorRect = $Background
 
 var _sequence_playing: bool = false
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.apply_secondary_button(_pause_button)
 	UITheme.apply_secondary_button(_hint_button)

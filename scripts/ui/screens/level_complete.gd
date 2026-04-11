@@ -13,13 +13,18 @@ signal world_map_requested
 @onready var _star_1: Label = %Star1
 @onready var _star_2: Label = %Star2
 @onready var _star_3: Label = %Star3
+@onready var _hero_label: Label = $Margin/VBox/HeroPlaceholder/HeroLabel
+@onready var _moves_label: Label = $Margin/VBox/StatPanel/StatRow/MovesCol/MovesLabel
 @onready var _moves_value: Label = %MovesValue
+@onready var _best_label: Label = $Margin/VBox/StatPanel/StatRow/BestCol/BestLabel
 @onready var _best_value: Label = %BestValue
+@onready var _par_label: Label = $Margin/VBox/StatPanel/StatRow/ParCol/ParLabel
 @onready var _par_value: Label = %ParValue
 @onready var _next_button: Button = %NextButton
 @onready var _replay_button: Button = %ReplayButton
 @onready var _world_map_button: Button = %WorldMapButton
 @onready var _star_timer: Timer = $StarRevealTimer
+@onready var _background: ColorRect = $Background
 
 var _stars_earned: int = 0
 var _stars_revealed: int = 0
@@ -35,11 +40,18 @@ const STAR_EMPTY: String = "☆"
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
+	UITheme.configure_muted_label(_hero_label)
 	UITheme.configure_title_label(_title_label)
 	UITheme.configure_body_label(_tagline_label)
+	UITheme.configure_muted_label(_moves_label)
 	UITheme.configure_numbers_label(_moves_value)
+	UITheme.configure_muted_label(_best_label)
 	UITheme.configure_numbers_label(_best_value)
+	UITheme.configure_muted_label(_par_label)
 	UITheme.configure_numbers_label(_par_value)
+	_par_value.add_theme_color_override(&"font_color", UITheme.accent_success)
 	UITheme.apply_primary_button(_next_button)
 	UITheme.apply_secondary_button(_replay_button)
 	UITheme.apply_secondary_button(_world_map_button)

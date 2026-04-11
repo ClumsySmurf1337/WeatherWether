@@ -18,7 +18,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0392157, 0.0784314, 0.156863, 1)
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -42,7 +41,6 @@ custom_minimum_size = Vector2(0, 144)
 
 [node name="HeaderBg" type="ColorRect" parent="Margin/VBox/HeaderBar"]
 layout_mode = 2
-color = Color(0.0392157, 0.0784314, 0.156863, 0.85)
 
 [node name="HeaderMargin" type="MarginContainer" parent="Margin/VBox/HeaderBar"]
 layout_mode = 2
@@ -68,7 +66,6 @@ text = "←"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.960784, 0.909804, 0.611765, 1)
 theme_override_font_sizes/font_size = 30
 text = "WORLD 1: DOWNPOUR"
 horizontal_alignment = 1
@@ -81,7 +78,6 @@ layout_mode = 2
 [node name="SubtitleLabel" type="Label" parent="Margin/VBox/HeaderBar/HeaderMargin/HeaderContent"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.909804, 0.933333, 0.968627, 1)
 theme_override_font_sizes/font_size = 22
 text = "0/22 levels • 0 stars"
 horizontal_alignment = 1
@@ -98,7 +94,6 @@ custom_minimum_size = Vector2(0, 3200)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color(0.121569, 0.227451, 0.360784, 1)
 
 [node name="PathContainer" type="Control" parent="Margin/VBox/NodeScroll/BiomeBg"]
 unique_name_in_owner = true

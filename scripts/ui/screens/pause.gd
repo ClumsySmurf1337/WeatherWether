@@ -19,6 +19,10 @@ signal quit_to_world_map_requested
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	var dim_color := UITheme.bg_deep
+	dim_color.a = 0.85
+	_dimmer.color = dim_color
 	UITheme.configure_title_label(_title_label)
 	UITheme.apply_primary_button(_resume_button)
 	UITheme.apply_secondary_button(_restart_button)

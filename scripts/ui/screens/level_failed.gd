@@ -23,6 +23,10 @@ var _death_cause: DeathCause = DeathCause.DROWN
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	var dim_color := UITheme.bg_deep
+	dim_color.a = 0.7
+	_dimmer.color = dim_color
 	UITheme.configure_title_label(_title_label)
 	_title_label.add_theme_color_override(&"font_color", UITheme.accent_danger)
 	UITheme.configure_body_label(_reason_label)

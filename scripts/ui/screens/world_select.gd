@@ -11,12 +11,15 @@ const WORLD_NAMES: Array[String] = [
 @onready var _back_button: Button = %BackButton
 @onready var _title: Label = $Margin/VBox/Header/Title
 @onready var _world_grid: GridContainer = %WorldGrid
+@onready var _background: ColorRect = $Background
 
 var _highest_unlocked_world: int = 1
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.configure_title_label(_title)
 	_back_button.pressed.connect(_on_back_pressed)
