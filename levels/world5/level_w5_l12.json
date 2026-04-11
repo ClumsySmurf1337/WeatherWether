@@ -1,0 +1,24 @@
+{
+  "id": "w5_l12",
+  "world": 5,
+  "level_number": 12,
+  "display_name": "Grounded First",
+  "hint_text": "Dry the wet grass before you strike, then cool the scorched bridge.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10,  1, 10, 10,  1, 10,
+    12,  2,  3,  3,  1, 13,
+    10,  1, 10, 10,  1, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [1, 4, 0, 0],
+  "max_moves": 4,
+  "par_moves": 4,
+  "target_difficulty": 5,
+  "min_solution_length": 4,
+  "unique_solution": false
+}
