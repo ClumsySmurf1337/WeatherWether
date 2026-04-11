@@ -1,0 +1,339 @@
+[gd_scene load_steps=2 format=3 uid="uid://whether_ui_gameplay"]
+
+[ext_resource type="Script" path="res://scripts/ui/screens/gameplay.gd" id="1_gp"]
+
+[node name="Gameplay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gp")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0392157, 0.0784314, 0.156863, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 64
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "←"
+
+[node name="TitleBox" type="VBoxContainer" parent="Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="LevelTitle" type="Label" parent="Margin/VBox/Header/TitleBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "LEVEL 1"
+horizontal_alignment = 1
+
+[node name="LevelInsight" type="Label" parent="Margin/VBox/Header/TitleBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Melt the way forward"
+horizontal_alignment = 1
+
+[node name="PauseButton" type="Button" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "⏸"
+
+[node name="HintBanner" type="PanelContainer" parent="Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="HintRow" type="HBoxContainer" parent="Margin/VBox/HintBanner"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MovesBox" type="VBoxContainer" parent="Margin/VBox/HintBanner/HintRow"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="MovesLabel" type="Label" parent="Margin/VBox/HintBanner/HintRow/MovesBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "MOVES"
+
+[node name="MovesValue" type="Label" parent="Margin/VBox/HintBanner/HintRow/MovesBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "6"
+
+[node name="HintContent" type="HBoxContainer" parent="Margin/VBox/HintBanner/HintRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HintIcon" type="Label" parent="Margin/VBox/HintBanner/HintRow/HintContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "☔"
+
+[node name="HintArrow" type="Label" parent="Margin/VBox/HintBanner/HintRow/HintContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "→"
+
+[node name="HintText" type="Label" parent="Margin/VBox/HintBanner/HintRow/HintContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Rain freezes → Ice"
+autowrap_mode = 2
+
+[node name="HintButton" type="Button" parent="Margin/VBox/HintBanner/HintRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "💡"
+
+[node name="QueueStrip" type="PanelContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 88)
+
+[node name="QueueSlots" type="HBoxContainer" parent="Margin/VBox/QueueStrip"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="Slot1" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot5" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot5"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot6" type="PanelContainer" parent="Margin/VBox/QueueStrip/QueueSlots"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+
+[node name="Label" type="Label" parent="Margin/VBox/QueueStrip/QueueSlots/Slot6"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "6"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QueueHint" type="Label" parent="Margin/VBox/QueueStrip"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "tap a card, tap a tile"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridPanel" type="PanelContainer" parent="Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 600)
+size_flags_vertical = 3
+
+[node name="GridPlaceholder" type="Label" parent="Margin/VBox/GridPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "[ grid ]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HandScroll" type="ScrollContainer" parent="Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 220)
+scroll_horizontal_enabled = true
+scroll_vertical_enabled = false
+
+[node name="HandRow" type="HBoxContainer" parent="Margin/VBox/HandScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="RainCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "RAIN"
+
+[node name="SunCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SUN"
+
+[node name="FrostCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "FROST"
+
+[node name="WindCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "WIND"
+
+[node name="LightningCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "LIGHT"
+
+[node name="FogCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
+custom_minimum_size = Vector2(144, 176)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "FOG"
+
+[node name="BottomStack" type="Control" parent="Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 144)
+
+[node name="BottomControls" type="HBoxContainer" parent="Margin/VBox/BottomStack"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="UndoButton" type="Button" parent="Margin/VBox/BottomStack/BottomControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "UNDO"
+
+[node name="PlayButton" type="Button" parent="Margin/VBox/BottomStack/BottomControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "▶ PLAY SEQUENCE"
+
+[node name="CancelButton" type="Button" parent="Margin/VBox/BottomStack/BottomControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "×"
+
+[node name="SpeedContainer" type="CenterContainer" parent="Margin/VBox/BottomStack"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+visible = false
+
+[node name="SpeedButton" type="Button" parent="Margin/VBox/BottomStack/SpeedContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "⏩ SPEED"

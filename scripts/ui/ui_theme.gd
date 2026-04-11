@@ -147,6 +147,45 @@ static func apply_primary_button(button: Button) -> void:
 	button.add_theme_color_override(&"font_pressed_color", bg_deep)
 
 
+static func apply_success_button(button: Button) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = accent_success
+	normal.corner_radius_top_left = 6
+	normal.corner_radius_top_right = 6
+	normal.corner_radius_bottom_right = 6
+	normal.corner_radius_bottom_left = 6
+	normal.content_margin_left = 24.0
+	normal.content_margin_right = 24.0
+	normal.content_margin_top = 16.0
+	normal.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"normal", normal)
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = accent_success.lightened(0.06)
+	hover.corner_radius_top_left = 6
+	hover.corner_radius_top_right = 6
+	hover.corner_radius_bottom_right = 6
+	hover.corner_radius_bottom_left = 6
+	hover.content_margin_left = 24.0
+	hover.content_margin_right = 24.0
+	hover.content_margin_top = 16.0
+	hover.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"hover", hover)
+	var pressed := StyleBoxFlat.new()
+	pressed.bg_color = accent_success.darkened(0.08)
+	pressed.corner_radius_top_left = 6
+	pressed.corner_radius_top_right = 6
+	pressed.corner_radius_bottom_right = 6
+	pressed.corner_radius_bottom_left = 6
+	pressed.content_margin_left = 24.0
+	pressed.content_margin_right = 24.0
+	pressed.content_margin_top = 16.0
+	pressed.content_margin_bottom = 16.0
+	button.add_theme_stylebox_override(&"pressed", pressed)
+	button.add_theme_color_override(&"font_color", bg_deep)
+	button.add_theme_color_override(&"font_hover_color", bg_deep)
+	button.add_theme_color_override(&"font_pressed_color", bg_deep)
+
+
 static func apply_secondary_button(button: Button) -> void:
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = bg_panel
