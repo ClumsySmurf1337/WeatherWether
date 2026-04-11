@@ -29,7 +29,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },
@@ -44,7 +44,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },
@@ -59,7 +59,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },
@@ -84,7 +84,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes-copilot",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },
@@ -99,7 +99,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes-copilot",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },
@@ -114,7 +114,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "group": "lanes-copilot",
-        "close": true
+        "close": false
       },
       "problemMatcher": []
     },

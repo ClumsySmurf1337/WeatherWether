@@ -9,5 +9,10 @@
     ".godot": true,
     "node_modules": true,
     "build": true
+  },
+  "plugins": {
+    "continual-learning": {
+      "enabled": true
+    }
   }
 }

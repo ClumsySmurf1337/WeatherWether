@@ -10,8 +10,8 @@ This doc is the **single operator contract**: what runs once a day, how **PM** u
 
 | Step | When | What to run |
 |------|------|-------------|
-| **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three `cursor-agent` lanes** in parallel. Lane terminals **auto-close** when each lane finishes. |
-| **1b** | **Same, but GitHub Copilot CLI** | **Weather Whether — Daily apply:lanes, then parallel Copilot lanes** — same daily prep, then **three terminals** each run **`copilot -p … --no-ask-user`** in the lane worktree (mirror of **`cursor-agent`**). Requires **`copilot`** on PATH. See **`docs/COPILOT_LANES.md`**. |
+| **1** | **Every working day** | **Weather Whether — Daily apply:lanes, then parallel lane agents** — `npm ci`, Linear producer **apply**, validate, worktree prep, then **three `cursor-agent` lanes** in parallel. Lane terminals **stay open** when each lane finishes (read logs, then dismiss the panel tab). |
+| **1b** | **Same, but GitHub Copilot CLI** | **Weather Whether — Daily apply:lanes, then parallel Copilot lanes** — same daily prep, then **three terminals** each run **`copilot -p … --no-ask-user`** in the lane worktree (mirror of **`cursor-agent`**). Lane terminals **stay open** after exit. Requires **`copilot`** on PATH. See **`docs/COPILOT_LANES.md`**. |
 | **2** | **When lane PRs exist and CI is ready** | **Weather Whether — QA agent (lane PRs)** — ships stale lanes if needed, merges **`agent/cursor-lane-*`** PRs, Linear **Done**, **`worktrees:sync`**, lane reset. Use **`npm run qa:lane-prs:quick`** if checks are already green. |
 | **3** | **Next cycle** | Go back to **step 1** (and **step 2** whenever you need merges). |
 | **1+2** | **Optional one-shot (Cursor)** | **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)** — **Daily full** → **All lane terminals (parallel)** → **QA agent**. |
@@ -74,7 +74,7 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 | **Godot import + build scaffold** (export presets still in Godot UI) | `pwsh ./tools/tasks/build.ps1` |
 | **Run the game** | `pwsh ./tools/tasks/launch.ps1` |
 | **Full health pass** (npm ci + Linear PM dry-run + validate + **lane prep** when run from Cursor’s terminal) | `npm run daily:full` |
-| **Simplest daily + parallel agents (one Task)** | **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** (`daily:full:apply:lanes`, then three lanes). Lane task terminals use **`presentation.close`** so each **closes when that lane finishes** (success or failure — re-run a single lane Task to debug). |
+| **Simplest daily + parallel agents (one Task)** | **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** (`daily:full:apply:lanes`, then three lanes). Lane task terminals use **`presentation.close: false`** so each **stays open** when that lane finishes (success or failure — re-run a single lane Task to debug). |
 | **Daily + lanes + QA from one terminal command** | **`npm run workflow:simple`** (parallel lane subprocesses; then **`qa:agent`**). **`npm run workflow:simple -- -SkipQa`** stops after lanes. |
 | **Daily apply + lane prep only** (no agents yet) | **Tasks →** **Weather Whether — Daily full (apply + lane prep)** — same as `npm run daily:full:apply:lanes` |
 | **Resume lanes — terminals inside this Cursor window** (neatest) | `npm run cursor:resume:editor` → then **Tasks: Run Task** → **Weather Whether — All lane terminals (parallel)** |
@@ -88,7 +88,7 @@ Full policy: [AUTONOMOUS_ORCHESTRATION.md](AUTONOMOUS_ORCHESTRATION.md), scopes:
 
 Same as **[Run every day (start here)](#run-every-day-start-here)** above — this block is the expanded version:
 
-1. **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** — runs **`npm run daily:full:apply:lanes`**, then **three lane terminals in parallel**. Each lane terminal **auto-closes when that lane’s script exits** (see `.vscode/tasks.json` **`presentation.close`**).
+1. **Tasks → Run Task →** **Weather Whether — Daily apply:lanes, then parallel lane agents** — runs **`npm run daily:full:apply:lanes`**, then **three lane terminals in parallel**. Each lane terminal **stays open when that lane’s script exits** (see `.vscode/tasks.json` **`presentation.close: false`**).
 2. **Tasks → Run Task →** **Weather Whether — QA agent (lane PRs)** (or `npm run qa:agent` in the terminal) when you are ready to merge — waits on GitHub checks unless you use **`npm run qa:lane-prs:quick`**. This merges lane PRs, moves Linear to Done, **`worktrees:sync`**, resets lane branches, and prints what to run next.
 3. Repeat **step 1** (and **step 2** when you have PRs to land) for the next cycle.
 
