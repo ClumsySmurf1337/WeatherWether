@@ -27,6 +27,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 
 
 ## 2026-04-11
+- PR #27 — agent/cursor-lane-2 — WEA-554: refresh splash screen
+- PR #28 — agent/cursor-lane-1 — WEA-529: lane work
 - PR #26 — agent/cursor-lane-3 — WEA-629: Whiteout levels 16-20
 - PR #25 — agent/cursor-lane-2 — WEA-553: UI theme tokens
 
