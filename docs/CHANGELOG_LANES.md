@@ -25,3 +25,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 - PR #8 — agent/cursor-lane-1 — WEA-521: lane work
 - PR #3 — agent/cursor-lane-3 — WEA-601: lane work
 
+
+## 2026-04-11
+- PR #26 — agent/cursor-lane-3 — WEA-629: Whiteout levels 16-20
+- PR #25 — agent/cursor-lane-2 — WEA-553: UI theme tokens
+
