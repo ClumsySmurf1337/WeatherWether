@@ -46,6 +46,7 @@
     "linear:status": "tsx tools/linear/workspace-status.ts",
     "linear:pm-organize": "tsx tools/linear/pm-organize.ts",
     "linear:pm-assignments": "tsx tools/linear/write-pm-assignments.ts",
+    "linear:pm-doc-intake": "tsx tools/linear/pm-doc-intake.ts",
     "linear:label-backfill": "tsx tools/linear/backfill-role-labels.ts",
     "linear:pm-prepare": "npm run linear:bootstrap -- --apply && npm run linear:label-backfill -- --apply && npm run linear:pm-organize -- --apply && npm run linear:pm-assignments",
     "linear:kickoff-first": "tsx tools/linear/kickoff-first-issue.ts",

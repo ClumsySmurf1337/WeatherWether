@@ -41,7 +41,8 @@ if ($LASTEXITCODE -ne 0) {
 
 $conflicting = git merge --ff-only "origin/$base" 2>&1
 if ($LASTEXITCODE -ne 0) {
-    $importConflicts = $conflicting | Where-Object { $_ -match '\.import$' }
+    # Always wrap in @() — a single stderr line is a scalar; .Count is missing under Set-StrictMode.
+    $importConflicts = @( $conflicting | Where-Object { $_ -match '\.import$' } )
     if ($importConflicts.Count -gt 0) {
         Write-Host "  Removing Godot-generated .import files that block ff-only merge..." -ForegroundColor Yellow
         foreach ($line in $importConflicts) {
@@ -56,7 +57,18 @@ if ($LASTEXITCODE -ne 0) {
             throw "Fast-forward $base to origin/$base failed even after cleaning .import files. Resolve locally, then re-run qa:agent."
         }
     } else {
-        throw "Fast-forward $base to origin/$base failed. Resolve locally (rebase/merge), then re-run qa:agent."
+        throw @"
+Fast-forward $base to origin/$base failed (local and remote have diverged, or other merge blocker).
+
+From repo root, typical fixes before re-running npm run qa:agent:
+  git status
+  git log --oneline -3 $base
+  git log --oneline -3 origin/$base
+  git pull --rebase origin $base
+  # or: git merge origin/$base --no-edit
+
+If you have only local doc/changelog commits, rebasing onto origin/$base is usually correct.
+"@
     }
 }
 
