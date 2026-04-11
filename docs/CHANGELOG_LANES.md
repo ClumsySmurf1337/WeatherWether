@@ -7,6 +7,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 - PR #_number_ — _head branch_ — _title_
 
 ## 2026-04-10
+- PR #22 — agent/cursor-lane-3 — WEA-625: add world5 levels 21-22
+- PR #23 — agent/cursor-lane-2 — WEA-552: add UIManager transitions
 - PR #21 — agent/cursor-lane-3 — WEA-626: lane work
 - PR #20 — agent/cursor-lane-2 — WEA-551: build gameplay UI screen
 - PR #19 — agent/cursor-lane-1 — WEA-528: add world metadata loader
