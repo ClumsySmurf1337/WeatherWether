@@ -9,6 +9,7 @@ param(
     [bool]$SyncWorktreesAfter = $true,
     [switch]$SkipResetLaneBranches,
     [switch]$SkipChangelog,
+    [switch]$SkipChangelogPush,
     [int[]]$PreflightShipLaneIndexes = @(1, 2, 3),
     [switch]$SkipPreflightShip,
     [string]$AgentRoot = "",
@@ -139,6 +140,8 @@ foreach ($p in $lanePrs) {
 }
 Write-Host ""
 
+$changelogPushPrNumbers = [System.Collections.Generic.List[int]]::new()
+
 function Append-ChangelogLaneEntry {
     param(
         [int]$PrNumber,
@@ -146,7 +149,7 @@ function Append-ChangelogLaneEntry {
         [string]$Title
     )
     if ($SkipChangelog) {
-        return
+        return $false
     }
     $changelogPath = Join-Path $repoRoot "docs\CHANGELOG_LANES.md"
     if (-not (Test-Path -LiteralPath $changelogPath)) {
@@ -160,7 +163,7 @@ Entries below are appended when you run **``npm run qa:agent``** (or ``qa-lane-p
     $dup = Select-String -LiteralPath $changelogPath -Pattern "PR #$PrNumber\b" -Quiet -ErrorAction SilentlyContinue
     if ($dup) {
         Write-Host "  Changelog: PR #$PrNumber already logged — skip." -ForegroundColor DarkGray
-        return
+        return $false
     }
     $today = Get-Date -Format "yyyy-MM-dd"
     $line = "- PR #$PrNumber — $HeadRef — $Title"
@@ -181,10 +184,11 @@ Entries below are appended when you run **``npm run qa:agent``** (or ``qa-lane-p
         }
         @($before + @($line) + $after) | Set-Content -LiteralPath $changelogPath -Encoding utf8
         Write-Host "  Changelog: appended under $sectionHeader" -ForegroundColor DarkGreen
-        return
+        return $true
     }
     Add-Content -LiteralPath $changelogPath -Value "`n$sectionHeader`n$line`n" -Encoding utf8
     Write-Host "  Changelog: new section $sectionHeader" -ForegroundColor DarkGreen
+    return $true
 }
 
 foreach ($p in $lanePrs) {
@@ -228,9 +232,39 @@ foreach ($p in $lanePrs) {
     if (-not $NoMerge) {
         Set-Location $repoRoot
         # main already synced in qa-pr-handoff-local after gh pr merge; changelog only here
-        Append-ChangelogLaneEntry -PrNumber $n -HeadRef $p.headRefName -Title $p.title
+        $appended = Append-ChangelogLaneEntry -PrNumber $n -HeadRef $p.headRefName -Title $p.title
+        if ($appended) {
+            [void]$changelogPushPrNumbers.Add($n)
+        }
     }
     Write-Host ""
+}
+
+if ($changelogPushPrNumbers.Count -gt 0 -and -not $SkipChangelogPush) {
+    Write-Host "`n=== Commit and push docs/CHANGELOG_LANES.md ===`n" -ForegroundColor Cyan
+    Set-Location -LiteralPath $mainResolved
+    & "$repoRoot\tools\tasks\git-sync-main.ps1" -RepoRoot $mainResolved -Reason "before lane changelog commit"
+    git add -- "docs/CHANGELOG_LANES.md"
+    git diff --cached --quiet
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  Changelog: nothing staged after git-sync — skip push (unexpected)." -ForegroundColor Yellow
+    }
+    else {
+        $sorted = @($changelogPushPrNumbers | Sort-Object -Unique)
+        $prBits = ($sorted | ForEach-Object { "PR #$_" }) -join ", "
+        git commit -m "docs: lane merge log ($prBits)" -- docs/CHANGELOG_LANES.md
+        if ($LASTEXITCODE -ne 0) {
+            throw "git commit failed for docs/CHANGELOG_LANES.md."
+        }
+        git push origin HEAD
+        if ($LASTEXITCODE -ne 0) {
+            throw "git push failed for changelog commit (auth or branch protection). Commit exists locally — push manually from $mainResolved."
+        }
+        Write-Host "  Changelog: committed and pushed ($prBits)." -ForegroundColor Green
+    }
+}
+elseif ($changelogPushPrNumbers.Count -gt 0 -and $SkipChangelogPush) {
+    Write-Host "`n  Changelog: new entries on disk; -SkipChangelogPush — commit and push docs/CHANGELOG_LANES.md manually when ready." -ForegroundColor DarkYellow
 }
 
 if ($SyncWorktreesAfter) {
@@ -257,7 +291,12 @@ Write-Host ""
 Write-Host "Next cycle: run daily full (lanes) again so agents pick up new work:" -ForegroundColor Cyan
 Write-Host "  npm run daily:full:apply:lanes" -ForegroundColor White
 Write-Host "  (or npm run daily:full:apply + your lane tasks)`n" -ForegroundColor DarkGray
-Write-Host 'If docs/CHANGELOG_LANES.md was updated, commit it on main when you are ready.' -ForegroundColor DarkGray
+if ($changelogPushPrNumbers.Count -gt 0 -and -not $SkipChangelogPush) {
+    Write-Host "  Lane merge log: docs/CHANGELOG_LANES.md was committed and pushed when new lines were added this run." -ForegroundColor DarkGray
+}
+elseif ($changelogPushPrNumbers.Count -gt 0) {
+    Write-Host "  Lane merge log: commit docs/CHANGELOG_LANES.md on main (you used -SkipChangelogPush)." -ForegroundColor DarkGray
+}
 Write-Host ""
 if ($SkipResetLaneBranches) {
     Write-Host "You skipped lane branch reset. To reset lane worktrees to fresh agent/cursor-lane-N from main:" -ForegroundColor Yellow

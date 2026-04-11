@@ -7,6 +7,9 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 - PR #_number_ — _head branch_ — _title_
 
 ## 2026-04-10
+- PR #21 — agent/cursor-lane-3 — WEA-626: lane work
+- PR #20 — agent/cursor-lane-2 — WEA-551: build gameplay UI screen
+- PR #19 — agent/cursor-lane-1 — WEA-528: add world metadata loader
 - PR #17 — agent/cursor-lane-2 — WEA-550: lane work
 - PR #16 — agent/cursor-lane-1 — WEA-527: lane work
 - PR #14 — agent/cursor-lane-3 — WEA-627: lane work
