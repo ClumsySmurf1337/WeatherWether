@@ -1,0 +1,24 @@
+{
+  "id": "w5_l06",
+  "world": 5,
+  "level_number": 6,
+  "display_name": "Grounded Spark",
+  "hint_text": "Dry the wet grass to stop the chain, then strike and cool the water.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10,  1, 10, 10,  1, 10,
+    12,  1,  2,  3,  1, 13,
+    10,  1, 10, 10,  1, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [1, 4, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 4,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
