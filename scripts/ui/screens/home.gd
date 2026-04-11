@@ -7,12 +7,16 @@ extends Control
 @onready var _select_level_button: Button = %SelectLevelButton
 @onready var _settings_button: Button = %SettingsButton
 @onready var _progress_label: Label = %ProgressLabel
+@onready var _background: ColorRect = $Background
 @onready var _hero_panel: PanelContainer = $Margin/VBox/HeroPanel
+@onready var _hero_label: Label = $Margin/VBox/HeroPanel/HeroLabel
 @onready var _wordmark: Label = $Margin/VBox/Wordmark
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
 	_refresh_continue_label()
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_select_level_button.pressed.connect(_on_select_level_pressed)
@@ -20,6 +24,7 @@ func _ready() -> void:
 	UITheme.apply_primary_button(_continue_button)
 	UITheme.apply_secondary_button(_select_level_button)
 	UITheme.apply_secondary_button(_settings_button)
+	UITheme.configure_muted_label(_hero_label)
 	UITheme.configure_body_label(_progress_label)
 	UITheme.configure_title_label(_wordmark)
 	call_deferred("_apply_hero_height")

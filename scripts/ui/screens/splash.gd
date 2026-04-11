@@ -6,6 +6,7 @@ extends Control
 const ADVANCE_SEC: float = 1.5
 
 var _advanced: bool = false
+@onready var _background: ColorRect = $Background
 @onready var _timer: Timer = $AdvanceTimer
 @onready var _title1: Label = $Center/VBox/Title1
 @onready var _title2: Label = $Center/VBox/Title2
@@ -15,6 +16,8 @@ var _advanced: bool = false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
 	UITheme.configure_title_label(_title1)
 	UITheme.configure_title_label(_title2)
 	UITheme.configure_muted_label(_tagline)

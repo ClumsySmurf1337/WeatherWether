@@ -6,10 +6,13 @@ extends Control
 @onready var _back_button: Button = %BackButton
 @onready var _title: Label = $Margin/VBox/Title
 @onready var _hint: Label = $Margin/VBox/Hint
+@onready var _background: ColorRect = $Background
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UITheme.apply_base_theme(self)
+	_background.color = UITheme.bg_deep
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.configure_title_label(_title)
 	UITheme.configure_muted_label(_hint)
