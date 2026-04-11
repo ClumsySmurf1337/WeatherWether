@@ -16,3 +16,5 @@ npm run linear:pm-organize -- --apply
 ```
 
 See `docs/PM_AGENT_LINEAR.md`.
+
+**PM doc intake:** `npm run linear:pm-doc-intake` writes `pm-doc-intake-dry-run.md` here (gitignored) — design-grounded issue bodies from GDD/UI/assets/SPEC. Candidates live in `tools/linear/pm-doc-issue-candidates.ts`.
