@@ -31,6 +31,8 @@ Pick the file that matches your assignment and follow it in addition to this doc
 
 Index: `docs/AGENT_CATALOG.md`. Canonical workspace rules for humans/agents: `.claude/CLAUDE.md` — **keep this file aligned when `.claude/CLAUDE.md` changes.**
 
+**Current issue scope (WEA-###):** After `npm run linear:pm-assignments` on the **main** repo, read **`assignments/generated/<role>.md`** (e.g. `level_designer.md`) in this worktree — lane launchers and **`npm run worktrees:sync`** copy those gitignored handoffs from main into each lane worktree so you can implement without Linear API access here.
+
 ## Product
 
 - **Godot 4.6**, strict typed **GDScript**, **signal-based** systems, **deterministic** puzzle logic (no randomness in rules).

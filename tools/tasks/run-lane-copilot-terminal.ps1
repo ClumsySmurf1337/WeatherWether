@@ -53,6 +53,7 @@ Write-Host "resume-pickup ran from main repo (reads .env.local there)." -Foregro
 Write-Host ""
 
 Set-Location -LiteralPath $wtPath
+& "$mainResolved\tools\tasks\copy-generated-assignments-to-worktree.ps1" -MainRepoRoot $mainResolved -WorktreePath $wtPath
 
 $copilotHeader = @"
 # Weather Whether — Copilot CLI lane (mirror of Cursor `run-lane-terminal`)

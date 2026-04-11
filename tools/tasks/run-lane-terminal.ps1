@@ -48,6 +48,7 @@ Write-Host "resume-pickup ran from main repo (reads .env.local there)." -Foregro
 Write-Host ""
 
 Set-Location -LiteralPath $wtPath
+& "$mainResolved\tools\tasks\copy-generated-assignments-to-worktree.ps1" -MainRepoRoot $mainResolved -WorktreePath $wtPath
 
 if ($SkipCursorChat) {
     Write-Host "Shell cwd is now the worktree — use Cursor Agent manually (SkipCursorChat)." -ForegroundColor Green

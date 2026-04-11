@@ -18,6 +18,8 @@ if (-not (Test-Path $agentRoot)) {
 
 Write-Host "=== Sync worktrees under $agentRoot with $BaseRef ===`n"
 
+$copyAssignmentsScript = Join-Path $repoRoot "tools\tasks\copy-generated-assignments-to-worktree.ps1"
+
 Get-ChildItem -Path $agentRoot -Directory -Filter "wt-*" -ErrorAction SilentlyContinue | ForEach-Object {
     $wt = $_.FullName
     $gitDir = Join-Path $wt ".git"
@@ -36,6 +38,8 @@ Get-ChildItem -Path $agentRoot -Directory -Filter "wt-*" -ErrorAction SilentlyCo
     } else {
         Write-Host "  merged $BaseRef"
     }
+    # Always refresh handoffs (merge may have failed; agents still need local scope for Copilot).
+    & $copyAssignmentsScript -MainRepoRoot $repoRoot -WorktreePath $wt
 }
 
 Write-Host "`nDone. Tip: run from repo root before parallel lanes: pwsh ./tools/tasks/sync-agent-worktrees.ps1"
