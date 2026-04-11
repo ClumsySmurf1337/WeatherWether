@@ -39,7 +39,7 @@ func _refresh_continue_label() -> void:
 
 
 func _on_continue_pressed() -> void:
-	UIManager.go_to_gameplay_placeholder()
+	UIManager.go_to_gameplay()
 
 
 func _on_select_level_pressed() -> void:

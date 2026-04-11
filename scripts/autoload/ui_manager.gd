@@ -9,7 +9,7 @@ const SCENE_HOME: PackedScene = preload("res://scenes/ui/home.tscn")
 const SCENE_WORLD_SELECT: PackedScene = preload("res://scenes/ui/world_select.tscn")
 const SCENE_LEVEL_SELECT: PackedScene = preload("res://scenes/ui/level_select.tscn")
 const SCENE_SETTINGS: PackedScene = preload("res://scenes/ui/settings.tscn")
-const SCENE_GAMEPLAY_PLACEHOLDER: PackedScene = preload("res://scenes/ui/gameplay_placeholder.tscn")
+const SCENE_GAMEPLAY: PackedScene = preload("res://scenes/ui/gameplay.tscn")
 const SCENE_LEVEL_COMPLETE: PackedScene = preload("res://scenes/ui/level_complete.tscn")
 const SCENE_LEVEL_FAILED: PackedScene = preload("res://scenes/ui/level_failed.tscn")
 const SCENE_NO_PATH: PackedScene = preload("res://scenes/ui/no_path.tscn")
@@ -112,8 +112,12 @@ func go_to_home() -> void:
 	replace_root(SCENE_HOME)
 
 
+func go_to_gameplay() -> void:
+	replace_root(SCENE_GAMEPLAY)
+
+
 func go_to_gameplay_placeholder() -> void:
-	replace_root(SCENE_GAMEPLAY_PLACEHOLDER)
+	go_to_gameplay()
 
 
 func go_to_level_complete() -> void:
@@ -132,7 +136,7 @@ func push_level_select(world: int, world_name: String, highest_unlocked: int, le
 
 
 func _on_level_selected(_world: int, _level: int) -> void:
-	go_to_gameplay_placeholder()
+	go_to_gameplay()
 
 
 static func has_save_file() -> bool:
