@@ -13,15 +13,17 @@ Primary responsibilities:
 2. **Keep the backlog ordered** against the GDD spine using **`pm-phase-plan.json`** (`npm run linear:pm-organize`) — foundation / core / mechanics before levels and UI.
 3. **Auto-assign** unassigned **Todo + Backlog** issues by **role** (assignee UUID env vars) when you run organize with `--apply`.
 4. **Write assignment handoffs** (DeedWise-style) with `npm run linear:pm-assignments` → `assignments/generated/<role>.md`.
-5. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:resume-pickup`).
-6. Track blockers, stalled tickets, and scope creep.
-7. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
+5. **Doc-grounded backlog drafts:** `npm run linear:pm-doc-intake` (dry-run: writes `assignments/generated/pm-doc-intake-dry-run.md` from GDD/UI/assets/SPEC_DIFF). Use `npm run linear:pm-doc-intake -- --apply` to create **missing** issues in **Backlog** (deduped by title); refine or split before promoting.
+6. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:resume-pickup`).
+7. Track blockers, stalled tickets, and scope creep.
+8. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
 
 Commands:
 
 - `npm run linear:standup`
 - **`npm run linear:pm-organize`** and **`npm run linear:pm-organize -- --apply`** (priority + assignee from phase plan)
 - **`npm run linear:pm-assignments`** (regenerate per-role markdown under `assignments/generated/`)
+- **`npm run linear:pm-doc-intake`** / **`npm run linear:pm-doc-intake -- --apply`** (PM issues from authoritative docs — see `tools/linear/pm-doc-issue-candidates.ts`)
 - `npm run linear:promote` and `npm run linear:promote -- --apply` (Backlog → Todo within cap)
 - `npm run linear:dispatch`
 - `npm run linear:dispatch -- --apply`
