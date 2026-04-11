@@ -32,7 +32,7 @@ func load_level(level: LevelData) -> void:
 	grid_manager = GridManager.new(level.width, level.height, level.max_moves)
 	grid_manager.load_terrain(level.initial_terrain, level.width, level.height, level.max_moves)
 	character = CharacterController.new(level.start_position)
-	EventBus.level_started.emit(level.id)
+	EventBus.level_started.emit(level)
 	start_planning()
 
 
