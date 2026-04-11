@@ -128,10 +128,16 @@ if (-not $SkipLinearVerify) {
 if ($state.HasUncommitted) {
     Write-Host "Staging and committing in $WorktreePath (branch $branch)..." -ForegroundColor Cyan
     git add -A
-    $msg = "${LinearId}: lane work"
-    git commit -m $msg
-    if ($LASTEXITCODE -ne 0) {
-        throw "git commit failed."
+    git diff --cached --quiet
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  Nothing staged after 'git add -A' (e.g. CRLF-only noise) — skip commit; continuing to push/PR." -ForegroundColor DarkYellow
+    }
+    else {
+        $msg = "${LinearId}: lane work"
+        git commit -m $msg
+        if ($LASTEXITCODE -ne 0) {
+            throw "git commit failed."
+        }
     }
 }
 
