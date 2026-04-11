@@ -17,8 +17,13 @@ config/features=PackedStringArray("4.6")
 [autoload]
 
 EventBus="*res://scripts/autoload/event_bus.gd"
+AudioManager="*res://scripts/autoload/audio_manager.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
 UIManager="*res://scripts/ui/ui_manager.gd"
+
+[audio]
+
+bus_layout="res://audio/default_bus_layout.tres"
 
 [display]
 
