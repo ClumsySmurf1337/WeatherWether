@@ -1,0 +1,25 @@
+{
+  "id": "w6_l18",
+  "world": 6,
+  "level_number": 18,
+  "display_name": "Twin Veils",
+  "hint_text": "Clear both fog gates — wind and sun each do the job.",
+  "width": 6,
+  "height": 6,
+  "initial_terrain": [
+    12,  1, 11,  1, 10, 10,
+    10, 10, 10,  1, 10, 10,
+    10, 10, 10,  1,  1, 10,
+    10, 10, 10, 10, 11,  1,
+    10, 10, 10, 10, 10,  1,
+    10, 10, 10, 10, 10, 13
+  ],
+  "start_position": [0, 0],
+  "goal_positions": [[5, 5]],
+  "available_cards": [1, 3],
+  "max_moves": 2,
+  "par_moves": 2,
+  "target_difficulty": 6,
+  "min_solution_length": 2,
+  "unique_solution": false
+}
