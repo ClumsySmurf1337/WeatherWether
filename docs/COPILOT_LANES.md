@@ -39,7 +39,11 @@ Optional **`WEATHER_COPILOT_USE_FLEET=1`**: the pointer is sent as **`/fleet …
 |----------|---------|
 | **`WEATHER_COPILOT_CLI`** | Full path to **`copilot`** if not on `PATH` |
 | **`WEATHER_COPILOT_USE_FLEET`** | **`1`** / **`true`** — prefix CLI prompt with **`/fleet`** for orchestrator-style splits **within** that lane’s worktree |
+| **`WEATHER_COPILOT_NO_ALLOW_ALL`** | Set to **`1`** to **disable** default **`--allow-all-tools --allow-all-paths`** (otherwise non-interactive runs often fail with “Permission denied and could not request permission from user”) |
+| **`WEATHER_COPILOT_CLI_EXTRA_ARGS`** | Extra flags for **`copilot`** (space-separated) |
 | **`WHETHER_AGENT_ROOT`** | Agent worktrees root (default `D:\Agents\WeatherWether`) |
+
+Lane scripts invoke **`copilot`** with **`--no-ask-user`** plus **`--allow-all-tools`** and **`--allow-all-paths`** so shell and file tools can run without a TTY (see **`copilot --help`**).
 
 ## Flags (advanced)
 

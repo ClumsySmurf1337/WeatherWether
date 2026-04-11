@@ -68,6 +68,8 @@ Default dispatch roles match ~3 implementation lanes; raise `LINEAR_MAX_IN_PROGR
 | `CURSOR_AGENT_MODEL_DISABLE_FALLBACK` | If **`1`** / **`true`**, only **`CURSOR_AGENT_MODEL`** is used (no retry on limits) |
 | `WEATHER_COPILOT_CLI` | Full path to **GitHub Copilot CLI** **`copilot`** when not on `PATH` (Copilot lane Tasks require the CLI unless you pass **`-SkipCopilotRun`**) |
 | `WEATHER_COPILOT_USE_FLEET` | If **`1`** / **`true`**, lane script runs **`copilot -p "/fleet …" --no-ask-user`** so the CLI orchestrator may spawn parallel subagents **inside that worktree** ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/fleet)) |
+| `WEATHER_COPILOT_NO_ALLOW_ALL` | If **`1`** / **`true`**, lane scripts do **not** pass **`--allow-all-tools --allow-all-paths`** (default is **on** so **`--no-ask-user`** sessions can run shell and edit files without “Permission denied”). Optional: set **`COPILOT_ALLOW_ALL`** in the environment instead (see **`copilot --help`**) |
+| `WEATHER_COPILOT_CLI_EXTRA_ARGS` | Space-separated extra **`copilot`** flags inserted **after** the allow flags (e.g. **`--allow-all-urls`**) |
 | `CURSOR_AGENT_TRUST_ARGS` | Space-separated flags passed **before** the prompt so **`cursor-agent`** skips the Workspace Trust prompt (default in scripts: **`--trust`**). Example override: **`--yolo`** |
 | `CURSOR_AGENT_NO_TRUST` | If **`1`** / **`true`**, do **not** auto-append trust flags (you want the interactive trust prompt) |
 | `CURSOR_AGENT_INTERACTIVE` | If **`1`** / **`true`**, same as **`CURSOR_AGENT_NO_TRUST`** (no auto **`--trust`**) |
