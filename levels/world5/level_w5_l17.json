@@ -1,0 +1,24 @@
+{
+  "id": "w5_l17",
+  "world": 5,
+  "level_number": 17,
+  "display_name": "Shattered Span",
+  "hint_text": "Strike the water to shatter ice, then rebuild the bridge with frost and rain.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10,  1, 10, 10, 10,  1, 10,
+    12,  1,  4,  3,  1,  1, 13,
+    10,  1, 10, 10, 10,  1, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [4, 2, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 7,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
