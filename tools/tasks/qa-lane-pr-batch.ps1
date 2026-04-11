@@ -95,6 +95,26 @@ if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
                 Pop-Location
             }
         }
+        if ($st.Branch -eq "HEAD") {
+            Write-Host "Lane $laneIdx : detached HEAD (e.g. after PR branch delete) — attaching agent/cursor-lane-$laneIdx for ship..." -ForegroundColor Yellow
+            $laneBranch = "agent/cursor-lane-$laneIdx"
+            git -C $wtPath fetch origin --prune 2>$null
+            git -C $wtPath rev-parse "refs/remotes/origin/$laneBranch" 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                git -C $wtPath checkout $laneBranch
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Lane $laneIdx : checkout $laneBranch failed in $wtPath."
+                }
+                git -C $wtPath merge --ff-only "origin/$laneBranch" 2>$null
+            }
+            else {
+                git -C $wtPath checkout -b $laneBranch
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Lane $laneIdx : could not create $laneBranch from detached HEAD in $wtPath."
+                }
+            }
+            $st = Get-LaneWorktreeShipState -RepoPath $wtPath
+        }
         Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); ahead-of-main=$($st.CommitsAheadOfMain); vs-tracking=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
         & "$repoRoot\tools\tasks\lane-ship.ps1" -LaneIndex $laneIdx -MainRepoRoot $mainResolved -AgentRoot $AgentRoot
         if ($LASTEXITCODE -ne 0) {
