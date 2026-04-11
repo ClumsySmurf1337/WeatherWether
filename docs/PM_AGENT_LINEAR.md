@@ -19,6 +19,8 @@ This repo combines **scripted** Linear operations with **agent** behavior modele
 | `npm run linear:pm-organize -- --todo-only` | Restrict to **Todo** (skip Backlog). |
 | `npm run linear:label-backfill -- --apply` | Create missing role labels and add one inferred role label to unlabeled Backlog/Todo/In Progress issues. |
 | `npm run linear:pm-assignments` | Regenerate **`assignments/generated/<role>.md`** (DeedWise-style handoffs; includes **Backlog**). |
+| `npm run linear:pm-doc-intake` | **Dry-run:** draft **detailed** PM issues from **GDD / UI_SCREENS / ASSET_MANIFEST / SPEC_DIFF** (excerpts + acceptance) → **`assignments/generated/pm-doc-intake-dry-run.md`**. No Linear API. |
+| `npm run linear:pm-doc-intake -- --apply` | Create **missing** issues in **Backlog** (dedupe by title). Optional `--max=12`. Requires `.env.local` + **`LINEAR_STATE_BACKLOG_ID`**. |
 | `npm run linear:plan-deps` | Generate `assignments/generated/dependency-scope-plan.md` with suggested dependencies and role file scopes to reduce overlap. |
 | `npm run linear:apply-deps` | Dry-run/apply real Linear **blocks** relations; writes `assignments/generated/dependency-relations-plan.md`. |
 | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` | Promote/claim the first role-matching issue (Todo first, else Backlog) into **In Progress** for build testing. |
@@ -49,6 +51,6 @@ If labels are missing or role inference is noisy, run **`npm run linear:pm-prepa
 ## What this still does **not** do
 
 - **Semantic/manual dependency curation** beyond heuristics: `linear:apply-deps` writes bulk `blocks` edges from title/phase patterns; you may still adjust critical paths manually in Linear.
-- **Create** issues from scratch without `linear:seed` / templates — PM agent can drive MCP or web for ad-hoc tickets.
+- **Create** issues from scratch: use **`npm run linear:pm-doc-intake -- --apply`** (doc-grounded drafts), **`linear:seed`**, or templates; the human/LLM PM can still add ad-hoc tickets in Linear.
 
 Tune **`pm-phase-plan.json`** so “build first” matches your label taxonomy; re-run organize + assignments.
