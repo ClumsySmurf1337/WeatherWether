@@ -1,0 +1,24 @@
+{
+  "id": "w6_l16",
+  "world": 6,
+  "level_number": 16,
+  "display_name": "Veiled Causeway",
+  "hint_text": "Fog the water, then clear it with wind and frost the last gap.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  3,  3,  3,  3, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [5, 3, 2],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 7,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
