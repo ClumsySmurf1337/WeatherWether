@@ -19,6 +19,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Clouds" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+clip_contents = true
+
+[node name="CloudA" type="TextureRect" parent="Clouds"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="CloudB" type="TextureRect" parent="Clouds"]
+layout_mode = 0
+mouse_filter = 2
+
 [node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -31,16 +49,13 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Title1" type="Label" parent="Center/VBox"]
+[node name="Wordmark" type="TextureRect" parent="Center/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Weather"
-horizontal_alignment = 1
 
-[node name="Title2" type="Label" parent="Center/VBox"]
+[node name="WordmarkFallback" type="Label" parent="Center/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Whether"
+theme_override_font_sizes/font_size = 64
+text = "Weather Whether"
 horizontal_alignment = 1
 
 [node name="Tagline" type="Label" parent="Center/VBox"]
@@ -49,10 +64,19 @@ theme_override_font_sizes/font_size = 22
 text = "CLEVER WEATHER. BRIGHTER TOMORROW."
 horizontal_alignment = 1
 
-[node name="TapHint" type="Label" parent="Center/VBox"]
-layout_mode = 2
+[node name="TapHint" type="Label" parent="."]
+layout_mode = 0
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -160.0
+offset_right = 0.0
+offset_bottom = -64.0
 theme_override_font_sizes/font_size = 20
 text = "tap to begin"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AdvanceTimer" type="Timer" parent="."]
