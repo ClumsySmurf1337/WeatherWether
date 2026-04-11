@@ -32,17 +32,17 @@ function Invoke-WeatherCopilotCliNonInteractive {
     }
     Push-Location -LiteralPath $WorkingDirectory
     try {
-        # Non-interactive lanes cannot approve tool prompts; CLI requires broad allow flags.
-        # See `copilot --help` (--allow-all-tools, --allow-all-paths; env COPILOT_ALLOW_ALL).
+        # Non-interactive lanes cannot approve tool prompts. Official examples: `copilot -p "..." --allow-all`
+        # (--allow-all == --allow-all-tools + --allow-all-paths + --allow-all-urls). See `copilot --help`.
         $extra = @()
         if ($env:WEATHER_COPILOT_CLI_EXTRA_ARGS -and $env:WEATHER_COPILOT_CLI_EXTRA_ARGS.Trim().Length -gt 0) {
             $extra = @($env:WEATHER_COPILOT_CLI_EXTRA_ARGS.Trim() -split '\s+')
         }
         $allowAll = ($env:WEATHER_COPILOT_NO_ALLOW_ALL -ne "1" -and $env:WEATHER_COPILOT_NO_ALLOW_ALL -ne "true")
         if ($allowAll) {
-            $extra = @("--allow-all-tools", "--allow-all-paths") + $extra
+            $extra = @("--allow-all") + $extra
         }
-        Write-Host "  copilot <allow flags> -p <...> --no-ask-user (cwd: $WorkingDirectory)" -ForegroundColor DarkGray
+        Write-Host "  copilot --allow-all -p <...> --no-ask-user (cwd: $WorkingDirectory)" -ForegroundColor DarkGray
         & $CopilotExe @extra -p $p --no-ask-user
         return $LASTEXITCODE
     }
