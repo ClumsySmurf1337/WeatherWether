@@ -116,6 +116,7 @@ func set_setting(key: String, value: Variant) -> void:
 	settings[key] = value
 	data["settings"] = settings
 	save()
+	EventBus.settings_changed.emit(key, value)
 
 
 func _init_default() -> void:
