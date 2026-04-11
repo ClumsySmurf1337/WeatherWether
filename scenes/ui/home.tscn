@@ -39,8 +39,29 @@ theme_override_constants/separation = 32
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HeroLabel" type="Label" parent="Margin/VBox/HeroPanel"]
+[node name="HeroContent" type="Control" parent="Margin/VBox/HeroPanel"]
 layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeroTexture" type="TextureRect" parent="Margin/VBox/HeroPanel/HeroContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeroFallback" type="Label" parent="Margin/VBox/HeroPanel/HeroContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 24
 text = "[ painterly hero key art ]"
 horizontal_alignment = 1
@@ -50,34 +71,55 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 
-[node name="ProgressLabel" type="Label" parent="Margin/VBox/ProgressStrip"]
+[node name="ProgressRow" type="HBoxContainer" parent="Margin/VBox/ProgressStrip"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProgressLabel" type="Label" parent="Margin/VBox/ProgressStrip/ProgressRow"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "0/132 levels"
 
+[node name="ProgressSpacer" type="Control" parent="Margin/VBox/ProgressStrip/ProgressRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StarLabel" type="Label" parent="Margin/VBox/ProgressStrip/ProgressRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "★ 0"
+horizontal_alignment = 2
+
 [node name="ContinueButton" type="Button" parent="Margin/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 144)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "CONTINUE"
 
 [node name="SelectLevelButton" type="Button" parent="Margin/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "SELECT LEVEL"
 
 [node name="SettingsButton" type="Button" parent="Margin/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "SETTINGS"
 
-[node name="Wordmark" type="Label" parent="Margin/VBox"]
+[node name="Wordmark" type="CenterContainer" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="WordmarkTexture" type="TextureRect" parent="Margin/VBox/Wordmark"]
+layout_mode = 2
+
+[node name="WordmarkFallback" type="Label" parent="Margin/VBox/Wordmark"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Weather Whether"
