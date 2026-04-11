@@ -18,7 +18,7 @@ config/features=PackedStringArray("4.6")
 
 EventBus="*res://scripts/autoload/event_bus.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
-UIManager="*res://scripts/autoload/ui_manager.gd"
+UIManager="*res://scripts/ui/ui_manager.gd"
 
 [display]
 
