@@ -62,7 +62,7 @@ if (-not (Get-CursorAgentCliExecutable) -and -not (Get-CursorCliExecutable)) {
 }
 
 $launcherNote = Build-WeatherLaneCursorLauncherNote -Role $role
-$promptText = Get-WeatherLaneAgentPromptText -MainRepoRoot $mainResolved -Role $role -LauncherNote $launcherNote
+$promptText = Get-WeatherLaneAgentPromptText -MainRepoRoot $mainResolved -Role $role -LauncherNote $launcherNote -WorktreeRoot $wtPath
 
 Write-Host "Starting Cursor CLI agent (auto) in worktree — no terminal typing required." -ForegroundColor Yellow
 $agentExe = Get-CursorAgentCliExecutable

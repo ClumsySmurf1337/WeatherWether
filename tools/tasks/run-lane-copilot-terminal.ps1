@@ -64,8 +64,8 @@ Read **``AGENTS.md``**, **``.github/copilot-instructions.md``**, and **``.claude
 ---
 
 "@
-$note = Build-WeatherLaneCopilotLauncherNote -LaneIndex $LaneIndex -Role $role
-$body = Get-WeatherLaneAgentPromptText -MainRepoRoot $mainResolved -Role $role -LauncherNote $note
+$note = Build-WeatherLaneCopilotLauncherNote -LaneIndex $LaneIndex -Role $role -MainRepoRoot $mainResolved
+$body = Get-WeatherLaneAgentPromptText -MainRepoRoot $mainResolved -Role $role -LauncherNote $note -WorktreeRoot $wtPath
 $full = $copilotHeader + $body
 
 $outFile = Join-Path $wtPath "WEATHER_COPILOT_LANE_PROMPT.md"
@@ -78,7 +78,7 @@ $pointerPrompt = @"
 You are the Weather Whether lane agent. NON-INTERACTIVE session: do not ask the user questions; apply reasonable defaults.
 
 1. At this repository root (current worktree), read `AGENTS.md`, `.github/copilot-instructions.md`, `.claude/CLAUDE.md`, and `.claude/agents/$role.md` — same behavior as Cursor `cursor-agent` lanes.
-2. Read `WEATHER_COPILOT_LANE_PROMPT.md` in this directory and carry out every step. Linear resume-pickup already ran from the main repo; `.weather-lane-issue.txt` contains the WEA-### marker for shipping.
+2. Read `WEATHER_COPILOT_LANE_PROMPT.md` in this directory and carry out every step. **Do not** run `npm run linear:resume-pickup` from this worktree (no `.env.local` here). If `.weather-lane-issue.txt` has **WEA-###**, skip prompt step 1b; only use step 1b from the main repo if that marker is empty.
 3. Run `pwsh` validate as specified in that file until it passes; then commit and push with WEA-### in the message as for Cursor lanes.
 
 Stay within the lane file scope in `.github/copilot-instructions.md` / `docs/CURSOR_PARALLEL_AGENTS.md`. If a step cannot complete non-interactively, document the blocker in a short `COPILOT_LANE_BLOCKER.md` in this worktree and exit.
