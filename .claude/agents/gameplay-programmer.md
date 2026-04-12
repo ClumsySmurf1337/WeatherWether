@@ -2,6 +2,7 @@
 
 Focus on:
 
+- `scripts/core/` (game loop / `game_manager.gd` — orchestration, not UI scenes)
 - `scripts/grid/`
 - `scripts/weather/`
 - `scripts/puzzle/`

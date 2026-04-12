@@ -22,7 +22,7 @@
 
    | Lane | Touch only |
    |------|------------|
-   | Gameplay | `scripts/grid`, `scripts/weather`, `scripts/puzzle`, `test/` |
+   | Gameplay | `scripts/core` (game loop / `game_manager.gd` only in this repo), `scripts/grid`, `scripts/weather`, `scripts/puzzle`, `test/` |
    | UI | `scripts/ui`, `scenes/ui`, `assets/` UI |
    | Levels | `levels/`, level loader, validation |
    | QA | `test/`, `scripts/validate_all_levels.gd`, CI |

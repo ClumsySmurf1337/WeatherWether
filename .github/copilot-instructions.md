@@ -71,7 +71,7 @@ Stay inside the lane/role scope. Full matrix (including QA): **`docs/CURSOR_PARA
 
 | Lane | Role | Typical scope |
 |------|------|----------------|
-| 1 | gameplay-programmer | `scripts/grid`, `scripts/weather`, `scripts/puzzle` (and gameplay-related tests under `test/` when your issue owns them) |
+| 1 | gameplay-programmer | `scripts/core` (gameplay orchestration — e.g. `game_manager.gd`), `scripts/grid`, `scripts/weather`, `scripts/puzzle` (and gameplay-related tests under `test/` when your issue owns them) |
 | 2 | ui-developer | `scripts/ui`, `scenes/ui`, `assets/ui` |
 | 3 | level-designer | `levels`, level loader, validation, level JSON |
 

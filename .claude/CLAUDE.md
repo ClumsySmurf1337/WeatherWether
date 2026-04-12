@@ -45,7 +45,7 @@ If anything in those files contradicts an older doc (including `docs/Building Wh
 
 ## Parallel Scope Boundaries
 
-- `scripts/grid`, `scripts/weather`, `scripts/puzzle` for gameplay systems.
+- `scripts/core` for gameplay orchestration (`game_manager.gd` and siblings); `scripts/grid`, `scripts/weather`, `scripts/puzzle` for gameplay systems.
 - `scripts/ui`, `scenes/ui`, `assets/ui` for UI tasks.
 - `levels` and validation scripts for level-design tasks.
 - `.github/workflows` and release docs for release-ops tasks.
@@ -53,7 +53,7 @@ If anything in those files contradicts an older doc (including `docs/Building Wh
 ## Agent Roles
 
 - `producer` manages backlog health and dispatch.
-- `gameplay-programmer` owns grid/weather/puzzle implementation.
+- `gameplay-programmer` owns core game loop (`scripts/core`), grid/weather/puzzle implementation.
 - `ui-developer` owns mobile-first UX scenes/scripts.
 - `level-designer` owns level batches and solvability quality.
 - `qa-agent` owns tests and validation.
