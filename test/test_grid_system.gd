@@ -59,6 +59,24 @@ func test_unqueue_on_empty_returns_false() -> void:
 	assert_false(gm.unqueue_last())
 
 
+func test_unqueue_at_removes_specific_card() -> void:
+	var gm := _make_manager()
+	gm.queue_card(C.RAIN, Vector2i(0, 0))
+	gm.queue_card(C.SUN, Vector2i(1, 0))
+	assert_true(gm.unqueue_at(0))
+	var queue := gm.get_queue()
+	assert_eq(queue.size(), 1)
+	assert_eq(queue[0][0], C.SUN as int)
+	assert_eq(queue[0][1], Vector2i(1, 0))
+
+
+func test_unqueue_at_invalid_index_returns_false() -> void:
+	var gm := _make_manager()
+	gm.queue_card(C.RAIN, Vector2i(0, 0))
+	assert_false(gm.unqueue_at(-1))
+	assert_false(gm.unqueue_at(5))
+
+
 func test_clear_queue_empties_it() -> void:
 	var gm := _make_manager()
 	gm.queue_card(C.RAIN, Vector2i(0, 0))
@@ -121,3 +139,19 @@ func test_load_terrain_initialises_correctly() -> void:
 func test_queue_rejects_out_of_bounds_position() -> void:
 	var gm := _make_manager()
 	assert_false(gm.queue_card(C.RAIN, Vector2i(99, 99)))
+
+
+func test_queue_rejects_invalid_placement_on_stone() -> void:
+	var gm := _make_manager()
+	gm.set_terrain_at(Vector2i(1, 1), T.STONE)
+	assert_false(gm.queue_card(C.RAIN, Vector2i(1, 1)))
+
+
+func test_queue_locked_prevents_modification() -> void:
+	var gm := _make_manager()
+	gm.queue_card(C.RAIN, Vector2i(0, 0))
+	gm.set_queue_locked(true)
+	assert_false(gm.queue_card(C.SUN, Vector2i(1, 0)))
+	assert_false(gm.unqueue_last())
+	gm.clear_queue()
+	assert_eq(gm.get_queue().size(), 1)
