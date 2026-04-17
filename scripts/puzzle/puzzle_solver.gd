@@ -34,14 +34,16 @@ func solve(initial_terrain: Array, available_cards: Array[int]) -> SolverResult:
 
 	var visited: Dictionary = {}
 	var queue: Array[PuzzleState] = []
+	var queue_index: int = 0
 	visited[start_state.hash_key()] = true
 	queue.append(start_state)
 
-	while not queue.is_empty():
+	while queue_index < queue.size():
 		if states_explored >= MAX_STATES:
 			break
 
-		var current: PuzzleState = queue.pop_front()
+		var current: PuzzleState = queue[queue_index]
+		queue_index += 1
 		states_explored += 1
 
 		var unique_cards: Dictionary = {}
