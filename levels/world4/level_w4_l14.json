@@ -1,0 +1,24 @@
+{
+  "id": "w4_l14",
+  "world": 4,
+  "level_number": 14,
+  "display_name": "Sunbreak Alley",
+  "hint_text": "Clear both fog banks, then rain on the scorched tile.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12, 11,  7, 11,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [3, 1, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 7,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
