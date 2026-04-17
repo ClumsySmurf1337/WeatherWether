@@ -40,11 +40,17 @@ if (-not $LevelsOnly) {
         if (-not (Test-Path -LiteralPath $godotCacheDir)) {
             Write-Host "Importing project (GUT class_names)..."
             & $godotPath --headless --path "$repoRoot" --import --quit
+            if ($LASTEXITCODE -ne 0) {
+                throw "Godot --import failed (exit $LASTEXITCODE)."
+            }
         } else {
             Write-Host "Skipping project import (.godot present; delete .godot to force full reimport)."
         }
         Write-Host "Running GUT tests..."
         & $godotPath --headless --path "$repoRoot" -s addons/gut/gut_cmdln.gd -gdir=res://test -gexit
+        if ($LASTEXITCODE -ne 0) {
+            throw "GUT tests failed (exit $LASTEXITCODE). Fix tests in $repoRoot then re-run validate.ps1."
+        }
     } else {
         Write-Host "GUT not installed yet; skipping unit tests."
     }
@@ -52,3 +58,6 @@ if (-not $LevelsOnly) {
 
 Write-Host "Running level validation..."
 & $godotPath --headless --path "$repoRoot" -s scripts/validate_all_levels.gd --quit
+if ($LASTEXITCODE -ne 0) {
+    throw "Level validation failed (exit $LASTEXITCODE). See output above."
+}

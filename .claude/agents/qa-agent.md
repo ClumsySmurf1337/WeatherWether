@@ -18,6 +18,8 @@ Focus on:
 
 Rules:
 
+- **`npm run qa:agent` / `qa:pr` do not auto-fix code.** If **`validate.ps1`** fails (GUT or level validation), fix the branch in the lane worktree or PR checkout, commit, push, then re-run. **`validate.ps1` propagates Godot exit codes** — a failing test run stops QA before merge/CI watch.
+- **`ERROR:` / `push_error` lines in GUT output** are often **expected** (tests that assert `push_error`); use the **Run Summary** (`Passing Tests` vs `Failing Tests`) and **`---- All tests passed! ----`**, not raw stderr alone.
 - Lane PRs should already be **validate-clean** before merge (see **Quality before handoff** in `.claude/CLAUDE.md` and `tools/tasks/prompts/lane-agent-prompt.md`); treat unexpected parse/test failures as process drift, not normal.
 - Follow the **reading order** in `.claude/CLAUDE.md` when validating spec drift or regression scope.
 - Gameplay / level / UI behavior must match **`docs/GAME_DESIGN.md` v2** (sequence model, terrains, win/lose, UI flow). Flag PRs that reintroduce instant-resolve or contradict the GDD.
