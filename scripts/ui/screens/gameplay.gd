@@ -12,6 +12,8 @@ signal play_sequence_requested
 signal cancel_requested
 signal speed_toggle_requested
 signal card_selected(card_key: StringName)
+signal queue_item_removed(index: int)
+signal queue_item_reordered(from_index: int, to_index: int)
 
 @onready var _back_button: Button = %BackButton
 @onready var _pause_button: Button = %PauseButton
@@ -24,9 +26,7 @@ signal card_selected(card_key: StringName)
 @onready var _hint_arrow: Label = %HintArrow
 @onready var _hint_text: Label = %HintText
 @onready var _hint_banner: PanelContainer = %HintBanner
-@onready var _queue_strip: PanelContainer = %QueueStrip
-@onready var _queue_hint: Label = %QueueHint
-@onready var _queue_slots: HBoxContainer = %QueueSlots
+@onready var _queue_strip: QueueStrip = %QueueStrip
 @onready var _grid_panel: PanelContainer = %GridPanel
 @onready var _undo_button: Button = %UndoButton
 @onready var _play_button: Button = %PlayButton
@@ -58,12 +58,10 @@ func _ready() -> void:
 	UITheme.configure_body_label(_hint_text)
 	UITheme.configure_muted_label(_hint_icon)
 	UITheme.configure_muted_label(_hint_arrow)
-	UITheme.configure_muted_label(_queue_hint)
 	UITheme.apply_secondary_button(_undo_button)
 	UITheme.apply_success_button(_play_button)
 	UITheme.apply_secondary_button(_cancel_button)
 	UITheme.apply_secondary_button(_speed_button)
-	_style_queue_slots()
 	_back_button.pressed.connect(_on_back_pressed)
 	_pause_button.pressed.connect(_on_pause_pressed)
 	_hint_button.pressed.connect(_on_hint_pressed)
@@ -71,6 +69,8 @@ func _ready() -> void:
 	_play_button.pressed.connect(_on_play_pressed)
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 	_speed_button.pressed.connect(_on_speed_pressed)
+	_queue_strip.remove_requested.connect(_on_queue_item_removed)
+	_queue_strip.reorder_requested.connect(_on_queue_item_reordered)
 	_bind_card_buttons()
 	_update_sequence_state(false)
 	_set_queue_count(0)
@@ -98,21 +98,13 @@ func set_sequence_playing(is_playing: bool) -> void:
 func set_queue_count(count: int) -> void:
 	_set_queue_count(count)
 
+func set_queue(entries: Array) -> void:
+	_queue_strip.set_queue(entries)
+	_set_queue_count(_queue_strip.get_queue_size())
+
 
 func _set_queue_count(count: int) -> void:
-	var has_items: bool = count > 0
-	_queue_slots.visible = has_items
-	_queue_hint.visible = not has_items
-	var index: int = 0
-	for slot: Node in _queue_slots.get_children():
-		var panel: Control = slot as Control
-		if panel == null:
-			continue
-		panel.visible = index < count
-		var label: Label = panel.get_node_or_null("Label") as Label
-		if label != null:
-			label.text = str(index + 1)
-		index += 1
+	_queue_strip.set_queue_count(count)
 	_play_button.disabled = count == 0
 	_undo_button.disabled = count == 0
 	_cancel_button.disabled = count == 0
@@ -143,28 +135,6 @@ func _bind_card_buttons() -> void:
 		card_view.configure(entry["key"], entry["label"], entry["color"], entry["description"])
 		card_view.pressed.connect(_on_card_pressed.bind(entry["key"]))
 		_card_views[entry["key"]] = card_view
-
-
-func _style_queue_slots() -> void:
-	for slot: Node in _queue_slots.get_children():
-		var panel: PanelContainer = slot as PanelContainer
-		if panel == null:
-			continue
-		var style := StyleBoxFlat.new()
-		style.bg_color = UITheme.bg_panel_alt
-		style.border_color = UITheme.border_frame
-		style.border_width_left = 2
-		style.border_width_top = 2
-		style.border_width_right = 2
-		style.border_width_bottom = 2
-		style.corner_radius_top_left = 6
-		style.corner_radius_top_right = 6
-		style.corner_radius_bottom_right = 6
-		style.corner_radius_bottom_left = 6
-		panel.add_theme_stylebox_override(&"panel", style)
-		var label: Label = panel.get_node_or_null("Label") as Label
-		if label != null:
-			UITheme.configure_numbers_label(label)
 
 
 func _apply_panel_style(panel: PanelContainer, fill: Color) -> void:
@@ -222,6 +192,13 @@ func _on_speed_pressed() -> void:
 func _on_card_pressed(card_key: StringName) -> void:
 	_set_selected_card(card_key)
 	card_selected.emit(card_key)
+
+func _on_queue_item_removed(index: int) -> void:
+	queue_item_removed.emit(index)
+
+
+func _on_queue_item_reordered(from_index: int, to_index: int) -> void:
+	queue_item_reordered.emit(from_index, to_index)
 
 
 func set_card_exhausted(card_key: StringName, exhausted: bool) -> void:
