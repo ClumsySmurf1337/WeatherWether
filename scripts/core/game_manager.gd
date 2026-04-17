@@ -13,25 +13,47 @@ var current_state: GameState = GameState.BOOT
 var current_level: LevelData = null
 var grid_manager: GridManager = null
 var character: CharacterController = null
+var animation_director: AnimationDirector = null
 
 var _pre_pause_state: GameState = GameState.PLANNING
 var _moves_used: int = 0
+
+const LEVELS_PER_WORLD: int = 22
+const LOG_PREFIX: String = "[GameManager]"
+const SCENE_GAMEPLAY: String = "res://scenes/ui/gameplay.tscn"
+const SCENE_LEVEL_COMPLETE: String = "res://scenes/ui/level_complete.tscn"
+const SCENE_LEVEL_FAILED: String = "res://scenes/ui/level_failed.tscn"
+
+
+func _ready() -> void:
+	animation_director = get_node_or_null("AnimationDirector") as AnimationDirector
+	if current_state == GameState.BOOT:
+		set_state(GameState.MAIN_MENU)
 
 
 func set_state(next_state: GameState) -> void:
 	if current_state == next_state:
 		return
+	var previous: GameState = current_state
 	current_state = next_state
+	_log_state_transition(previous, next_state)
 	game_state_changed.emit(current_state)
 
 
 func load_level(level: LevelData) -> void:
+	if level == null:
+		push_error("%s load_level called with null" % LOG_PREFIX)
+		return
+	if not level.is_valid():
+		push_error("%s invalid level: %s" % [LOG_PREFIX, level.id])
+		return
 	set_state(GameState.LOADING)
 	current_level = level
 	_moves_used = 0
 	grid_manager = GridManager.new(level.width, level.height, level.max_moves)
 	grid_manager.load_terrain(level.initial_terrain, level.width, level.height, level.max_moves)
 	character = CharacterController.new(level.start_position)
+	_render_gameplay_ui(level)
 	EventBus.level_started.emit(level)
 	start_planning()
 
@@ -128,6 +150,7 @@ func handle_win() -> void:
 	var stars: int = _compute_stars(_moves_used)
 	EventBus.level_completed.emit(current_level.id, stars, _moves_used)
 	EventBus.character_won.emit()
+	_show_level_complete(stars)
 
 
 func handle_loss(cause: int) -> void:
@@ -135,6 +158,7 @@ func handle_loss(cause: int) -> void:
 	EventBus.character_died.emit(cause)
 	if current_level != null:
 		EventBus.level_failed.emit(current_level.id, cause)
+	_show_level_failed_modal(cause)
 
 
 func handle_no_path() -> void:
@@ -175,3 +199,108 @@ func _compute_stars(moves_used: int) -> int:
 	if moves_used <= current_level.max_moves - 1:
 		return 2
 	return 1
+
+
+func _render_gameplay_ui(level: LevelData) -> void:
+	var ui_manager: Node = _get_ui_manager()
+	if ui_manager == null:
+		return
+	if ui_manager.has_method("go_to_gameplay"):
+		ui_manager.call("go_to_gameplay")
+	elif ui_manager.has_method("replace_screen"):
+		ui_manager.call("replace_screen", SCENE_GAMEPLAY)
+	_configure_gameplay_screen(level)
+
+
+func _configure_gameplay_screen(level: LevelData) -> void:
+	var screen: Control = _get_active_ui_screen()
+	if screen == null:
+		return
+	if not screen.has_method("configure"):
+		return
+	var title: String = level.display_name
+	if title.is_empty():
+		title = "LEVEL %d" % level.level_number
+	screen.call("configure", title, level.hint_text, level.max_moves, level.hint_text)
+
+
+func _show_level_complete(stars: int) -> void:
+	var ui_manager: Node = _get_ui_manager()
+	if ui_manager == null:
+		return
+	if ui_manager.has_method("go_to_level_complete"):
+		ui_manager.call("go_to_level_complete")
+	elif ui_manager.has_method("replace_screen"):
+		ui_manager.call("replace_screen", SCENE_LEVEL_COMPLETE)
+	var screen: Control = _get_active_ui_screen()
+	var level_complete: LevelCompleteScreen = screen as LevelCompleteScreen
+	if level_complete == null or current_level == null:
+		return
+	var best_moves: int = _moves_used
+	var save_manager: Node = _get_save_manager()
+	if save_manager != null and save_manager.has_method("get_level_record"):
+		var record: Dictionary = save_manager.call("get_level_record", current_level.id)
+		if record.has("best_moves"):
+			best_moves = int(record.get("best_moves"))
+	var is_last_in_world: bool = current_level.level_number >= LEVELS_PER_WORLD
+	level_complete.configure(stars, _moves_used, best_moves, current_level.par_moves, is_last_in_world)
+
+
+func _show_level_failed_modal(cause: int) -> void:
+	var ui_manager: Node = _get_ui_manager()
+	if ui_manager == null:
+		return
+	if not ui_manager.has_method("show_modal"):
+		return
+	var modal: Control = ui_manager.call("show_modal", SCENE_LEVEL_FAILED)
+	if modal == null:
+		return
+	var level_failed: LevelFailedScreen = modal as LevelFailedScreen
+	if level_failed != null:
+		level_failed.configure(cause)
+
+
+func _get_active_ui_screen() -> Control:
+	var ui_manager: Node = _get_ui_manager()
+	if ui_manager == null:
+		return null
+	var host: Node = ui_manager.get_node_or_null("UIScreenHost")
+	if host == null or host.get_child_count() == 0:
+		return null
+	return host.get_child(host.get_child_count() - 1) as Control
+
+
+func _get_ui_manager() -> Node:
+	return get_node_or_null("/root/UIManager")
+
+
+func _get_save_manager() -> Node:
+	return get_node_or_null("/root/SaveManager")
+
+
+func _log_state_transition(from_state: GameState, to_state: GameState) -> void:
+	print("%s state %s -> %s" % [LOG_PREFIX, _state_name(from_state), _state_name(to_state)])
+
+
+func _state_name(state: GameState) -> String:
+	match state:
+		GameState.BOOT:
+			return "BOOT"
+		GameState.MAIN_MENU:
+			return "MAIN_MENU"
+		GameState.LOADING:
+			return "LOADING"
+		GameState.PLANNING:
+			return "PLANNING"
+		GameState.RESOLVING:
+			return "RESOLVING"
+		GameState.WALKING:
+			return "WALKING"
+		GameState.COMPLETE:
+			return "COMPLETE"
+		GameState.FAILED:
+			return "FAILED"
+		GameState.PAUSED:
+			return "PAUSED"
+		_:
+			return "UNKNOWN"
