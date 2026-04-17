@@ -12,6 +12,7 @@ var initial_terrain: Array
 
 var queue: Array  # Array of [card_type: int, pos: Vector2i]
 var max_queue_size: int
+var _queue_locked: bool = false
 
 
 func _init(level_width: int = 5, level_height: int = 5, max_moves: int = 6) -> void:
@@ -24,6 +25,7 @@ func _init(level_width: int = 5, level_height: int = 5, max_moves: int = 6) -> v
 		terrain[i] = T.EMPTY as int
 	initial_terrain = terrain.duplicate()
 	queue = []
+	_queue_locked = false
 
 
 ## Initialise from a LevelData-style flat terrain array.
@@ -34,6 +36,7 @@ func load_terrain(source: Array, w: int, h: int, max_moves: int) -> void:
 	terrain = source.duplicate()
 	initial_terrain = source.duplicate()
 	queue = []
+	_queue_locked = false
 
 
 # -----------------------------------------------------------------------
@@ -41,22 +44,37 @@ func load_terrain(source: Array, w: int, h: int, max_moves: int) -> void:
 # -----------------------------------------------------------------------
 
 func queue_card(card_type: int, pos: Vector2i) -> bool:
+	if _queue_locked:
+		return false
 	if not can_queue():
 		return false
-	if not is_in_bounds(pos):
+	if not WeatherSystem.is_valid_placement(terrain, width, height, card_type, pos):
 		return false
 	queue.append([card_type, pos])
 	return true
 
 
 func unqueue_last() -> bool:
+	if _queue_locked:
+		return false
 	if queue.is_empty():
 		return false
 	queue.pop_back()
 	return true
 
 
+func unqueue_at(index: int) -> bool:
+	if _queue_locked:
+		return false
+	if index < 0 or index >= queue.size():
+		return false
+	queue.remove_at(index)
+	return true
+
+
 func clear_queue() -> void:
+	if _queue_locked:
+		return
 	queue.clear()
 
 
@@ -65,7 +83,7 @@ func get_queue() -> Array:
 
 
 func can_queue() -> bool:
-	return queue.size() < max_queue_size
+	return not _queue_locked and queue.size() < max_queue_size
 
 
 # -----------------------------------------------------------------------
@@ -87,6 +105,15 @@ func resolve_next_card() -> Dictionary:
 func reset_to_initial() -> void:
 	terrain = initial_terrain.duplicate()
 	queue.clear()
+	_queue_locked = false
+
+
+func set_queue_locked(locked: bool) -> void:
+	_queue_locked = locked
+
+
+func is_queue_locked() -> bool:
+	return _queue_locked
 
 
 # -----------------------------------------------------------------------
