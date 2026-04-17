@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/screens/gameplay.gd" id="1_gp"]
 [ext_resource type="Script" path="res://scripts/ui/widgets/card_view.gd" id="2_cv"]
+[ext_resource type="Script" path="res://scripts/ui/widgets/queue_strip.gd" id="3_qs"]
 
 [node name="Gameplay" type="Control"]
 layout_mode = 3
@@ -136,6 +137,7 @@ text = "💡"
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(0, 88)
+script = ExtResource("3_qs")
 
 [node name="QueueSlots" type="HBoxContainer" parent="Margin/VBox/QueueStrip"]
 unique_name_in_owner = true
