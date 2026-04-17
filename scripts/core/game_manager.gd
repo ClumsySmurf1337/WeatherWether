@@ -216,6 +216,10 @@ func _compute_stars(moves_used: int) -> int:
 
 
 func _render_gameplay_ui(level: LevelData) -> void:
+	# GUT: GameManager is parented under `res://test/*` scripts — avoid swapping global UIManager
+	# (full gameplay scene + autoload graph); unit tests only assert grid/character/state.
+	if _is_running_under_gut_or_test_harness():
+		return
 	var ui_manager: Node = _get_ui_manager()
 	if ui_manager == null:
 		return
@@ -282,6 +286,18 @@ func _get_active_ui_screen() -> Control:
 	if host == null or host.get_child_count() == 0:
 		return null
 	return host.get_child(host.get_child_count() - 1) as Control
+
+
+func _is_running_under_gut_or_test_harness() -> bool:
+	var p: Node = get_parent()
+	while p != null:
+		var s: Script = p.get_script() as Script
+		if s != null:
+			var path: String = s.resource_path
+			if path.begins_with("res://test/") or path.begins_with("res://addons/gut/"):
+				return true
+		p = p.get_parent()
+	return false
 
 
 func _get_ui_manager() -> Node:
