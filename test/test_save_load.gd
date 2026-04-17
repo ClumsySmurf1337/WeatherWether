@@ -11,6 +11,8 @@ func _make_manager(path: String = TEST_PATH, init_defaults: bool = true) -> Node
 	sm.save_path = path
 	if init_defaults:
 		sm._init_default()
+	# GutTest auto-frees after each test so SaveManager nodes are not orphans.
+	autoqfree(sm)
 	return sm
 
 

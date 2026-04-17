@@ -35,8 +35,14 @@ $repoRoot = if ($GodotProjectPath) {
 }
 if (-not $LevelsOnly) {
     if (Test-Path "$repoRoot\addons\gut\gut_cmdln.gd") {
-        Write-Host "Importing project (GUT class_names)..."
-        & $godotPath --headless --path "$repoRoot" --import --quit
+        # Headless --import --quit triggers ObjectDB leak warnings in Godot 4.x; skip when cache exists.
+        $godotCacheDir = Join-Path $repoRoot ".godot"
+        if (-not (Test-Path -LiteralPath $godotCacheDir)) {
+            Write-Host "Importing project (GUT class_names)..."
+            & $godotPath --headless --path "$repoRoot" --import --quit
+        } else {
+            Write-Host "Skipping project import (.godot present; delete .godot to force full reimport)."
+        }
         Write-Host "Running GUT tests..."
         & $godotPath --headless --path "$repoRoot" -s addons/gut/gut_cmdln.gd -gdir=res://test -gexit
     } else {

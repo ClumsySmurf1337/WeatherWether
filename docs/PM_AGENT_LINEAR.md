@@ -7,6 +7,7 @@ This repo combines **scripted** Linear operations with **agent** behavior modele
 - **GDD (authoritative):** `docs/GAME_DESIGN.md` v2 — `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` is legacy toolkit / study context only.
 - **Phase → priority mapping:** `docs/backlog/pm-phase-plan.json` (edit labels/title prefixes to match your board)
 - **Role from labels/title:** `tools/linear/role-map.ts` (`[CORE]` / `[MECH]` → gameplay programmer, etc.)
+- **Parallel lane scopes (Cursor + Copilot):** `docs/CURSOR_PARALLEL_AGENTS.md` — gameplay lane includes `scripts/core` (e.g. `game_manager.gd`), `scripts/grid`, `scripts/weather`, `scripts/puzzle`, and gameplay-owned tests under `test/`. Keep aligned with `.github/copilot-instructions.md` and `.claude/CLAUDE.md` so Linear-assigned work matches what agents are allowed to touch.
 
 ## Commands (run from repo root)
 

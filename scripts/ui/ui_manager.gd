@@ -62,8 +62,9 @@ func replace_screen(scene_path: String) -> void:
 	_transitioning = false
 	_clear_transition()
 	dismiss_modal(true)
-	for child: Node in _host.get_children():
-		_host.remove_child(child)
+	# queue_free only — remove_child first briefly orphans nodes (GUT / orphan count noise).
+	var to_clear: Array[Node] = _host.get_children()
+	for child: Node in to_clear:
 		child.queue_free()
 	_stack.clear()
 	var inst: Control = _instantiate_scene(scene_path)
@@ -273,16 +274,14 @@ func _on_transition_finished() -> void:
 
 
 func _remove_screen(screen: Control) -> void:
-	if screen.get_parent() == _host:
-		_host.remove_child(screen)
+	if screen == null:
+		return
 	screen.queue_free()
 
 
 func _remove_modal(modal: Control) -> void:
 	if modal == null:
 		return
-	if modal.get_parent() == _modal_host:
-		_modal_host.remove_child(modal)
 	modal.queue_free()
 
 

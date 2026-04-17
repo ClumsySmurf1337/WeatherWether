@@ -36,7 +36,7 @@ func _set_grid_cell(grid: Array, pos: Vector2i, w: int, val: int) -> void:
 
 func test_load_level_transitions_to_planning() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
@@ -45,12 +45,11 @@ func test_load_level_transitions_to_planning() -> void:
 	assert_eq(gm.current_state, GS.PLANNING)
 	assert_not_null(gm.grid_manager)
 	assert_not_null(gm.character)
-	gm.queue_free()
 
 
 func test_queue_card_emits_and_increments() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
@@ -61,12 +60,11 @@ func test_queue_card_emits_and_increments() -> void:
 	var ok: bool = gm.queue_card(C.RAIN, Vector2i(1, 0))
 	assert_true(ok)
 	assert_eq(gm.grid_manager.queue.size(), 1)
-	gm.queue_free()
 
 
 func test_undo_removes_from_queue() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
@@ -76,12 +74,11 @@ func test_undo_removes_from_queue() -> void:
 	gm.queue_card(C.RAIN, Vector2i(1, 0))
 	gm.undo_last_card()
 	assert_eq(gm.grid_manager.queue.size(), 0)
-	gm.queue_free()
 
 
 func test_play_sequence_transitions_to_resolving() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(1, 0), 3, T.WATER)
@@ -92,12 +89,11 @@ func test_play_sequence_transitions_to_resolving() -> void:
 	gm.queue_card(C.FROST, Vector2i(1, 0))
 	gm.play_sequence()
 	assert_eq(gm.current_state, GS.RESOLVING)
-	gm.queue_free()
 
 
 func test_pause_and_resume() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
@@ -107,12 +103,11 @@ func test_pause_and_resume() -> void:
 	assert_eq(gm.current_state, GS.PAUSED)
 	gm.resume()
 	assert_eq(gm.current_state, GS.PLANNING)
-	gm.queue_free()
 
 
 func test_star_rating_three_stars_at_par() -> void:
 	var gm := GameManager.new()
-	add_child(gm)
+	add_child_autoqfree(gm)
 	var grid := _make_grid(3, 1, T.DRY_GRASS)
 	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
 	_set_grid_cell(grid, Vector2i(1, 0), 3, T.WATER)
@@ -133,4 +128,3 @@ func test_star_rating_three_stars_at_par() -> void:
 	gm.walk_step()
 	gm.walk_step()
 	assert_eq(gm.current_state, GS.COMPLETE)
-	gm.queue_free()
