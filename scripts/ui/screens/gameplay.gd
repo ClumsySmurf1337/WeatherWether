@@ -23,9 +23,11 @@ signal card_selected(card_key: StringName)
 @onready var _hint_icon: Label = %HintIcon
 @onready var _hint_arrow: Label = %HintArrow
 @onready var _hint_text: Label = %HintText
-@onready var _queue_strip: Control = %QueueStrip
+@onready var _hint_banner: PanelContainer = %HintBanner
+@onready var _queue_strip: PanelContainer = %QueueStrip
 @onready var _queue_hint: Label = %QueueHint
 @onready var _queue_slots: HBoxContainer = %QueueSlots
+@onready var _grid_panel: PanelContainer = %GridPanel
 @onready var _undo_button: Button = %UndoButton
 @onready var _play_button: Button = %PlayButton
 @onready var _cancel_button: Button = %CancelButton
@@ -41,6 +43,9 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	UITheme.apply_base_theme(self)
 	_background.color = UITheme.bg_deep
+	_apply_panel_style(_hint_banner, UITheme.bg_panel)
+	_apply_panel_style(_queue_strip, UITheme.bg_deep)
+	_apply_panel_style(_grid_panel, UITheme.bg_panel)
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.apply_secondary_button(_pause_button)
 	UITheme.apply_secondary_button(_hint_button)
@@ -97,19 +102,24 @@ func _set_queue_count(count: int) -> void:
 	var has_items: bool = count > 0
 	_queue_slots.visible = has_items
 	_queue_hint.visible = not has_items
-	var slot_labels: Array[Label] = []
+	var index: int = 0
 	for slot: Node in _queue_slots.get_children():
-		var label: Label = slot.get_node_or_null("Label") as Label
+		var panel: Control = slot as Control
+		if panel == null:
+			continue
+		panel.visible = index < count
+		var label: Label = panel.get_node_or_null("Label") as Label
 		if label != null:
-			slot_labels.append(label)
-	for i: int in range(slot_labels.size()):
-		slot_labels[i].text = str(i + 1)
-		slot_labels[i].visible = i < count
+			label.text = str(index + 1)
+		index += 1
+	_play_button.disabled = count == 0
+	_undo_button.disabled = count == 0
+	_cancel_button.disabled = count == 0
 
 
 func _update_sequence_state(is_playing: bool) -> void:
 	_sequence_playing = is_playing
-	_queue_strip.visible = not is_playing
+	_queue_strip.visible = true
 	_speed_container.visible = is_playing
 	_undo_button.visible = not is_playing
 	_play_button.visible = not is_playing
@@ -182,6 +192,27 @@ func _style_card_button(button: Button, color: Color) -> void:
 	button.add_theme_color_override(&"font_color", UITheme.bg_deep)
 	button.add_theme_color_override(&"font_hover_color", UITheme.bg_deep)
 	button.add_theme_color_override(&"font_pressed_color", UITheme.bg_deep)
+
+
+func _apply_panel_style(panel: PanelContainer, fill: Color) -> void:
+	if panel == null:
+		return
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = UITheme.border_frame
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	style.content_margin_left = 24.0
+	style.content_margin_right = 24.0
+	style.content_margin_top = 16.0
+	style.content_margin_bottom = 16.0
+	panel.add_theme_stylebox_override(&"panel", style)
 
 
 func _on_back_pressed() -> void:
