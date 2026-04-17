@@ -1,0 +1,24 @@
+{
+  "id": "w4_l11",
+  "world": 4,
+  "level_number": 11,
+  "display_name": "Gale Gate",
+  "hint_text": "A gust clears the fog, frost bridges the water, rain cools the scorch.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10,
+    12,  3, 11, 11, 11,  7, 13,
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [3, 2, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 5,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
