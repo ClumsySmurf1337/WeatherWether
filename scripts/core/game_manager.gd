@@ -17,6 +17,7 @@ var animation_director: AnimationDirector = null
 
 var _pre_pause_state: GameState = GameState.PLANNING
 var _moves_used: int = 0
+var _sequence_running: bool = false
 
 const LEVELS_PER_WORLD: int = 22
 const LOG_PREFIX: String = "[GameManager]"
@@ -110,6 +111,8 @@ func play_sequence() -> void:
 	set_state(GameState.RESOLVING)
 	grid_manager.set_queue_locked(true)
 	EventBus.sequence_started.emit()
+	if animation_director != null:
+		_start_sequence_playback()
 
 
 func resolve_next() -> Dictionary:
@@ -121,6 +124,12 @@ func resolve_next() -> Dictionary:
 		return {}
 	EventBus.sequence_card_resolved.emit(result["card_type"], result["pos"])
 	return result
+
+
+func toggle_sequence_speed() -> void:
+	if animation_director == null:
+		return
+	animation_director.toggle_fast_mode()
 
 
 func _begin_walk_or_no_path() -> void:
@@ -137,6 +146,81 @@ func _begin_walk_or_no_path() -> void:
 	character.begin_walk(walk_path)
 	set_state(GameState.WALKING)
 	EventBus.walk_started.emit()
+
+
+func _start_sequence_playback() -> void:
+	if _sequence_running or animation_director == null:
+		return
+	_sequence_running = true
+	if not animation_director.weather_effect_finished.is_connected(_on_sequence_card_effect_finished):
+		animation_director.weather_effect_finished.connect(_on_sequence_card_effect_finished)
+	_play_next_sequence_card()
+
+
+func _play_next_sequence_card() -> void:
+	if animation_director == null or grid_manager == null:
+		_sequence_running = false
+		return
+	if current_state != GameState.RESOLVING:
+		_sequence_running = false
+		return
+	if grid_manager.queue.is_empty():
+		_finish_sequence_playback()
+		return
+	var entry: Array = grid_manager.queue[0]
+	if entry.size() < 2:
+		grid_manager.resolve_next_card()
+		_play_next_sequence_card()
+		return
+	var card_type: int = entry[0]
+	var pos: Vector2i = entry[1]
+	animation_director.play_card_resolution(card_type, pos)
+
+
+func _on_sequence_card_effect_finished(_card_type: int) -> void:
+	if not _sequence_running or current_state != GameState.RESOLVING or grid_manager == null:
+		return
+	var result: Dictionary = grid_manager.resolve_next_card()
+	if result.is_empty():
+		_finish_sequence_playback()
+		return
+	EventBus.sequence_card_resolved.emit(result["card_type"], result["pos"])
+	if grid_manager.queue.is_empty():
+		_finish_sequence_playback()
+		return
+	var delay: float = animation_director.get_scaled_delay_seconds(
+		animation_director.inter_card_pause_ms,
+		true
+	)
+	if delay <= 0.0:
+		_play_next_sequence_card()
+		return
+	var timer: SceneTreeTimer = get_tree().create_timer(delay)
+	timer.timeout.connect(_play_next_sequence_card)
+
+
+func _finish_sequence_playback() -> void:
+	if animation_director == null:
+		_sequence_running = false
+		_begin_walk_or_no_path()
+		return
+	var delay: float = animation_director.get_scaled_delay_seconds(
+		animation_director.walk_start_delay_ms,
+		false
+	)
+	if delay <= 0.0:
+		_sequence_running = false
+		_begin_walk_or_no_path()
+		return
+	var timer: SceneTreeTimer = get_tree().create_timer(delay)
+	timer.timeout.connect(_on_sequence_walk_delay_finished)
+
+
+func _on_sequence_walk_delay_finished() -> void:
+	if not _sequence_running:
+		return
+	_sequence_running = false
+	_begin_walk_or_no_path()
 
 
 func walk_step() -> bool:
