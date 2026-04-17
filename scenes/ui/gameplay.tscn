@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://whether_ui_gameplay"]
+[gd_scene load_steps=3 format=3 uid="uid://whether_ui_gameplay"]
 
 [ext_resource type="Script" path="res://scripts/ui/screens/gameplay.gd" id="1_gp"]
+[ext_resource type="Script" path="res://scripts/ui/widgets/card_view.gd" id="2_cv"]
 
 [node name="Gameplay" type="Control"]
 layout_mode = 3
@@ -255,36 +256,42 @@ custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "RAIN"
+script = ExtResource("2_cv")
 
 [node name="SunCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
 custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "SUN"
+script = ExtResource("2_cv")
 
 [node name="FrostCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
 custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "FROST"
+script = ExtResource("2_cv")
 
 [node name="WindCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
 custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "WIND"
+script = ExtResource("2_cv")
 
 [node name="LightningCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
 custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "LIGHT"
+script = ExtResource("2_cv")
 
 [node name="FogCard" type="Button" parent="Margin/VBox/HandScroll/HandRow"]
 custom_minimum_size = Vector2(144, 176)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "FOG"
+script = ExtResource("2_cv")
 
 [node name="BottomStack" type="Control" parent="Margin/VBox"]
 layout_mode = 2
