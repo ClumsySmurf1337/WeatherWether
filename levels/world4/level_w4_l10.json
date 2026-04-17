@@ -1,0 +1,24 @@
+{
+  "id": "w4_l10",
+  "world": 4,
+  "level_number": 10,
+  "display_name": "Twin Gust Passage",
+  "hint_text": "Two gusts clear the fog banks; frost bridges the gap; rain cools the scorch.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10,
+    12, 11,  0,  7, 11,  1, 13,
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [3, 3, 2, 0],
+  "max_moves": 4,
+  "par_moves": 4,
+  "target_difficulty": 7,
+  "min_solution_length": 4,
+  "unique_solution": false
+}
