@@ -1,0 +1,24 @@
+{
+  "id": "w4_l04",
+  "world": 4,
+  "level_number": 4,
+  "display_name": "Scorch Sweep",
+  "hint_text": "Gust clears the fog; rain cools the scorch.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12, 11,  7,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [3, 0],
+  "max_moves": 2,
+  "par_moves": 2,
+  "target_difficulty": 4,
+  "min_solution_length": 2,
+  "unique_solution": false
+}
