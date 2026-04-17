@@ -43,3 +43,9 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 - PR #36 — agent/cursor-lane-3 — WEA-630: add Whiteout levels 21-22
 - PR #35 — agent/cursor-lane-2 — WEA-556: build world select cards
 
+
+## 2026-04-17
+- PR #39 — agent/cursor-lane-3 — WEA-620: add Gale Force levels 21-22
+- PR #38 — agent/cursor-lane-2 — WEA-557: implement level select map
+- PR #37 — agent/cursor-lane-1 — WEA-532: wire GameManager UI + logging
+
