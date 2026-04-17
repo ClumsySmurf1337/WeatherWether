@@ -59,6 +59,8 @@ func load_level(level: LevelData) -> void:
 
 
 func start_planning() -> void:
+	if grid_manager != null:
+		grid_manager.set_queue_locked(false)
 	set_state(GameState.PLANNING)
 
 
@@ -83,6 +85,15 @@ func undo_last_card() -> bool:
 	return ok
 
 
+func unqueue_card_at(index: int) -> bool:
+	if current_state != GameState.PLANNING:
+		return false
+	var ok: bool = grid_manager.unqueue_at(index)
+	if ok:
+		EventBus.card_unqueued.emit(index)
+	return ok
+
+
 func clear_queue() -> void:
 	if current_state != GameState.PLANNING:
 		return
@@ -97,6 +108,7 @@ func play_sequence() -> void:
 		return
 	_moves_used = grid_manager.queue.size()
 	set_state(GameState.RESOLVING)
+	grid_manager.set_queue_locked(true)
 	EventBus.sequence_started.emit()
 
 
@@ -162,6 +174,8 @@ func handle_loss(cause: int) -> void:
 
 
 func handle_no_path() -> void:
+	if grid_manager != null:
+		grid_manager.set_queue_locked(false)
 	set_state(GameState.PLANNING)
 	EventBus.no_path_forward.emit()
 
