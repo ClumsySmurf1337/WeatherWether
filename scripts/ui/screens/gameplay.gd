@@ -37,6 +37,7 @@ signal card_selected(card_key: StringName)
 @onready var _background: ColorRect = $Background
 
 var _sequence_playing: bool = false
+var _card_views: Dictionary = {}
 
 
 func _ready() -> void:
@@ -128,20 +129,20 @@ func _update_sequence_state(is_playing: bool) -> void:
 
 func _bind_card_buttons() -> void:
 	var card_defs := [
-		{"node": "RainCard", "label": "RAIN", "key": &"rain", "color": UITheme.card_rain},
-		{"node": "SunCard", "label": "SUN", "key": &"sun", "color": UITheme.card_sun},
-		{"node": "FrostCard", "label": "FROST", "key": &"frost", "color": UITheme.card_frost},
-		{"node": "WindCard", "label": "WIND", "key": &"wind", "color": UITheme.card_wind},
-		{"node": "LightningCard", "label": "LIGHT", "key": &"lightning", "color": UITheme.card_lightning},
-		{"node": "FogCard", "label": "FOG", "key": &"fog", "color": UITheme.card_fog},
+		{"node": "RainCard", "label": "RAIN", "key": &"rain", "color": UITheme.card_rain, "description": "Rain wets tiles and clears fog."},
+		{"node": "SunCard", "label": "SUN", "key": &"sun", "color": UITheme.card_sun, "description": "Sun dries wet tiles and evaporates water."},
+		{"node": "FrostCard", "label": "FROST", "key": &"frost", "color": UITheme.card_frost, "description": "Frost freezes wet tiles into ice."},
+		{"node": "WindCard", "label": "WIND", "key": &"wind", "color": UITheme.card_wind, "description": "Wind clears fog and steam in a cross."},
+		{"node": "LightningCard", "label": "LIGHT", "key": &"lightning", "color": UITheme.card_lightning, "description": "Lightning chains through conductive tiles."},
+		{"node": "FogCard", "label": "FOG", "key": &"fog", "color": UITheme.card_fog, "description": "Fog blankets a 3×3 area."},
 	]
 	for entry: Dictionary in card_defs:
-		var button: Button = _hand_row.get_node_or_null(entry["node"]) as Button
-		if button == null:
+		var card_view: CardView = _hand_row.get_node_or_null(entry["node"]) as CardView
+		if card_view == null:
 			continue
-		button.text = entry["label"]
-		_style_card_button(button, entry["color"])
-		button.pressed.connect(_on_card_pressed.bind(entry["key"]))
+		card_view.configure(entry["key"], entry["label"], entry["color"], entry["description"])
+		card_view.pressed.connect(_on_card_pressed.bind(entry["key"]))
+		_card_views[entry["key"]] = card_view
 
 
 func _style_queue_slots() -> void:
@@ -164,34 +165,6 @@ func _style_queue_slots() -> void:
 		var label: Label = panel.get_node_or_null("Label") as Label
 		if label != null:
 			UITheme.configure_numbers_label(label)
-
-
-func _style_card_button(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = color
-	normal.border_color = UITheme.border_frame
-	normal.border_width_left = 2
-	normal.border_width_top = 2
-	normal.border_width_right = 2
-	normal.border_width_bottom = 2
-	normal.corner_radius_top_left = 8
-	normal.corner_radius_top_right = 8
-	normal.corner_radius_bottom_right = 8
-	normal.corner_radius_bottom_left = 8
-	normal.content_margin_left = 8.0
-	normal.content_margin_right = 8.0
-	normal.content_margin_top = 8.0
-	normal.content_margin_bottom = 8.0
-	button.add_theme_stylebox_override(&"normal", normal)
-	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
-	hover.bg_color = color.lightened(0.05)
-	button.add_theme_stylebox_override(&"hover", hover)
-	var pressed: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
-	pressed.bg_color = color.darkened(0.05)
-	button.add_theme_stylebox_override(&"pressed", pressed)
-	button.add_theme_color_override(&"font_color", UITheme.bg_deep)
-	button.add_theme_color_override(&"font_hover_color", UITheme.bg_deep)
-	button.add_theme_color_override(&"font_pressed_color", UITheme.bg_deep)
 
 
 func _apply_panel_style(panel: PanelContainer, fill: Color) -> void:
@@ -247,7 +220,27 @@ func _on_speed_pressed() -> void:
 
 
 func _on_card_pressed(card_key: StringName) -> void:
+	_set_selected_card(card_key)
 	card_selected.emit(card_key)
+
+
+func set_card_exhausted(card_key: StringName, exhausted: bool) -> void:
+	var card: CardView = _card_views.get(card_key, null) as CardView
+	if card == null:
+		return
+	card.set_exhausted(exhausted)
+
+
+func _set_selected_card(card_key: StringName) -> void:
+	for key: Variant in _card_views.keys():
+		var card: CardView = _card_views[key] as CardView
+		if card == null:
+			continue
+		if key == card_key:
+			if not card.disabled:
+				card.toggle_selected()
+		else:
+			card.set_selected(false)
 
 
 func _open_pause() -> void:
