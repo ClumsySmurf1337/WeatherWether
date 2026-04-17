@@ -1,0 +1,24 @@
+{
+  "id": "w4_l03",
+  "world": 4,
+  "level_number": 3,
+  "display_name": "Steam Break",
+  "hint_text": "Blow off the steam, then freeze the gap.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  8,  1,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [3, 2],
+  "max_moves": 2,
+  "par_moves": 2,
+  "target_difficulty": 3,
+  "min_solution_length": 2,
+  "unique_solution": false
+}

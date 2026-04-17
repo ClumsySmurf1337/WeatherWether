@@ -1,0 +1,24 @@
+{
+  "id": "w4_l01",
+  "world": 4,
+  "level_number": 1,
+  "display_name": "First Gust",
+  "hint_text": "A single gust clears the fog.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12, 11,  1,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [3],
+  "max_moves": 1,
+  "par_moves": 1,
+  "target_difficulty": 2,
+  "min_solution_length": 1,
+  "unique_solution": false
+}
