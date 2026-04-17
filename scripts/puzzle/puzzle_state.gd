@@ -15,12 +15,12 @@ func _init(p_terrain: Array, p_remaining_cards: Array[int], p_moves: Array) -> v
 
 
 func hash_key() -> String:
-	var parts: PackedStringArray = PackedStringArray()
+	var terrain_parts: PackedStringArray = PackedStringArray()
 	for t: int in terrain:
-		parts.append(str(t))
-	parts.append("|")
+		terrain_parts.append(str(t))
 	var sorted_cards: Array[int] = remaining_cards.duplicate()
 	sorted_cards.sort()
+	var card_parts: PackedStringArray = PackedStringArray()
 	for c: int in sorted_cards:
-		parts.append(str(c))
-	return "".join(parts)
+		card_parts.append(str(c))
+	return "%s|%s" % [",".join(terrain_parts), ",".join(card_parts)]

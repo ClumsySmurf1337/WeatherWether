@@ -160,6 +160,15 @@ func test_different_states_produce_different_hashes() -> void:
 	assert_ne(state_a.hash_key(), state_b.hash_key())
 
 
+func test_hash_distinguishes_two_digit_values() -> void:
+	var terrain_a: Array = [T.DRY_GRASS, T.FOG_COVERED]
+	var terrain_b: Array = [T.FOG_COVERED, T.DRY_GRASS]
+	var cards: Array[int] = [C.RAIN]
+	var state_a := PuzzleState.new(terrain_a, cards, [])
+	var state_b := PuzzleState.new(terrain_b, cards, [])
+	assert_ne(state_a.hash_key(), state_b.hash_key())
+
+
 func test_identical_states_produce_same_hash() -> void:
 	var terrain: Array = [T.DRY_GRASS, T.WATER, T.ICE]
 	var cards: Array[int] = [C.FROST, C.RAIN]
