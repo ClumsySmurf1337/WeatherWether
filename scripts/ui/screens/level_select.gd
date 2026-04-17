@@ -14,12 +14,22 @@ signal level_selected(world: int, level: int)
 @onready var _background: ColorRect = $Background
 @onready var _header_bg: ColorRect = $Margin/VBox/HeaderBar/HeaderBg
 @onready var _biome_bg: ColorRect = %BiomeBg
+@onready var _biome_texture: TextureRect = %BiomeTexture
 
 const NODE_RADIUS: float = 40.0
+const NODE_DIAMETER: float = 80.0
 const NODE_FONT_SIZE: int = 28
+const STAR_FONT_SIZE: int = 16
+const STAR_LABEL_HEIGHT: float = 24.0
+const STAR_LABEL_MARGIN: float = 6.0
 const PULSE_DURATION: float = 1.2
 const PATH_WIDTH: float = 3.0
 const SCROLL_HEIGHT: float = 3200.0
+const BACKGROUND_TEXTURE_PATH: String = "res://assets/sprites/ui/world_bg_w%d.png"
+const NODE_COMPLETE_TEXTURE_PATH: String = "res://assets/sprites/ui/node_complete.png"
+const NODE_CURRENT_TEXTURE_PATH: String = "res://assets/sprites/ui/node_current.png"
+const NODE_LOCKED_TEXTURE_PATH: String = "res://assets/sprites/ui/node_locked.png"
+const PATH_DASH_TEXTURE_PATH: String = "res://assets/sprites/ui/path_dash.png"
 
 var _world_id: int = 1
 var _world_name: String = "DOWNPOUR"
@@ -28,6 +38,11 @@ var _level_stars: Dictionary = {}
 var _path_data: Array = []
 var _node_controls: Array[Control] = []
 var _tween: Tween = null
+var _node_texture_complete: Texture2D = null
+var _node_texture_current: Texture2D = null
+var _node_texture_locked: Texture2D = null
+var _path_dash_texture: Texture2D = null
+var _drag_active: bool = false
 
 
 func _ready() -> void:
@@ -38,10 +53,14 @@ func _ready() -> void:
 	header_color.a = 0.85
 	_header_bg.color = header_color
 	_biome_bg.color = UITheme.bg_panel_alt
+	_biome_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	_biome_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.configure_title_label(_title_label)
 	UITheme.configure_body_label(_subtitle_label)
 	_back_button.pressed.connect(_on_back_pressed)
+	_scroll.gui_input.connect(_on_scroll_gui_input)
+	_load_assets()
 	configure(_world_id, _world_name, _highest_unlocked, _level_stars)
 
 
@@ -60,9 +79,32 @@ func configure(world: int, world_name: String, highest_unlocked: int, level_star
 		if val is int:
 			total_stars += val as int
 	_subtitle_label.text = "%d/22 levels • %d stars" % [completed, total_stars]
+	_load_biome_background()
 	_load_path_data()
 	_build_nodes()
 	call_deferred("_scroll_to_current")
+
+
+func _load_assets() -> void:
+	_node_texture_complete = _load_texture(NODE_COMPLETE_TEXTURE_PATH)
+	_node_texture_current = _load_texture(NODE_CURRENT_TEXTURE_PATH)
+	_node_texture_locked = _load_texture(NODE_LOCKED_TEXTURE_PATH)
+	_path_dash_texture = _load_texture(PATH_DASH_TEXTURE_PATH)
+
+
+func _load_biome_background() -> void:
+	var background_path: String = BACKGROUND_TEXTURE_PATH % _world_id
+	var texture: Texture2D = _load_texture(background_path)
+	_biome_texture.texture = texture
+	_biome_texture.visible = texture != null
+	_biome_bg.custom_minimum_size = Vector2(0, SCROLL_HEIGHT)
+
+
+func _load_texture(path: String) -> Texture2D:
+	if not ResourceLoader.exists(path):
+		return null
+	var texture: Texture2D = load(path) as Texture2D
+	return texture
 
 
 func _load_path_data() -> void:
@@ -125,16 +167,56 @@ func _build_nodes() -> void:
 
 
 func _create_level_node(level: int, px: float, py: float) -> void:
+	var container := Control.new()
+	container.custom_minimum_size = Vector2(NODE_DIAMETER, NODE_DIAMETER + STAR_LABEL_MARGIN + STAR_LABEL_HEIGHT)
+	container.size = container.custom_minimum_size
+	container.position = Vector2(px - NODE_RADIUS, py - NODE_RADIUS)
+	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	var node: Button = Button.new()
-	node.custom_minimum_size = Vector2(NODE_RADIUS * 2.0, NODE_RADIUS * 2.0)
-	node.position = Vector2(px - NODE_RADIUS, py - NODE_RADIUS)
+	node.custom_minimum_size = Vector2(NODE_DIAMETER, NODE_DIAMETER)
+	node.size = node.custom_minimum_size
+	node.position = Vector2.ZERO
 	node.mouse_filter = Control.MOUSE_FILTER_STOP
+	node.focus_mode = Control.FOCUS_NONE
+	node.flat = true
+
+	var icon := TextureRect.new()
+	icon.anchor_right = 1.0
+	icon.anchor_bottom = 1.0
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_SCALE
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	node.add_child(icon)
+
+	var label := Label.new()
+	label.anchor_right = 1.0
+	label.anchor_bottom = 1.0
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	UITheme.apply_numbers_font(label)
+	label.add_theme_font_size_override(&"font_size", NODE_FONT_SIZE)
+	node.add_child(label)
+
+	var star_label := Label.new()
+	star_label.position = Vector2(0.0, NODE_DIAMETER + STAR_LABEL_MARGIN)
+	star_label.custom_minimum_size = Vector2(NODE_DIAMETER, STAR_LABEL_HEIGHT)
+	star_label.size = star_label.custom_minimum_size
+	star_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	star_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	star_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	star_label.add_theme_color_override(&"font_color", UITheme.text_title)
+	star_label.add_theme_font_size_override(&"font_size", STAR_FONT_SIZE)
+	UITheme.apply_body_font(star_label)
 
 	var state: int = _get_node_state(level)
-	_apply_node_style(node, state, level)
+	_apply_node_style(node, icon, label, star_label, state, level)
 
 	node.pressed.connect(_on_level_node_pressed.bind(level))
-	_path_container.add_child(node)
+	container.add_child(node)
+	container.add_child(star_label)
+	_path_container.add_child(container)
 	_node_controls.append(node)
 
 
@@ -147,7 +229,52 @@ func _get_node_state(level: int) -> int:
 		return 2  # locked
 
 
-func _apply_node_style(node: Button, state: int, level: int) -> void:
+func _apply_node_style(node: Button, icon: TextureRect, label: Label, star_label: Label, state: int, level: int) -> void:
+	var texture: Texture2D = null
+	match state:
+		0:
+			texture = _node_texture_complete
+		1:
+			texture = _node_texture_current
+		2:
+			texture = _node_texture_locked
+
+	if texture != null:
+		node.flat = true
+		icon.texture = texture
+		icon.visible = true
+	else:
+		node.flat = false
+		icon.visible = false
+
+	match state:
+		0:  # completed
+			label.text = str(level)
+			label.visible = true
+			label.add_theme_color_override(&"font_color", UITheme.bg_deep)
+			star_label.text = _star_text_for_level(level)
+			star_label.visible = true
+			node.tooltip_text = _star_text_for_level(level)
+		1:  # current
+			label.text = str(level)
+			label.visible = true
+			label.add_theme_color_override(&"font_color", UITheme.bg_deep)
+			star_label.visible = false
+			node.tooltip_text = ""
+		2:  # locked
+			label.text = "🔒"
+			label.visible = true
+			label.add_theme_color_override(&"font_color", UITheme.text_muted)
+			star_label.visible = false
+			node.tooltip_text = "Beat level %d to unlock" % (level - 1)
+
+	if texture != null:
+		node.text = ""
+		if state == 2:
+			label.visible = false
+			label.text = ""
+		return
+
 	var stylebox := StyleBoxFlat.new()
 	stylebox.corner_radius_top_left = int(NODE_RADIUS)
 	stylebox.corner_radius_top_right = int(NODE_RADIUS)
@@ -165,8 +292,7 @@ func _apply_node_style(node: Button, state: int, level: int) -> void:
 			node.add_theme_color_override(&"font_color", UITheme.bg_deep)
 			node.add_theme_color_override(&"font_hover_color", UITheme.bg_deep)
 			node.add_theme_color_override(&"font_pressed_color", UITheme.bg_deep)
-			node.text = str(level)
-			node.tooltip_text = _star_text_for_level(level)
+			node.text = ""
 		1:  # current
 			stylebox.bg_color = UITheme.accent_primary
 			stylebox.border_color = UITheme.text_title
@@ -177,7 +303,7 @@ func _apply_node_style(node: Button, state: int, level: int) -> void:
 			node.add_theme_color_override(&"font_color", UITheme.bg_deep)
 			node.add_theme_color_override(&"font_hover_color", UITheme.bg_deep)
 			node.add_theme_color_override(&"font_pressed_color", UITheme.bg_deep)
-			node.text = str(level)
+			node.text = ""
 		2:  # locked
 			stylebox.bg_color = UITheme.bg_panel
 			stylebox.border_color = UITheme.border_frame
@@ -188,7 +314,7 @@ func _apply_node_style(node: Button, state: int, level: int) -> void:
 			node.add_theme_color_override(&"font_color", UITheme.text_muted)
 			node.add_theme_color_override(&"font_hover_color", UITheme.text_muted)
 			node.add_theme_color_override(&"font_pressed_color", UITheme.text_muted)
-			node.text = "🔒"
+			node.text = ""
 
 	node.add_theme_font_size_override(&"font_size", NODE_FONT_SIZE)
 	node.add_theme_stylebox_override(&"normal", stylebox)
@@ -221,6 +347,9 @@ func _create_path_line(positions: Array[Vector2]) -> void:
 	line.width = PATH_WIDTH
 	line.default_color = UITheme.border_frame
 	line.antialiased = true
+	if _path_dash_texture != null:
+		line.texture = _path_dash_texture
+		line.texture_mode = Line2D.LINE_TEXTURE_TILE
 	for pos: Vector2 in positions:
 		line.add_point(pos)
 	_path_container.add_child(line)
@@ -246,7 +375,7 @@ func _scroll_to_current() -> void:
 	var entry: Dictionary = _path_data[current_idx] as Dictionary
 	var ny: float = float(entry.get("y", 0.5))
 	var target_y: float = ny * SCROLL_HEIGHT - _scroll.size.y * 0.5
-	_scroll.scroll_vertical = int(clampf(target_y, 0.0, SCROLL_HEIGHT - _scroll.size.y))
+	_scroll.scroll_vertical = int(clampf(target_y, 0.0, maxf(SCROLL_HEIGHT - _scroll.size.y, 0.0)))
 
 
 func _on_level_node_pressed(level: int) -> void:
@@ -254,6 +383,22 @@ func _on_level_node_pressed(level: int) -> void:
 		_shake_locked_node(level)
 		return
 	level_selected.emit(_world_id, level)
+
+
+func _on_scroll_gui_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		_drag_active = touch.pressed
+	elif event is InputEventScreenDrag:
+		var drag := event as InputEventScreenDrag
+		_scroll.scroll_vertical = int(clampf(_scroll.scroll_vertical - drag.relative.y, 0.0, maxf(SCROLL_HEIGHT - _scroll.size.y, 0.0)))
+	elif event is InputEventMouseButton:
+		var mouse_button := event as InputEventMouseButton
+		if mouse_button.button_index == MOUSE_BUTTON_LEFT:
+			_drag_active = mouse_button.pressed
+	elif event is InputEventMouseMotion and _drag_active:
+		var motion := event as InputEventMouseMotion
+		_scroll.scroll_vertical = int(clampf(_scroll.scroll_vertical - motion.relative.y, 0.0, maxf(SCROLL_HEIGHT - _scroll.size.y, 0.0)))
 
 
 func _shake_locked_node(level: int) -> void:
