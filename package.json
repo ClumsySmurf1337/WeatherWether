@@ -49,6 +49,8 @@
     "linear:pm-doc-intake": "tsx tools/linear/pm-doc-intake.ts",
     "linear:label-backfill": "tsx tools/linear/backfill-role-labels.ts",
     "linear:pm-prepare": "npm run linear:bootstrap -- --apply && npm run linear:label-backfill -- --apply && npm run linear:pm-organize -- --apply && npm run linear:pm-assignments",
+    "linear:pm-handoff": "npm run linear:pm-doc-intake && npm run linear:pm-organize && npm run linear:pm-assignments",
+    "linear:pm-handoff:apply": "npm run linear:pm-doc-intake -- --apply && npm run linear:pm-organize -- --apply && npm run linear:pm-assignments",
     "linear:kickoff-first": "tsx tools/linear/kickoff-first-issue.ts",
     "linear:kickoff-lanes": "tsx tools/linear/kickoff-lanes.ts",
     "linear:pm-feed-todo": "tsx tools/linear/pm-feed-todo.ts",

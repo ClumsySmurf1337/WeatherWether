@@ -27,11 +27,17 @@ This repo combines **scripted** Linear operations with **agent** behavior modele
 | `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` | Promote/claim the first role-matching issue (Todo first, else Backlog) into **In Progress** for build testing. |
 | `npm run linear:kickoff-lanes -- --apply` | Kick off one issue per default build lane (**gameplay/ui/level**) from Todo or Backlog into **In Progress**. |
 | `npm run linear:pm-prepare` | One command: bootstrap labels/projects/states + role-label backfill + PM organize apply + assignment file generation. |
+| `npm run linear:pm-handoff` | **Doc-driven + board preview + assignments:** `pm-doc-intake` (writes `assignments/generated/pm-doc-intake-dry-run.md` from GDD/UI/ASSET/SPEC_DIFF/BLUEPRINT candidates) → **`pm-organize`** (dry-run) → **`pm-assignments`**. Requires `.env.local` for organize + assignments. |
+| `npm run linear:pm-handoff:apply` | Same chain with **`--apply`** on doc-intake and organize (creates missing Backlog issues; updates priorities/assignees), then regenerates assignment markdown. |
 
 **Auto-assign toggle:** `LINEAR_PM_AUTO_ASSIGN=false` disables assignee updates (priorities still apply unless `--assign-only`).
 
 **Assignee IDs:** `LINEAR_ASSIGNEE_GAMEPLAY_ID`, `LINEAR_ASSIGNEE_UI_ID`, … or `LINEAR_DEFAULT_ASSIGNEE_ID` — see `docs/LINEAR_ENV_VARS.md`.
 If those are unset, scripts fall back to the API-key user by default (`LINEAR_FALLBACK_ASSIGNEE_TO_VIEWER=true`).
+
+## Simple / daily flows vs PM handoff
+
+- **`npm run workflow:simple`** / **`npm run daily:full:apply:lanes`** (Tasks: *Daily apply:lanes*) run **`linear:producer -- --apply`** (when using apply variants), **`validate.ps1`**, then **`linear:pm-assignments`** + **`worktrees:sync`** + lane worktree prep — **they do not** run **`linear:pm-organize`** or **`linear:pm-doc-intake`**. Use **`npm run linear:pm-handoff`** (or **`linear:pm-prepare`** for full bootstrap) when you want board phase/priority alignment and fresh doc-grounded drafts before lanes pick up work.
 
 ## Agent workflow (producer)
 

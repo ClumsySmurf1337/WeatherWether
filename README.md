@@ -63,8 +63,10 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `npm run lane:next-cycle` — reset each **`wt-agent-cursor-lane-*`** to a new **`agent/cursor-lane-N`** branch from **main** after merges
 - `npm run qa:repair-merge` — merge `origin/main` in current repo/worktree; on conflict opens **Cursor CLI** with the QA merge prompt (see `.cursor/commands/qa-repair-merge.md`)
 - `npm run linear:pm-prepare` — one command PM pass: bootstrap labels/states/projects, role-label backfill, phase-priority organize apply, and assignment file generation
+- `npm run linear:pm-handoff` — **pm-doc-intake** (dry-run markdown from GDD/UI/ASSET/SPEC_DIFF/BLUEPRINT) → **pm-organize** (dry-run) → **pm-assignments**; requires `.env.local` for the Linear API steps
+- `npm run linear:pm-handoff:apply` — same with **`--apply`** on doc-intake + organize (creates Backlog issues + updates priorities/assignees), then regenerates assignments
 - `npm run linear:pm-organize -- --apply` / `npm run linear:pm-feed-todo -- --apply` / `npm run linear:pm-assignments` — dependency-aware ordering + Todo queue fill + DeedWise-style per-role assignment markdown
-- `npm run linear:pm-doc-intake` — dry-run PM issue drafts from **GDD / UI_SCREENS / ASSET_MANIFEST / SPEC_DIFF** → `assignments/generated/pm-doc-intake-dry-run.md`; add `-- --apply` to create missing Backlog issues in Linear
+- `npm run linear:pm-doc-intake` — dry-run PM issue drafts from **GDD / UI_SCREENS / ASSET_MANIFEST / SPEC_DIFF** (+ **BLUEPRINT_GAP_AUDIT** gap umbrella in `pm-doc-issue-candidates.ts`) → `assignments/generated/pm-doc-intake-dry-run.md`; add `-- --apply` to create missing Backlog issues in Linear
 - `npm run linear:plan-deps` — generate dependency + file-scope plan for non-overlapping lanes
 - `npm run linear:apply-deps -- --apply` — write real Linear `blocks` relations from dependency heuristics
 - `npm run linear:kickoff-first -- --role=gameplay-programmer --apply` — force-start first role issue (Todo first, otherwise Backlog) for build testing

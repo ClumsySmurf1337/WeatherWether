@@ -138,5 +138,19 @@ export const PM_DOC_ISSUE_CANDIDATES: PmDocIssueCandidate[] = [
       "Hint entry points match UI spec; free tier per GDD/SPEC_DIFF",
       "No soft-lock board states without recovery path"
     ]
+  },
+  {
+    id: "blueprint-remaining-gaps",
+    title: "[CORE] Close prioritized implementation gaps (BLUEPRINT_GAP_AUDIT — export, LDtk, validation, CI hygiene)",
+    labels: ["Core-Engine"],
+    priority: 2,
+    docPath: "docs/BLUEPRINT_GAP_AUDIT.md",
+    sectionHeadingPrefix: "Remaining gaps (prioritized)",
+    deliverables:
+      "Work through **BLUEPRINT_GAP_AUDIT.md** § *Remaining gaps*: Windows/Steam export + CI, LDtk/level loader, solver-backed validation, branch protection / PR hygiene, optional PR↔Linear and visual QA. Split into child issues per bullet when scope is large.",
+    acceptance: [
+      "Each numbered gap has a merged fix, an open owned issue, or an explicit deferral with producer sign-off",
+      "`pwsh tools/tasks/validate.ps1` stays green; CI expectations unchanged unless intentionally updated"
+    ]
   }
 ];
