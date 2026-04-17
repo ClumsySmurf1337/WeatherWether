@@ -53,6 +53,10 @@ Write-Host "  Preflight: ship when dirty or ahead of origin/main (validate + Lin
 Write-Host ""
 Test-GhCli
 
+$qaRunStart = Get-Date
+$qaPreflightShipInvocations = 0
+$qaMergedPrLines = [System.Collections.Generic.List[string]]::new()
+
 if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
     Write-Host "=== Pre-flight: lane worktrees that need ship (lanes $($PreflightShipLaneIndexes -join ', ')) ===`n" -ForegroundColor Cyan
     $rolesForMarker = @("gameplay-programmer", "ui-developer", "level-designer")
@@ -116,6 +120,7 @@ if (-not $SkipPreflightShip -and $PreflightShipLaneIndexes.Count -gt 0) {
             $st = Get-LaneWorktreeShipState -RepoPath $wtPath
         }
         Write-Host "Lane $laneIdx : shipping — uncommitted=$($st.HasUncommitted); ahead-of-main=$($st.CommitsAheadOfMain); vs-tracking=$($st.UnpushedCount); branch=$($st.Branch)" -ForegroundColor Yellow
+        $qaPreflightShipInvocations += 1
         & "$repoRoot\tools\tasks\lane-ship.ps1" -LaneIndex $laneIdx -MainRepoRoot $mainResolved -AgentRoot $AgentRoot
         if ($LASTEXITCODE -ne 0) {
             throw "Pre-flight lane-ship failed for lane $laneIdx (exit $LASTEXITCODE). Fix the worktree, then re-run npm run qa:agent."
@@ -151,6 +156,19 @@ if ($lanePrs.Count -eq 0) {
     else {
         Write-Host "Tip: if work is still only local, check lane worktrees and .weather-lane-issue.txt (Linear id for ship)." -ForegroundColor DarkGray
     }
+    $elapsed = (Get-Date) - $qaRunStart
+    Write-Host ""
+    Write-Host "--- QA run summary ---" -ForegroundColor Cyan
+    Write-Host "  Wall time:   $($elapsed.ToString('mm\:ss'))" -ForegroundColor Gray
+    Write-Host "  Lane PRs:    0 open (nothing merged this run)" -ForegroundColor Gray
+    if ($SkipPreflightShip) {
+        Write-Host "  Preflight:   skipped (-SkipPreflightShip)" -ForegroundColor Gray
+    }
+    else {
+        Write-Host "  Preflight:   $qaPreflightShipInvocations lane-ship run(s) (lanes $($PreflightShipLaneIndexes -join ', '))" -ForegroundColor Gray
+    }
+    Write-Host "  Next:        npm run daily:full:apply:lanes (or open a lane PR, then re-run npm run qa:agent)" -ForegroundColor Gray
+    Write-Host ""
     exit 0
 }
 
@@ -250,6 +268,7 @@ foreach ($p in $lanePrs) {
         throw "qa-pr-handoff-local failed for PR #$n (exit $LASTEXITCODE). Fix and re-run; remaining PRs were not processed."
     }
     if (-not $NoMerge) {
+        $qaMergedPrLines.Add("PR #$n  $($p.headRefName)  $($p.title)")
         Set-Location $repoRoot
         # main already synced in qa-pr-handoff-local after gh pr merge; changelog only here
         $appended = Append-ChangelogLaneEntry -PrNumber $n -HeadRef $p.headRefName -Title $p.title
@@ -303,20 +322,58 @@ if ($ReconcileLinearFromMergedLanePrs) {
     & "$repoRoot\tools\tasks\linear-complete-from-merged-prs.ps1" -WithinDays $ReconcileLinearMergedWithinDays
 }
 
+$qaElapsed = (Get-Date) - $qaRunStart
+$changelogDidPush = ($changelogPushPrNumbers.Count -gt 0 -and -not $SkipChangelogPush)
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "  QA AGENT FINISHED" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
+Write-Host "--- QA run summary ---" -ForegroundColor Cyan
+Write-Host "  Wall time:     $($qaElapsed.ToString('mm\:ss'))" -ForegroundColor Gray
+if ($SkipPreflightShip) {
+    Write-Host "  Preflight:     skipped (-SkipPreflightShip)" -ForegroundColor Gray
+}
+else {
+    Write-Host "  Preflight:     $qaPreflightShipInvocations lane-ship run(s) (lanes $($PreflightShipLaneIndexes -join ', '))" -ForegroundColor Gray
+}
+Write-Host "  Batch PRs:     $($lanePrs.Count) open lane PR(s); $($qaMergedPrLines.Count) merged (mode: $MergeMode; -NoMerge: $NoMerge)" -ForegroundColor Gray
+foreach ($line in $qaMergedPrLines) {
+    Write-Host "    merged — $line" -ForegroundColor DarkGreen
+}
+if ($qaMergedPrLines.Count -eq 0 -and $NoMerge -and $lanePrs.Count -gt 0) {
+    Write-Host "    (no merges — -NoMerge)" -ForegroundColor DarkGray
+}
+if ($changelogDidPush) {
+    $prBits = (@($changelogPushPrNumbers | Sort-Object -Unique) | ForEach-Object { "PR #$_" }) -join ", "
+    Write-Host "  Changelog:     committed + pushed — $prBits → docs/CHANGELOG_LANES.md" -ForegroundColor Gray
+}
+elseif ($changelogPushPrNumbers.Count -gt 0) {
+    Write-Host "  Changelog:     entries staged on disk; -SkipChangelogPush (push manually)" -ForegroundColor Yellow
+}
+else {
+    Write-Host "  Changelog:     no new lane-merge lines this run" -ForegroundColor Gray
+}
+if ($SyncWorktreesAfter) {
+    Write-Host "  Worktrees:     npm run worktrees:sync — ran" -ForegroundColor Gray
+}
+else {
+    Write-Host "  Worktrees:     sync skipped" -ForegroundColor Gray
+}
+if ($SkipResetLaneBranches) {
+    Write-Host "  Lane reset:    skipped (-SkipResetLaneBranches); run: npm run lane:next-cycle" -ForegroundColor Yellow
+}
+else {
+    Write-Host "  Lane reset:    lane-worktrees-reset-for-next-cycle — ran" -ForegroundColor Gray
+}
+if ($ReconcileLinearFromMergedLanePrs) {
+    Write-Host "  Linear reconcile: linear-complete-from-merged-prs — ran (last $ReconcileLinearMergedWithinDays days)" -ForegroundColor Gray
+}
+Write-Host ""
 Write-Host "Next cycle: run daily full (lanes) again so agents pick up new work:" -ForegroundColor Cyan
 Write-Host "  npm run daily:full:apply:lanes" -ForegroundColor White
 Write-Host "  (or npm run daily:full:apply + your lane tasks)`n" -ForegroundColor DarkGray
-if ($changelogPushPrNumbers.Count -gt 0 -and -not $SkipChangelogPush) {
-    Write-Host "  Lane merge log: docs/CHANGELOG_LANES.md was committed and pushed when new lines were added this run." -ForegroundColor DarkGray
-}
-elseif ($changelogPushPrNumbers.Count -gt 0) {
-    Write-Host "  Lane merge log: commit docs/CHANGELOG_LANES.md on main (you used -SkipChangelogPush)." -ForegroundColor DarkGray
-}
 Write-Host ""
 if ($SkipResetLaneBranches) {
     Write-Host "You skipped lane branch reset. To reset lane worktrees to fresh agent/cursor-lane-N from main:" -ForegroundColor Yellow
