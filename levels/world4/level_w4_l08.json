@@ -1,0 +1,24 @@
+{
+  "id": "w4_l08",
+  "world": 4,
+  "level_number": 8,
+  "display_name": "Steamline Veil",
+  "hint_text": "Blow off the steam, freeze the gap, then sun clears the fog.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  8, 11,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [3, 2, 1],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 5,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
