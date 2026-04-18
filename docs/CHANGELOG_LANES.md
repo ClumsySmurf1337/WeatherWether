@@ -61,6 +61,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 
 
 ## 2026-04-18
+- PR #54 — agent/cursor-lane-3 — WEA-621: W5 thunderstorm levels 1-5
+- PR #55 — agent/cursor-lane-2 — WEA-639: wire undo restart hint
 - PR #53 — agent/cursor-lane-3 — WEA-619: add W4 levels 16-20
 - PR #52 — agent/cursor-lane-2 — WEA-633: verify display profile settings
 
