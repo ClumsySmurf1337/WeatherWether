@@ -61,6 +61,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 
 
 ## 2026-04-18
+- PR #61 — agent/cursor-lane-3 — WEA-604: add W1-B4 levels 16-20
+- PR #62 — agent/cursor-lane-2 — WEA-562: add character view widget
 - PR #59 — agent/cursor-lane-3 — WEA-603: add Downpour levels 11-15
 - PR #60 — agent/cursor-lane-2 — WEA-635: wire world select flow
 - PR #57 — agent/cursor-lane-3 — WEA-602: add Downpour levels 6-10
