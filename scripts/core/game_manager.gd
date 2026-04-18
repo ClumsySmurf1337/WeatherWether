@@ -136,9 +136,9 @@ func _begin_walk_or_no_path() -> void:
 	EventBus.sequence_finished.emit()
 	if current_level == null:
 		return
-	var walk_path: Array[Vector2i] = Pathfinder.find_path(
-		grid_manager.terrain, grid_manager.width, grid_manager.height,
-		current_level.start_position, current_level.goal_positions[0]
+	var walk_path: Array[Vector2i] = _find_walk_path(
+		current_level.start_position,
+		current_level.goal_positions
 	)
 	if walk_path.is_empty():
 		handle_no_path()
@@ -360,6 +360,24 @@ func _show_level_failed_modal(cause: int) -> void:
 	var level_failed: LevelFailedScreen = modal as LevelFailedScreen
 	if level_failed != null:
 		level_failed.configure(cause)
+
+
+func _find_walk_path(start: Vector2i, goals: Array[Vector2i]) -> Array[Vector2i]:
+	if grid_manager == null or goals.is_empty():
+		return []
+	var best_path: Array[Vector2i] = []
+	var best_len: int = 0
+	for goal: Vector2i in goals:
+		var path: Array[Vector2i] = Pathfinder.find_path(
+			grid_manager.terrain, grid_manager.width, grid_manager.height,
+			start, goal
+		)
+		if path.is_empty():
+			continue
+		if best_path.is_empty() or path.size() < best_len:
+			best_path = path
+			best_len = path.size()
+	return best_path
 
 
 func _get_active_ui_screen() -> Control:
