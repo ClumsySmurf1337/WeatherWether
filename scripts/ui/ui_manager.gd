@@ -13,6 +13,7 @@ const SCENE_LEVEL_COMPLETE: String = "res://scenes/ui/level_complete.tscn"
 const SCENE_LEVEL_FAILED: String = "res://scenes/ui/level_failed.tscn"
 const SCENE_NO_PATH: String = "res://scenes/ui/no_path.tscn"
 const SCENE_PAUSE: String = "res://scenes/ui/pause.tscn"
+const SCENE_HINT_POPUP: String = "res://scenes/ui/hint_popup.tscn"
 
 const SAVE_DEFAULT_PATH: String = "user://save_default.json"
 
@@ -29,6 +30,7 @@ var _active_modal: Control = null
 var _transitioning: bool = false
 var _transition_tween: Tween = null
 var _modal_tween: Tween = null
+var _last_committed_queue: Array = []
 
 
 func _ready() -> void:
@@ -204,6 +206,64 @@ func go_to_level_complete() -> void:
 	replace_screen(SCENE_LEVEL_COMPLETE)
 
 
+func set_last_committed_queue(queue_entries: Array) -> void:
+	_last_committed_queue = _normalize_queue(queue_entries)
+
+
+func clear_last_committed_queue() -> void:
+	_last_committed_queue.clear()
+
+
+func restore_planning_without_last() -> void:
+	var queue_entries: Array = _last_committed_queue.duplicate()
+	if not queue_entries.is_empty():
+		queue_entries.remove_at(queue_entries.size() - 1)
+	restore_planning_from_queue(queue_entries)
+
+
+func restore_planning_from_queue(queue_entries: Array) -> void:
+	var game_manager: GameManager = _get_game_manager()
+	if game_manager == null:
+		return
+	var grid_manager: GridManager = game_manager.grid_manager
+	if grid_manager == null:
+		return
+	grid_manager.reset_to_initial()
+	game_manager.start_planning()
+	var event_bus: Node = get_node_or_null("/root/EventBus")
+	if event_bus != null and event_bus.has_signal("queue_cleared"):
+		event_bus.queue_cleared.emit()
+	var normalized: Array = _normalize_queue(queue_entries)
+	for entry: Array in normalized:
+		if entry.size() < 2:
+			continue
+		game_manager.queue_card(int(entry[0]), entry[1])
+	set_last_committed_queue(normalized)
+	_refresh_gameplay_screen(grid_manager)
+
+
+func request_restart_level() -> void:
+	var game_manager: GameManager = _get_game_manager()
+	if game_manager == null:
+		return
+	game_manager.restart_level()
+	clear_last_committed_queue()
+
+
+func show_hint_popup() -> void:
+	var modal: Control = show_modal(SCENE_HINT_POPUP)
+	if modal == null:
+		return
+	var hint_popup: Control = modal
+	var hint: Dictionary = _compute_hint()
+	if hint.has("card_type") and hint.has("pos"):
+		if hint_popup.has_method("configure"):
+			hint_popup.call("configure", int(hint["card_type"]), hint["pos"] as Vector2i)
+	else:
+		if hint_popup.has_method("configure_fallback"):
+			hint_popup.call("configure_fallback", _get_level_hint_text())
+
+
 func push_level_select(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary) -> void:
 	if _transitioning:
 		return
@@ -345,3 +405,71 @@ func _clear_modal_tween() -> void:
 	if _modal_tween != null:
 		_modal_tween.kill()
 		_modal_tween = null
+
+
+func _normalize_queue(queue_entries: Array) -> Array:
+	var normalized: Array = []
+	for entry: Variant in queue_entries:
+		if entry is Array and (entry as Array).size() >= 2:
+			var entry_array: Array = entry as Array
+			normalized.append([int(entry_array[0]), entry_array[1]])
+		elif entry is Dictionary:
+			var entry_dict: Dictionary = entry as Dictionary
+			var card_type: int = int(entry_dict.get("card_type", entry_dict.get("card", -1)))
+			var pos: Vector2i = entry_dict.get("pos", Vector2i.ZERO)
+			normalized.append([card_type, pos])
+	return normalized
+
+
+func _compute_hint() -> Dictionary:
+	var game_manager: GameManager = _get_game_manager()
+	if game_manager == null:
+		return {}
+	var level: LevelData = game_manager.current_level
+	var grid_manager: GridManager = game_manager.grid_manager
+	if level == null or grid_manager == null:
+		return {}
+	var preview: Array = grid_manager.get_preview_grid()
+	var remaining: Array[int] = level.available_cards.duplicate()
+	for entry: Variant in grid_manager.queue:
+		if entry is Array and (entry as Array).size() >= 2:
+			var card_type: int = int((entry as Array)[0])
+			var idx: int = remaining.find(card_type)
+			if idx >= 0:
+				remaining.remove_at(idx)
+	var solver := PuzzleSolver.new(
+		grid_manager.width,
+		grid_manager.height,
+		PuzzleSolver.make_path_exists_goal(level.start_position, level.goal_positions)
+	)
+	var result: SolverResult = solver.solve(preview, remaining)
+	if result.is_solvable and result.solution.size() > 0:
+		var move: Array = result.solution[0]
+		if move.size() >= 2:
+			return {"card_type": int(move[0]), "pos": move[1]}
+	return {}
+
+
+func _get_level_hint_text() -> String:
+	var game_manager: GameManager = _get_game_manager()
+	if game_manager != null and game_manager.current_level != null:
+		return game_manager.current_level.hint_text
+	return "No hint available yet."
+
+
+func _get_game_manager() -> GameManager:
+	return get_node_or_null("/root/GameManager") as GameManager
+
+
+func _refresh_gameplay_screen(grid_manager: GridManager) -> void:
+	if _stack.is_empty():
+		return
+	var screen: Control = _stack.back()
+	if screen == null:
+		return
+	if screen.has_method("set_grid_manager"):
+		screen.call("set_grid_manager", grid_manager)
+	if screen.has_method("set_queue"):
+		screen.call("set_queue", grid_manager.get_queue())
+	if screen.has_method("set_sequence_playing"):
+		screen.call("set_sequence_playing", false)

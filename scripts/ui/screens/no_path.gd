@@ -31,7 +31,11 @@ func _ready() -> void:
 
 func _on_undo() -> void:
 	undo_last_requested.emit()
+	UIManager.dismiss_modal()
+	UIManager.restore_planning_without_last()
 
 
 func _on_restart() -> void:
 	restart_requested.emit()
+	UIManager.dismiss_modal()
+	UIManager.request_restart_level()

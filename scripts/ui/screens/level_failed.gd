@@ -71,11 +71,16 @@ func _apply_death_copy() -> void:
 
 func _on_try_again() -> void:
 	try_again_requested.emit()
+	UIManager.dismiss_modal()
+	UIManager.request_restart_level()
 
 
 func _on_undo_last() -> void:
 	undo_last_requested.emit()
+	UIManager.dismiss_modal()
+	UIManager.restore_planning_without_last()
 
 
 func _on_hint() -> void:
 	hint_requested.emit()
+	UIManager.show_hint_popup()
