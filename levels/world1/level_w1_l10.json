@@ -1,0 +1,24 @@
+{
+  "id": "w1_l10",
+  "world": 1,
+  "level_number": 10,
+  "display_name": "Serpentine Rain",
+  "hint_text": "Clear the ridge and the lower switchback to finish.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10,  1,  7,  7, 10, 10, 10,
+    12,  1, 10,  1, 10,  7, 13,
+    10, 10, 10,  1,  7,  7, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [0, 0, 0, 0, 0],
+  "max_moves": 5,
+  "par_moves": 5,
+  "target_difficulty": 7,
+  "min_solution_length": 5,
+  "unique_solution": false
+}

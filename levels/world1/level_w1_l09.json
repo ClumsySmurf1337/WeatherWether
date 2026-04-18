@@ -1,0 +1,24 @@
+{
+  "id": "w1_l09",
+  "world": 1,
+  "level_number": 9,
+  "display_name": "Double Bridge",
+  "hint_text": "You need to cool scorched tiles on both paths.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10,  1,  7,  7, 10, 10,
+    12,  1, 10,  1, 10, 13,
+    10, 10, 10,  1,  7,  7,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [0, 0, 0, 0],
+  "max_moves": 4,
+  "par_moves": 4,
+  "target_difficulty": 6,
+  "min_solution_length": 4,
+  "unique_solution": false
+}
