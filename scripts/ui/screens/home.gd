@@ -20,6 +20,8 @@ const WORDMARK_TEXTURE_PATH: String = "res://assets/sprites/ui/wordmark_small.pn
 @onready var _wordmark_texture: TextureRect = $Margin/VBox/Wordmark/WordmarkTexture
 @onready var _wordmark_fallback: Label = $Margin/VBox/Wordmark/WordmarkFallback
 
+var _total_levels: int = TOTAL_LEVELS
+
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -29,6 +31,7 @@ func _ready() -> void:
 	_apply_panel_style(_progress_strip, UITheme.bg_panel)
 	_setup_hero_art()
 	_setup_wordmark()
+	_prime_level_counts()
 	_refresh_progress()
 	_refresh_continue_label()
 	_continue_button.pressed.connect(_on_continue_pressed)
@@ -53,7 +56,7 @@ func _refresh_progress() -> void:
 	var save_data: Dictionary = _get_save_data()
 	var completed: int = _count_completed_levels(save_data)
 	var total_stars: int = _get_total_stars(save_data)
-	_progress_label.text = "%d/%d levels" % [completed, TOTAL_LEVELS]
+	_progress_label.text = "%d/%d levels" % [completed, _total_levels]
 	_progress_star_label.text = "★ %d" % total_stars
 
 
@@ -61,14 +64,20 @@ func _refresh_continue_label() -> void:
 	var completed: int = _count_completed_levels(_get_save_data())
 	if not UIManager.has_save_file():
 		_continue_button.text = "BEGIN"
-	elif completed >= TOTAL_LEVELS:
+	elif completed >= _total_levels:
 		_continue_button.text = "FREEPLAY"
 	else:
 		_continue_button.text = "CONTINUE"
 
 
 func _on_continue_pressed() -> void:
-	UIManager.go_to_gameplay()
+	var progress: Dictionary = _get_save_data().get("progress", {}) as Dictionary
+	var world: int = progress.get("current_world", 1) as int
+	var level: int = progress.get("current_level", 1) as int
+	if not UIManager.has_save_file():
+		world = 1
+		level = 1
+	UIManager.start_level(world, level)
 
 
 func _on_select_level_pressed() -> void:
@@ -132,6 +141,23 @@ func _get_save_data() -> Dictionary:
 		if data_value is Dictionary:
 			return data_value
 	return {}
+
+
+func _prime_level_counts() -> void:
+	var worlds: Array = WorldLoader.load_all_worlds()
+	if worlds.is_empty():
+		_total_levels = TOTAL_LEVELS
+		return
+	var count: int = 0
+	for world: Variant in worlds:
+		var data: WorldData = world as WorldData
+		if data == null:
+			continue
+		var level_count: int = data.level_count
+		if data.levels.size() > level_count:
+			level_count = data.levels.size()
+		count += level_count
+	_total_levels = count if count > 0 else TOTAL_LEVELS
 
 
 func _count_completed_levels(save_data: Dictionary) -> int:
