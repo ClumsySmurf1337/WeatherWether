@@ -128,3 +128,29 @@ func test_star_rating_three_stars_at_par() -> void:
 	gm.walk_step()
 	gm.walk_step()
 	assert_eq(gm.current_state, GS.COMPLETE)
+
+
+func test_walk_uses_any_goal_not_just_first() -> void:
+	var gm := GameManager.new()
+	add_child_autoqfree(gm)
+	var grid := _make_grid(3, 2, T.DRY_GRASS)
+	_set_grid_cell(grid, Vector2i(0, 0), 3, T.START)
+	_set_grid_cell(grid, Vector2i(1, 0), 3, T.WATER)
+	_set_grid_cell(grid, Vector2i(2, 0), 3, T.GOAL)
+	_set_grid_cell(grid, Vector2i(2, 1), 3, T.GOAL)
+	var cards: Array[int] = [C.RAIN]
+	var level: LevelData = _make_level(
+		grid, 3, 2, cards,
+		Vector2i(0, 0),
+		[Vector2i(2, 0), Vector2i(2, 1)]
+	)
+	gm.load_level(level)
+	gm.queue_card(C.RAIN, Vector2i(1, 0))
+	gm.play_sequence()
+	gm.resolve_next()
+	gm.resolve_next()
+	assert_eq(gm.current_state, GS.WALKING)
+	gm.walk_step()
+	gm.walk_step()
+	gm.walk_step()
+	assert_eq(gm.current_state, GS.COMPLETE)
