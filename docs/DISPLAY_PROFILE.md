@@ -8,6 +8,10 @@
 
 ---
 
+## Display profile
+
+Weather Whether uses a **single logical** design resolution (**1080×1920** portrait). Desktop builds get a **windowed 9:16** frame via **DisplayProfile**; **mobile** exports use OS fullscreen; **CI** remains headless-safe. Details below: project settings, runtime behavior, simulated presets, and Linear/PM notes.
+
 ## Project settings
 
 | Setting | Value | Why |
