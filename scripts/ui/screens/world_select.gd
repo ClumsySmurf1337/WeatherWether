@@ -4,10 +4,10 @@ extends Control
 ## Screen 3 — World Select (`docs/UI_SCREENS.md`).
 ## 2×3 grid of world cards with lock state driven by save progress.
 
-const WORLD_NAMES: Array[String] = [
+const WORLD_NAMES_FALLBACK: Array[String] = [
 	"DOWNPOUR", "HEATWAVE", "COLD SNAP", "GALE FORCE", "THUNDERSTORM", "WHITEOUT",
 ]
-const LEVELS_PER_WORLD: int = 22
+const DEFAULT_LEVELS_PER_WORLD: int = 22
 const WORLD_CARD_TEXTURE_TEMPLATE: String = "res://assets/sprites/ui/world_card_w%d.png"
 const LOCK_ICON_PATH: String = "res://assets/sprites/ui/icon_lock.png"
 const DENIED_SFX_PATH: String = "res://assets/audio/sfx/sfx_denied.wav"
@@ -21,6 +21,8 @@ var _highest_unlocked_world: int = 1
 var _world_stats: Array = []
 var _world_cards: Array[Control] = []
 var _save_data: Dictionary = {}
+var _worlds: Array = []
+var _world_level_counts: Array[int] = []
 
 
 func _ready() -> void:
@@ -30,6 +32,7 @@ func _ready() -> void:
 	UITheme.apply_secondary_button(_back_button)
 	UITheme.configure_title_label(_title)
 	_back_button.pressed.connect(_on_back_pressed)
+	_load_worlds()
 	_refresh_world_state()
 	_build_world_cards()
 
@@ -40,15 +43,16 @@ func _build_world_cards() -> void:
 		child.queue_free()
 	_world_cards.clear()
 
-	for i: int in range(6):
+	for i: int in range(_worlds.size()):
 		var world_num: int = i + 1
 		var is_unlocked: bool = world_num <= _highest_unlocked_world
-		var card: Control = _create_world_card(world_num, is_unlocked)
+		var world_name: String = _world_name_for(world_num)
+		var card: Control = _create_world_card(world_num, world_name, is_unlocked)
 		_world_grid.add_child(card)
 		_world_cards.append(card)
 
 
-func _create_world_card(world_num: int, is_unlocked: bool) -> Control:
+func _create_world_card(world_num: int, world_name: String, is_unlocked: bool) -> Control:
 	var card := Button.new()
 	card.text = ""
 	card.custom_minimum_size = Vector2(0, 320)
@@ -131,16 +135,19 @@ func _create_world_card(world_num: int, is_unlocked: bool) -> Control:
 
 	var art_path: String = WORLD_CARD_TEXTURE_TEMPLATE % world_num
 	var art_tex: Texture2D = _try_load_texture(art_path)
-	if art_tex != null:
+	if is_unlocked and art_tex != null:
 		art_texture.texture = art_tex
 		art_texture.visible = true
 		art_fallback.visible = false
-	else:
+	elif is_unlocked:
 		art_texture.visible = false
 		art_fallback.visible = true
+	else:
+		art_texture.visible = false
+		art_fallback.visible = false
 
 	var title_label := Label.new()
-	title_label.text = "%d. %s" % [world_num, WORLD_NAMES[world_num - 1]]
+	title_label.text = "%d. %s" % [world_num, world_name]
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override(&"font_size", 24)
 	UITheme.configure_title_label(title_label)
@@ -183,6 +190,7 @@ func _create_world_card(world_num: int, is_unlocked: bool) -> Control:
 		lock_texture.visible = false
 		lock_fallback.visible = true
 	lock_container.visible = not is_unlocked
+	progress_label.visible = is_unlocked
 
 	card.pressed.connect(_on_world_card_pressed.bind(world_num, is_unlocked))
 	return card
@@ -193,36 +201,122 @@ func _on_world_card_pressed(world_num: int, is_unlocked: bool) -> void:
 		_shake_world_card(world_num)
 		_play_denied_sound()
 		return
+	var world_name: String = _world_name_for(world_num)
 	var highest_level: int = _highest_unlocked_level_for_world(world_num)
 	var level_stars: Dictionary = _level_stars_for_world(world_num)
-	UIManager.push_level_select(world_num, WORLD_NAMES[world_num - 1], highest_level, level_stars)
+	var level_count: int = _level_count_for_world(world_num)
+	UIManager.push_level_select(world_num, world_name, highest_level, level_stars, level_count)
 
 
 func _on_back_pressed() -> void:
 	UIManager.pop_screen()
 
 
+func _load_worlds() -> void:
+	_worlds = WorldLoader.load_all_worlds()
+	if _worlds.is_empty():
+		_worlds = []
+		for i: int in range(WORLD_NAMES_FALLBACK.size()):
+			var fallback := WorldData.new()
+			fallback.id = "world%d" % (i + 1)
+			fallback.name = WORLD_NAMES_FALLBACK[i]
+			fallback.level_count = DEFAULT_LEVELS_PER_WORLD
+			_worlds.append(fallback)
+	_world_level_counts.clear()
+	for world: Variant in _worlds:
+		var data: WorldData = world as WorldData
+		var count: int = DEFAULT_LEVELS_PER_WORLD
+		if data != null:
+			count = data.level_count
+			if data.levels.size() > count:
+				count = data.levels.size()
+		_world_level_counts.append(count)
+
+
+func _world_for(world_num: int) -> WorldData:
+	var idx: int = world_num - 1
+	if idx < 0 or idx >= _worlds.size():
+		return null
+	return _worlds[idx] as WorldData
+
+
+func _world_name_for(world_num: int) -> String:
+	var world: WorldData = _world_for(world_num)
+	if world != null and not world.name.is_empty():
+		return world.name.to_upper()
+	if world_num - 1 < WORLD_NAMES_FALLBACK.size():
+		return WORLD_NAMES_FALLBACK[world_num - 1]
+	return "WORLD %d" % world_num
+
+
+func _level_count_for_world(world_num: int) -> int:
+	var idx: int = world_num - 1
+	if idx < 0 or idx >= _world_level_counts.size():
+		return DEFAULT_LEVELS_PER_WORLD
+	return _world_level_counts[idx]
+
+
 func _refresh_world_state() -> void:
 	_save_data = _get_save_data()
-	_highest_unlocked_world = _extract_highest_unlocked_world(_save_data)
 	_world_stats = _compute_world_stats(_save_data)
+	_highest_unlocked_world = _extract_highest_unlocked_world(_save_data)
 
 
 func _extract_highest_unlocked_world(save_data: Dictionary) -> int:
 	var progress: Dictionary = save_data.get("progress", {}) as Dictionary
-	var highest: String = progress.get("highest_unlocked", "w1_l01") as String
 	var current_world: int = progress.get("current_world", 1) as int
-	var parsed: Dictionary = _parse_highest_unlocked(highest)
-	var world_num: int = parsed.get("world", 1) as int
-	return clampi(maxi(world_num, current_world), 1, 6)
+	var unlocked: int = 1
+	for i: int in range(_world_stats.size()):
+		var stats: Dictionary = _world_stats[i] as Dictionary
+		var level_count: int = _level_count_for_world(i + 1)
+		if stats.get("completed", 0) as int >= level_count:
+			unlocked = i + 2
+		else:
+			break
+	var world_count: int = maxi(_worlds.size(), 1)
+	return clampi(maxi(unlocked, current_world), 1, world_count)
 
 
 func _compute_world_stats(save_data: Dictionary) -> Array:
 	var stats: Array = []
 	var levels: Dictionary = save_data.get("levels", {}) as Dictionary
-	for world_num: int in range(1, 7):
+	for i: int in range(_worlds.size()):
+		var world_num: int = i + 1
+		var world: WorldData = _world_for(world_num)
 		var completed: int = 0
 		var stars: int = 0
+		if world != null and not world.levels.is_empty():
+			for level_data: LevelData in world.levels:
+				var record: Dictionary = levels.get(level_data.id, {}) as Dictionary
+				if record.get("completed", false):
+					completed += 1
+				stars += record.get("stars", 0) as int
+		else:
+			for level_id: String in levels:
+				if not level_id.begins_with("w%d_" % world_num):
+					continue
+				var record_value: Variant = levels[level_id]
+				if not record_value is Dictionary:
+					continue
+				var record: Dictionary = record_value as Dictionary
+				if record.get("completed", false):
+					completed += 1
+				stars += record.get("stars", 0) as int
+		stats.append({"completed": completed, "stars": stars})
+	return stats
+
+
+func _highest_unlocked_level_for_world(world_num: int) -> int:
+	var level_count: int = _level_count_for_world(world_num)
+	var levels: Dictionary = _save_data.get("levels", {}) as Dictionary
+	var highest_completed: int = 0
+	var world: WorldData = _world_for(world_num)
+	if world != null and not world.levels.is_empty():
+		for level_data: LevelData in world.levels:
+			var record: Dictionary = levels.get(level_data.id, {}) as Dictionary
+			if record.get("completed", false):
+				highest_completed = maxi(highest_completed, level_data.level_number)
+	else:
 		for level_id: String in levels:
 			if not level_id.begins_with("w%d_" % world_num):
 				continue
@@ -231,42 +325,35 @@ func _compute_world_stats(save_data: Dictionary) -> Array:
 				continue
 			var record: Dictionary = record_value as Dictionary
 			if record.get("completed", false):
-				completed += 1
-			stars += record.get("stars", 0) as int
-		stats.append({"completed": completed, "stars": stars})
-	return stats
-
-
-func _highest_unlocked_level_for_world(world_num: int) -> int:
-	var progress: Dictionary = _save_data.get("progress", {}) as Dictionary
-	var highest: String = progress.get("highest_unlocked", "w1_l01") as String
-	var parsed: Dictionary = _parse_highest_unlocked(highest)
-	var highest_world: int = parsed.get("world", 1) as int
-	var highest_level: int = parsed.get("level", 1) as int
-	if world_num < highest_world:
-		return LEVELS_PER_WORLD
-	if world_num == highest_world:
-		return clampi(highest_level, 1, LEVELS_PER_WORLD)
-	return 1
+				var parsed: Dictionary = _parse_highest_unlocked(level_id)
+				highest_completed = maxi(highest_completed, parsed.get("level", 1) as int)
+	var highest_unlocked: int = highest_completed + 1
+	return clampi(highest_unlocked, 1, level_count)
 
 
 func _level_stars_for_world(world_num: int) -> Dictionary:
 	var stars: Dictionary = {}
 	var levels: Dictionary = _save_data.get("levels", {}) as Dictionary
-	for level_id: String in levels:
-		if not level_id.begins_with("w%d_" % world_num):
-			continue
-		var record_value: Variant = levels[level_id]
-		if not record_value is Dictionary:
-			continue
-		var record: Dictionary = record_value as Dictionary
-		stars[level_id] = record.get("stars", 0)
+	var world: WorldData = _world_for(world_num)
+	if world != null and not world.levels.is_empty():
+		for level_data: LevelData in world.levels:
+			var record: Dictionary = levels.get(level_data.id, {}) as Dictionary
+			stars[level_data.id] = record.get("stars", 0)
+	else:
+		for level_id: String in levels:
+			if not level_id.begins_with("w%d_" % world_num):
+				continue
+			var record_value: Variant = levels[level_id]
+			if not record_value is Dictionary:
+				continue
+			var record: Dictionary = record_value as Dictionary
+			stars[level_id] = record.get("stars", 0)
 	return stars
 
 
 func _world_progress_text(world_num: int) -> String:
 	if world_num - 1 < 0 or world_num - 1 >= _world_stats.size():
-		return "··· 0/%d" % LEVELS_PER_WORLD
+		return "··· 0/%d" % _level_count_for_world(world_num)
 	var stats: Dictionary = _world_stats[world_num - 1] as Dictionary
 	var completed: int = stats.get("completed", 0) as int
 	var stars: int = stats.get("stars", 0) as int
@@ -274,7 +361,7 @@ func _world_progress_text(world_num: int) -> String:
 	if completed > 0:
 		rating = int(floor(float(stars) / float(completed)))
 	var star_text: String = _stars_text(rating)
-	return "%s %d/%d" % [star_text, completed, LEVELS_PER_WORLD]
+	return "%s %d/%d" % [star_text, completed, _level_count_for_world(world_num)]
 
 
 func _parse_highest_unlocked(value: String) -> Dictionary:

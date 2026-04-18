@@ -202,6 +202,22 @@ func go_to_gameplay_placeholder() -> void:
 	go_to_gameplay()
 
 
+func start_level(world: int, level: int) -> void:
+	var world_index: int = clampi(world, 1, 6)
+	var level_index: int = maxi(level, 1)
+	var level_data: LevelData = _load_level_data(world_index, level_index)
+	if level_data != null:
+		level_index = level_data.level_number
+		_update_save_progress(world_index, level_index)
+		var game_manager: GameManager = _get_game_manager()
+		if game_manager != null:
+			game_manager.load_level(level_data)
+			return
+		go_to_gameplay()
+		return
+	go_to_gameplay()
+
+
 func go_to_level_complete() -> void:
 	replace_screen(SCENE_LEVEL_COMPLETE)
 
@@ -264,7 +280,7 @@ func show_hint_popup() -> void:
 			hint_popup.call("configure_fallback", _get_level_hint_text())
 
 
-func push_level_select(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary) -> void:
+func push_level_select(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary, level_count: int) -> void:
 	if _transitioning:
 		return
 	var inst: Control = _instantiate_scene(SCENE_LEVEL_SELECT)
@@ -272,13 +288,13 @@ func push_level_select(world: int, world_name: String, highest_unlocked: int, le
 		return
 	var screen: LevelSelectScreen = inst as LevelSelectScreen
 	if screen != null:
-		screen.configure(world, world_name, highest_unlocked, level_stars)
+		screen.configure(world, world_name, highest_unlocked, level_stars, level_count)
 		screen.level_selected.connect(_on_level_selected)
 	_push_instance(inst)
 
 
-func _on_level_selected(_world: int, _level: int) -> void:
-	go_to_gameplay()
+func _on_level_selected(world: int, level: int) -> void:
+	start_level(world, level)
 
 
 static func has_save_file() -> bool:
@@ -459,6 +475,40 @@ func _get_level_hint_text() -> String:
 
 func _get_game_manager() -> GameManager:
 	return get_node_or_null("/root/GameManager") as GameManager
+
+
+func _get_save_manager() -> Node:
+	return get_node_or_null("/root/SaveManager")
+
+
+func _load_level_data(world_index: int, level_index: int) -> LevelData:
+	var world_id: String = "world%d" % world_index
+	var world_data: WorldData = WorldLoader.load_world(world_id)
+	if world_data != null:
+		for entry: LevelData in world_data.levels:
+			if entry.level_number == level_index:
+				return entry
+	var path: String = "res://levels/world%d/level_w%d_l%02d.json" % [world_index, world_index, level_index]
+	if FileAccess.file_exists(path):
+		return LevelLoader.load_from_json(path)
+	return null
+
+
+func _update_save_progress(world_index: int, level_index: int) -> void:
+	var save: Node = _get_save_manager()
+	if save == null:
+		return
+	var data_value: Variant = save.get("data")
+	if not data_value is Dictionary:
+		return
+	var data: Dictionary = data_value as Dictionary
+	var progress: Dictionary = data.get("progress", {}) as Dictionary
+	progress["current_world"] = world_index
+	progress["current_level"] = level_index
+	data["progress"] = progress
+	save.set("data", data)
+	if save.has_method("save"):
+		save.call("save")
 
 
 func _refresh_gameplay_screen(grid_manager: GridManager) -> void:

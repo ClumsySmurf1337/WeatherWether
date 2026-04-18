@@ -30,6 +30,7 @@ const NODE_COMPLETE_TEXTURE_PATH: String = "res://assets/sprites/ui/node_complet
 const NODE_CURRENT_TEXTURE_PATH: String = "res://assets/sprites/ui/node_current.png"
 const NODE_LOCKED_TEXTURE_PATH: String = "res://assets/sprites/ui/node_locked.png"
 const PATH_DASH_TEXTURE_PATH: String = "res://assets/sprites/ui/path_dash.png"
+const DENIED_SFX_PATH: String = "res://assets/audio/sfx/sfx_denied.wav"
 
 var _world_id: int = 1
 var _world_name: String = "DOWNPOUR"
@@ -43,6 +44,7 @@ var _node_texture_current: Texture2D = null
 var _node_texture_locked: Texture2D = null
 var _path_dash_texture: Texture2D = null
 var _drag_active: bool = false
+var _level_count: int = 22
 
 
 func _ready() -> void:
@@ -61,13 +63,14 @@ func _ready() -> void:
 	_back_button.pressed.connect(_on_back_pressed)
 	_scroll.gui_input.connect(_on_scroll_gui_input)
 	_load_assets()
-	configure(_world_id, _world_name, _highest_unlocked, _level_stars)
+	configure(_world_id, _world_name, _highest_unlocked, _level_stars, _level_count)
 
 
-func configure(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary) -> void:
+func configure(world: int, world_name: String, highest_unlocked: int, level_stars: Dictionary, level_count: int) -> void:
 	_world_id = world
 	_world_name = world_name
-	_highest_unlocked = clampi(highest_unlocked, 1, 22)
+	_level_count = maxi(level_count, 1)
+	_highest_unlocked = clampi(highest_unlocked, 1, _level_count)
 	_level_stars = level_stars
 	if not is_node_ready():
 		return
@@ -78,7 +81,7 @@ func configure(world: int, world_name: String, highest_unlocked: int, level_star
 		var val: Variant = _level_stars[key]
 		if val is int:
 			total_stars += val as int
-	_subtitle_label.text = "%d/22 levels • %d stars" % [completed, total_stars]
+	_subtitle_label.text = "%d/%d levels • %d stars" % [completed, _level_count, total_stars]
 	_load_biome_background()
 	_load_path_data()
 	_build_nodes()
@@ -109,32 +112,27 @@ func _load_texture(path: String) -> Texture2D:
 
 func _load_path_data() -> void:
 	_path_data = []
-	var path_file: String = "res://levels/world%d/path.json" % _world_id
-	if not FileAccess.file_exists(path_file):
+	var world_id: String = "world%d" % _world_id
+	var nodes: Array = WorldLoader.load_path_layout(world_id)
+	if nodes.is_empty():
 		_generate_fallback_path()
 		return
-	var file: FileAccess = FileAccess.open(path_file, FileAccess.READ)
-	if file == null:
-		_generate_fallback_path()
-		return
-	var json: JSON = JSON.new()
-	var text: String = file.get_as_text()
-	file = null
-	var err: Error = json.parse(text)
-	if err != OK:
-		_generate_fallback_path()
-		return
-	var parsed: Variant = json.data
-	if parsed is Array:
-		_path_data = parsed as Array
-	else:
+	_path_data = nodes
+	_path_data.sort_custom(func(a: Variant, b: Variant) -> bool:
+		var da: Dictionary = a as Dictionary
+		var db: Dictionary = b as Dictionary
+		return int(da.get("level", 0)) < int(db.get("level", 0))
+	)
+	if _path_data.size() < _level_count:
 		_generate_fallback_path()
 
 
 func _generate_fallback_path() -> void:
 	_path_data = []
-	for i: int in range(1, 23):
-		var t: float = float(i - 1) / 21.0
+	var count: int = maxi(_level_count, 1)
+	var denom: float = maxf(float(count - 1), 1.0)
+	for i: int in range(1, count + 1):
+		var t: float = float(i - 1) / denom
 		var x: float = 0.5 + 0.25 * sin(t * TAU * 1.5)
 		var y: float = 1.0 - t * 0.95 - 0.02
 		_path_data.append({"level": i, "x": x, "y": y})
@@ -150,11 +148,15 @@ func _build_nodes() -> void:
 
 	_path_container.custom_minimum_size = Vector2(_scroll.size.x, SCROLL_HEIGHT)
 	var container_width: float = maxf(_scroll.size.x, 600.0)
+	if _path_data.size() < _level_count:
+		_generate_fallback_path()
 
 	var positions: Array[Vector2] = []
 	for entry: Variant in _path_data:
 		var d: Dictionary = entry as Dictionary
 		var level: int = int(d.get("level", 0))
+		if level <= 0 or level > _level_count:
+			continue
 		var nx: float = float(d.get("x", 0.5))
 		var ny: float = float(d.get("y", 0.5))
 		var px: float = nx * container_width
@@ -369,10 +371,9 @@ func _start_pulse_animation() -> void:
 func _scroll_to_current() -> void:
 	if _path_data.is_empty():
 		return
-	var current_idx: int = _highest_unlocked - 1
-	if current_idx < 0 or current_idx >= _path_data.size():
+	var entry: Dictionary = _find_path_entry(_highest_unlocked)
+	if entry.is_empty():
 		return
-	var entry: Dictionary = _path_data[current_idx] as Dictionary
 	var ny: float = float(entry.get("y", 0.5))
 	var target_y: float = ny * SCROLL_HEIGHT - _scroll.size.y * 0.5
 	_scroll.scroll_vertical = int(clampf(target_y, 0.0, maxf(SCROLL_HEIGHT - _scroll.size.y, 0.0)))
@@ -381,6 +382,7 @@ func _scroll_to_current() -> void:
 func _on_level_node_pressed(level: int) -> void:
 	if level > _highest_unlocked:
 		_shake_locked_node(level)
+		_play_denied_sound()
 		return
 	level_selected.emit(_world_id, level)
 
@@ -412,6 +414,23 @@ func _shake_locked_node(level: int) -> void:
 	shake_tween.tween_property(node, "position:x", original_x - 8.0, 0.05)
 	shake_tween.tween_property(node, "position:x", original_x + 4.0, 0.05)
 	shake_tween.tween_property(node, "position:x", original_x, 0.05)
+
+
+func _find_path_entry(level: int) -> Dictionary:
+	for entry: Variant in _path_data:
+		var d: Dictionary = entry as Dictionary
+		if int(d.get("level", 0)) == level:
+			return d
+	return {}
+
+
+func _play_denied_sound() -> void:
+	if not ResourceLoader.exists(DENIED_SFX_PATH):
+		return
+	var audio: Node = get_node_or_null("/root/AudioManager")
+	if audio == null or not audio.has_method("play_sfx"):
+		return
+	audio.call("play_sfx", DENIED_SFX_PATH)
 
 
 func _on_back_pressed() -> void:
