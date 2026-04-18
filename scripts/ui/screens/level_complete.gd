@@ -36,6 +36,14 @@ var _is_last_in_world: bool = false
 const STAR_REVEAL_DELAY_SEC: float = 0.2
 const STAR_FILLED: String = "★"
 const STAR_EMPTY: String = "☆"
+const STAR_REVEAL_SCALE_START: Vector2 = Vector2(0.6, 0.6)
+const SPARKLE_AMOUNT: int = 14
+const SPARKLE_LIFETIME_SEC: float = 0.6
+const SPARKLE_VELOCITY_MIN: float = 40.0
+const SPARKLE_VELOCITY_MAX: float = 90.0
+
+var _sparkle_particles: Array[GPUParticles2D] = []
+var _sparkle_texture: Texture2D = null
 
 
 func _ready() -> void:
@@ -52,7 +60,7 @@ func _ready() -> void:
 	UITheme.configure_muted_label(_par_label)
 	UITheme.configure_numbers_label(_par_value)
 	_par_value.add_theme_color_override(&"font_color", UITheme.accent_success)
-	UITheme.apply_primary_button(_next_button)
+	UITheme.apply_success_button(_next_button)
 	UITheme.apply_secondary_button(_replay_button)
 	UITheme.apply_secondary_button(_world_map_button)
 	_next_button.pressed.connect(_on_next_pressed)
@@ -61,6 +69,7 @@ func _ready() -> void:
 	_star_timer.wait_time = STAR_REVEAL_DELAY_SEC
 	_star_timer.one_shot = true
 	_star_timer.timeout.connect(_reveal_next_star)
+	_setup_star_sparkles()
 	_reset_stars()
 	_apply_result()
 
@@ -109,6 +118,9 @@ func _reset_stars() -> void:
 	_star_1.add_theme_color_override(&"font_color", UITheme.text_muted)
 	_star_2.add_theme_color_override(&"font_color", UITheme.text_muted)
 	_star_3.add_theme_color_override(&"font_color", UITheme.text_muted)
+	_reset_star_visual(_star_1)
+	_reset_star_visual(_star_2)
+	_reset_star_visual(_star_3)
 
 
 func _reveal_next_star() -> void:
@@ -119,6 +131,8 @@ func _reveal_next_star() -> void:
 	if _stars_revealed <= _stars_earned:
 		target.text = STAR_FILLED
 		target.add_theme_color_override(&"font_color", UITheme.text_title)
+		_play_star_reveal(target)
+		_emit_sparkle_for_index(_stars_revealed)
 	if _stars_revealed < 3:
 		_star_timer.start()
 
@@ -133,6 +147,84 @@ func _star_for_index(index: int) -> Label:
 			return _star_3
 		_:
 			return null
+
+
+func _reset_star_visual(star: Label) -> void:
+	star.scale = Vector2.ONE
+	star.modulate = Color(1.0, 1.0, 1.0, 1.0)
+
+
+func _play_star_reveal(star: Label) -> void:
+	star.pivot_offset = star.size * 0.5
+	star.scale = STAR_REVEAL_SCALE_START
+	star.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	var tween := create_tween()
+	tween.tween_property(star, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.12)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(star, "scale", Vector2.ONE, 0.18)\
+		.set_trans(Tween.TRANS_BACK)\
+		.set_ease(Tween.EASE_OUT)
+
+
+func _setup_star_sparkles() -> void:
+	_sparkle_particles.clear()
+	_sparkle_texture = _build_sparkle_texture()
+	_attach_sparkle_to_star(_star_1)
+	_attach_sparkle_to_star(_star_2)
+	_attach_sparkle_to_star(_star_3)
+
+
+func _attach_sparkle_to_star(star: Label) -> void:
+	var particles := GPUParticles2D.new()
+	particles.emitting = false
+	particles.one_shot = true
+	particles.amount = SPARKLE_AMOUNT
+	particles.lifetime = SPARKLE_LIFETIME_SEC
+	particles.explosiveness = 1.0
+	particles.speed_scale = 1.0
+	particles.texture = _sparkle_texture
+	particles.process_material = _build_sparkle_material()
+	star.add_child(particles)
+	particles.position = star.size * 0.5
+	star.resized.connect(_on_star_resized.bind(star, particles))
+	_sparkle_particles.append(particles)
+
+
+func _on_star_resized(star: Label, particles: GPUParticles2D) -> void:
+	particles.position = star.size * 0.5
+
+
+func _emit_sparkle_for_index(index: int) -> void:
+	if index < 1 or index > _sparkle_particles.size():
+		return
+	var particles := _sparkle_particles[index - 1]
+	if particles == null:
+		return
+	particles.restart()
+	particles.emitting = true
+
+
+func _build_sparkle_texture() -> Texture2D:
+	var image := Image.create(4, 4, false, Image.FORMAT_RGBA8)
+	image.fill(Color(1.0, 1.0, 1.0, 1.0))
+	return ImageTexture.create_from_image(image)
+
+
+func _build_sparkle_material() -> ParticleProcessMaterial:
+	var material := ParticleProcessMaterial.new()
+	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_POINT
+	material.direction = Vector3(0.0, -1.0, 0.0)
+	material.spread = 160.0
+	material.initial_velocity_min = SPARKLE_VELOCITY_MIN
+	material.initial_velocity_max = SPARKLE_VELOCITY_MAX
+	material.gravity = Vector3(0.0, 90.0, 0.0)
+	material.scale_min = 0.5
+	material.scale_max = 1.1
+	material.angular_velocity_min = -6.0
+	material.angular_velocity_max = 6.0
+	material.color = UITheme.text_title
+	return material
 
 
 func _on_next_pressed() -> void:
