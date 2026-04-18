@@ -1,9 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://whether_ui_gameplay"]
+[gd_scene load_steps=5 format=3 uid="uid://whether_ui_gameplay"]
 
 [ext_resource type="Script" path="res://scripts/ui/screens/gameplay.gd" id="1_gp"]
 [ext_resource type="Script" path="res://scripts/ui/widgets/card_view.gd" id="2_cv"]
 [ext_resource type="Script" path="res://scripts/ui/widgets/queue_strip.gd" id="3_qs"]
 [ext_resource type="Script" path="res://scripts/ui/widgets/grid_view.gd" id="4_gv"]
+[ext_resource type="Script" path="res://scripts/ui/widgets/character_view.gd" id="5_cv"]
 
 [node name="Gameplay" type="Control"]
 layout_mode = 3
@@ -245,6 +246,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_gv")
+tile_size_px = 144
+
+[node name="CharacterView" type="Control" parent="Margin/VBox/GridPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 2
+script = ExtResource("5_cv")
+grid_view_path = NodePath("../GridView")
 tile_size_px = 144
 
 [node name="HandScroll" type="ScrollContainer" parent="Margin/VBox"]
