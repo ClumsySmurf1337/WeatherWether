@@ -12,6 +12,7 @@ signal play_sequence_requested
 signal cancel_requested
 signal speed_toggle_requested
 signal card_selected(card_key: StringName)
+signal tile_selected(pos: Vector2i)
 signal queue_item_removed(index: int)
 signal queue_item_reordered(from_index: int, to_index: int)
 
@@ -28,6 +29,7 @@ signal queue_item_reordered(from_index: int, to_index: int)
 @onready var _hint_banner: PanelContainer = %HintBanner
 @onready var _queue_strip: QueueStrip = %QueueStrip
 @onready var _grid_panel: PanelContainer = %GridPanel
+@onready var _grid_view: GridView = %GridView
 @onready var _undo_button: Button = %UndoButton
 @onready var _play_button: Button = %PlayButton
 @onready var _cancel_button: Button = %CancelButton
@@ -71,6 +73,8 @@ func _ready() -> void:
 	_speed_button.pressed.connect(_on_speed_pressed)
 	_queue_strip.remove_requested.connect(_on_queue_item_removed)
 	_queue_strip.reorder_requested.connect(_on_queue_item_reordered)
+	if _grid_view != null:
+		_grid_view.tile_tapped.connect(_on_grid_tile_tapped)
 	_bind_card_buttons()
 	_update_sequence_state(false)
 	_set_queue_count(0)
@@ -101,6 +105,11 @@ func set_queue_count(count: int) -> void:
 func set_queue(entries: Array) -> void:
 	_queue_strip.set_queue(entries)
 	_set_queue_count(_queue_strip.get_queue_size())
+
+
+func set_grid_manager(manager: GridManager) -> void:
+	if _grid_view != null:
+		_grid_view.set_grid_manager(manager)
 
 
 func _set_queue_count(count: int) -> void:
@@ -192,6 +201,10 @@ func _on_speed_pressed() -> void:
 func _on_card_pressed(card_key: StringName) -> void:
 	_set_selected_card(card_key)
 	card_selected.emit(card_key)
+
+
+func _on_grid_tile_tapped(pos: Vector2i) -> void:
+	tile_selected.emit(pos)
 
 func _on_queue_item_removed(index: int) -> void:
 	queue_item_removed.emit(index)
