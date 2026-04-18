@@ -1,0 +1,24 @@
+{
+  "id": "w4_l18",
+  "world": 4,
+  "level_number": 18,
+  "display_name": "Vapor Relay",
+  "hint_text": "Wind opens the vent, rain fills it, frost locks the bridge, sun clears the fog.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10,
+    12,  8,  1, 11,  1,  1, 13,
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [3, 0, 2, 1],
+  "max_moves": 4,
+  "par_moves": 4,
+  "target_difficulty": 8,
+  "min_solution_length": 4,
+  "unique_solution": false
+}
