@@ -1,0 +1,24 @@
+{
+  "id": "w5_l04",
+  "world": 5,
+  "level_number": 4,
+  "display_name": "Split Current",
+  "hint_text": "Freeze the pit to snow, then ground the water and cool it.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  1,  0,  3,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [2, 4, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 4,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
