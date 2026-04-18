@@ -61,6 +61,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 
 
 ## 2026-04-18
+- PR #59 — agent/cursor-lane-3 — WEA-603: add Downpour levels 11-15
+- PR #60 — agent/cursor-lane-2 — WEA-635: wire world select flow
 - PR #57 — agent/cursor-lane-3 — WEA-602: add Downpour levels 6-10
 - PR #58 — agent/cursor-lane-2 — WEA-634: align gameplay screen layout
 - PR #56 — agent/cursor-lane-1 — WEA-638: use reachable goals for path
