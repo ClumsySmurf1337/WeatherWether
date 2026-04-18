@@ -137,7 +137,7 @@ func _build_slots() -> void:
 		_slot_container.name = &"QueueSlots"
 		_slot_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_slot_container.alignment = BoxContainer.ALIGNMENT_CENTER
-		_slot_container.theme_override_constants/separation = 12
+		_slot_container.add_theme_constant_override(&"separation", 12)
 		_slot_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(_slot_container)
 	_slot_container.mouse_filter = Control.MOUSE_FILTER_IGNORE

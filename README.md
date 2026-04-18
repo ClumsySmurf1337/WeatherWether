@@ -44,6 +44,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/PM_AGENT_LINEAR.md`
 - `docs/OPEN_SOURCE_AND_PIPELINE.md`
 - `docs/GODOT_DOCS_ACCESS.md`
+- `docs/DISPLAY_PROFILE.md` (desktop window fit + simulated mobile presets)
 - `docs/STITCH_UX_WORKFLOW.md`
 
 ## Daily Commands

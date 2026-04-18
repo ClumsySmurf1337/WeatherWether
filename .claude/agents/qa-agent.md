@@ -27,5 +27,6 @@ Rules:
 - Expand regression coverage before broad refactors.
 - Ensure `validate.ps1` and **GitHub Actions** (`ci.yml`) stay aligned — CI uses Ubuntu Godot headless, **no Docker** required.
 - Track pipeline truth in `docs/OPEN_SOURCE_AND_PIPELINE.md` when validation or level format changes.
+- **Editor / Windows visual pass:** `validate.ps1` does not render UI. For layout regressions, run the game or editor and compare to `docs/UI_SCREENS.md` + mocks. **`docs/DISPLAY_PROFILE.md`** — set `WHETHER_DISPLAY_PRESET` (e.g. `360`, `720`, `1080`) to simulate phone sizes on desktop; default auto-fit keeps 9:16 without squashing (`stretch` **keep**).
 - Report failures with reproduction steps.
 

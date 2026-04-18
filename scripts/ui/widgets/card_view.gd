@@ -138,7 +138,7 @@ func _cache_base_position() -> void:
 
 
 func _update_lift() -> void:
-	var offset := Vector2(0.0, _selected ? -lift_pixels : 0.0)
+	var offset := Vector2(0.0, (-lift_pixels) if _selected else 0.0)
 	_suppress_rect_change = true
 	position = _base_position + offset
 	_suppress_rect_change = false

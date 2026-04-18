@@ -50,6 +50,21 @@ export const PM_DOC_ISSUE_CANDIDATES: PmDocIssueCandidate[] = [
     ]
   },
   {
+    id: "ui-display-profile-desktop-mobile",
+    title: "[UI] DisplayProfile: desktop 9:16 window + stretch keep + mobile sim presets (close when shipped)",
+    labels: ["UI-UX"],
+    priority: 2,
+    docPath: "docs/DISPLAY_PROFILE.md",
+    sectionHeadingPrefix: "Display profile",
+    deliverables:
+      "**Shipped on main:** `scripts/autoload/display_profile.gd` (before `UIManager`), `project.godot` stretch `keep`, handheld portrait, env `WHETHER_DISPLAY_PRESET` for 360/540/720/1080 windows on desktop. If this issue is still open, verify against `docs/DISPLAY_PROFILE.md` and close as Done.",
+    acceptance: [
+      "Desktop/editor opens a centered portrait window that fits the monitor (not 1:1 1080×1920 px by default unless preset)",
+      "Android/iOS exports are not forced to a tiny window — DisplayProfile skips mobile OS features",
+      "`pwsh tools/tasks/validate.ps1` passes"
+    ]
+  },
+  {
     id: "ui-gameplay-screen",
     title: "[UI] Gameplay screen: HUD, queue strip, hand, PLAY — match UI_SCREENS Screen 5",
     labels: ["UI-UX"],

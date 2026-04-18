@@ -37,6 +37,7 @@ All UIs pull from this palette. Hex values match `assets/styleguide/Assets.png`.
 ## Layout fundamentals
 
 - **Reference resolution:** 1080×1920 portrait. All screens design at this size.
+- **Display / scaling:** See **`docs/DISPLAY_PROFILE.md`**. The project uses **stretch `keep`** so layout is not squashed on desktop; **`DisplayProfile`** autoload sizes the **Windows/Linux/macOS** window to a comfortable 9:16 frame (mobile exports use OS fullscreen — autoload skips). Compare **desktop** proportions to `assets/mocks/gameplay_desktop.svg` where applicable.
 - **Safe area:** 48px top, 64px bottom (for iPhone notch and home indicator).
 - **Touch target minimum:** 144×144 px (= 48 device px @ 3x).
 - **Side margins:** 48px left/right.
