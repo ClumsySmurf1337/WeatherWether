@@ -1,0 +1,24 @@
+{
+  "id": "w5_l01",
+  "world": 5,
+  "level_number": 1,
+  "display_name": "First Strike",
+  "hint_text": "Strike the water, then cool the scorched bridge with rain.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  1,  3,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [4, 0],
+  "max_moves": 2,
+  "par_moves": 2,
+  "target_difficulty": 2,
+  "min_solution_length": 2,
+  "unique_solution": false
+}

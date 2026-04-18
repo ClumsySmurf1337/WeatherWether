@@ -1,0 +1,24 @@
+{
+  "id": "w5_l05",
+  "world": 5,
+  "level_number": 5,
+  "display_name": "Twin Bolts",
+  "hint_text": "One strike scorches both pools; cool each with rain.",
+  "width": 7,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10,
+    12,  1,  3,  3,  1,  1, 13,
+    10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[6, 2]],
+  "available_cards": [4, 0, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 5,
+  "min_solution_length": 3,
+  "unique_solution": false
+}

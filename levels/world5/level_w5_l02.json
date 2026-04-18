@@ -1,0 +1,24 @@
+{
+  "id": "w5_l02",
+  "world": 5,
+  "level_number": 2,
+  "display_name": "Stormfill",
+  "hint_text": "Fill the pit, strike the pool, then rain again to make mud.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  1,  0,  1,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [0, 4, 0],
+  "max_moves": 3,
+  "par_moves": 3,
+  "target_difficulty": 3,
+  "min_solution_length": 3,
+  "unique_solution": false
+}
