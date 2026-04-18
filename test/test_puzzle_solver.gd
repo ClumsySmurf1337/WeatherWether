@@ -245,3 +245,19 @@ func test_goal_predicate_returns_false_when_blocked() -> void:
 	var grid: Array = [T.START, T.STONE, T.GOAL]
 	var pred: Callable = PuzzleSolver.make_path_exists_goal(Vector2i(0, 0), [Vector2i(2, 0)])
 	assert_false(pred.call(grid, w, h))
+
+
+func test_goal_predicate_requires_walkable_start() -> void:
+	var w := 3
+	var h := 1
+	var grid: Array = [T.WATER, T.DRY_GRASS, T.GOAL]
+	var pred: Callable = PuzzleSolver.make_path_exists_goal(Vector2i(0, 0), [Vector2i(2, 0)])
+	assert_false(pred.call(grid, w, h))
+
+
+func test_goal_predicate_requires_walkable_goal() -> void:
+	var w := 3
+	var h := 1
+	var grid: Array = [T.START, T.DRY_GRASS, T.WATER]
+	var pred: Callable = PuzzleSolver.make_path_exists_goal(Vector2i(0, 0), [Vector2i(2, 0)])
+	assert_false(pred.call(grid, w, h))
