@@ -51,11 +51,21 @@ no anime characters, no text, no UI elements, no logos, no watermarks,
 no 3D rendering, no specular highlights, no PBR materials
 ```
 
+### Framing addendum (Gemini nano / Imagen / Replicate — paste for tight crops)
+
+Image models often return a **small patch** in the **middle** of a **large** square or add **wide transparent** margins. That makes **Trim** in Aseprite useless until you delete filler. **Append the block below** to any **tile** or **square icon** prompt when retrying:
+
+```
+Square 1:1 aspect ratio. Full-bleed composition: the terrain must fill the entire image from edge to edge. No letterboxing, no empty margins, no tiny sprite floating in the center of a large canvas—the drawable texture must occupy the full width and height of the output. Top-down, tileable on all four edges. No extra wide panoramic frame.
+```
+
+**Reject if:** you see huge empty checkerboard around a small grass blob, or aspect ratio is clearly not 1:1.
+
 ---
 
 ## 1. Tile sprites (pixel art, 16×16 source)
 
-Generate each at 256×256 (4× the source size) and downsample to 16×16 in Aseprite.
+Generate each at **256×256** (4× the source size) **with the framing addendum above** so the file is already square and full-frame; then downsample to **16×16** in Aseprite with **nearest neighbor**.
 
 ### `tile_dry_grass.png`
 
@@ -63,13 +73,14 @@ Generate each at 256×256 (4× the source size) and downsample to 16×16 in Asep
 
 **Prompt:**
 ```
-[pixel art anchor]. Top-down view of a single 16x16 grass tile. Dry yellow-green
+[pixel art anchor]. Top-down view of a single grass tile texture. Dry yellow-green
 grass, individual blade pixels visible, faint brown soil showing through in a few
 spots. Tileable edges. Bright daytime lighting from top-left.
+[framing addendum — see “Framing addendum” above]
 [negative prompt]
 ```
 
-**Reject if:** smooth gradient instead of pixel blades, anti-aliased edges, drop shadow.
+**Reject if:** smooth gradient instead of pixel blades, anti-aliased edges, drop shadow, small grass island on a giant canvas (regenerate with framing addendum).
 
 ---
 

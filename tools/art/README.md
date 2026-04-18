@@ -39,10 +39,18 @@ $env:NANOBANANA_API_KEY = $env:GEMINI_API_KEY   # match the name you use in .env
 gemini
 ```
 
-Inside the CLI, paste prompts from **`ASSET_PROMPTS_GEMINI.md`** (include style anchor + negative). Examples:
+Inside the CLI, paste prompts from **`ASSET_PROMPTS_GEMINI.md`** (include style anchor + **framing addendum** + negative — see doc section *Framing addendum* so the grass **fills the square**, not a tiny island on a huge canvas).
+
+**Dry grass — retry example** (one line; paste as one `/generate`):
 
 ```text
-/generate "…short subject line from doc…" --styles="pixel-art" --count=2 --preview
+/generate "pixel art 16-bit SNES, hard edges, 32 color feel, top-down dry grass tile, yellow-green blades, faint brown soil, tileable edges, sun from top-left. Square 1:1 full-bleed: texture fills entire image edge to edge, no letterboxing, no tiny sprite centered in large empty space, no huge transparent margins. no text no UI." --styles="pixel-art" --count=2 --preview
+```
+
+More examples:
+
+```text
+/generate "…short subject line from doc + framing addendum…" --styles="pixel-art" --count=2 --preview
 /pattern "…" --type="seamless"   # backgrounds / tiles exploration
 ```
 
@@ -72,6 +80,30 @@ Use **Tasks → Run Task** → group **art**:
 
 - **Art: Replicate dry run** — checks env + script without spending credits.  
 - **Art: Validate project** — run after you drop sprites in and reimport in Godot.
+
+---
+
+## Non-artist: LibreSprite / editors / “clean” in plain English
+
+**Your `D:\Godot\libresprite` folder:** If there is **no `.exe`**, you don’t have the Windows app — you likely copied **data-only** or source. **LibreSprite:** download a **Release** archive for Windows from the [LibreSprite releases](https://github.com/LibreSprite/LibreSprite/releases) page (look for a **`.zip`** that contains **`LibreSprite.exe`**). Extract the whole folder and run that `.exe`.
+
+**Easiest paid option (most tutorials match it): [Aseprite](https://www.aseprite.org/)** ( Steam / site ) — one purchase, best match for this repo’s docs.
+
+**Free / simpler (good enough to start):**
+
+| Tool | Notes |
+|------|--------|
+| **[Piskel](https://www.piskelapp.com/)** (browser) | Free, dead simple, pixel grid. Export PNG. Good for **resize + touch-up** after AI. |
+| **[Paint.NET](https://www.getpaint.net/)** (Windows) | Free. Use **nearest neighbor** when resizing; harder palette lock than Aseprite. |
+| **LibreSprite** | Free Aseprite-like fork — **must** install from a release **with** `.exe`. |
+
+**What “clean the sprite” means** (no art degree required):
+
+1. **Shrink** the AI image to the right size (e.g. **16×16** for a tile) using **nearest neighbor** / **pixel resize** so it stays crunchy, not blurry.  
+2. **Reduce colors** so everything snaps to the game palette (indexed / ~32 colors). AI loves soft edges; we need **hard** blocks of color.  
+3. **Fix odd pixels** — zoom in, erase stray dots along edges with a **1×1 pencil**. If it still looks mushy, **regenerate** in Gemini with a stronger prompt instead of fighting it for an hour.
+
+**Plugins / helpers:** pixel workflow is mostly **the editor + eyeball**. Optional: load a **`.gpl` palette** in Aseprite/LibreSprite (Lospec has community palettes; your game’s truth is still `assets/styleguide/Assets.png`). No Godot plugin replaces **editing the PNG** before import.
 
 ---
 
