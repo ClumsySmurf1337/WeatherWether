@@ -1,0 +1,24 @@
+{
+  "id": "w1_l19",
+  "world": 1,
+  "level_number": 19,
+  "display_name": "False Creek",
+  "hint_text": "Skip the dead-end branch to save rain.",
+  "width": 8,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10, 10,
+    10, 10,  7,  7,  7,  1,  7, 10,
+    12,  7,  7,  7, 10, 10,  7, 13,
+    10, 10, 10,  7,  7, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[7, 2]],
+  "available_cards": [0, 0, 0, 0, 0, 0, 0],
+  "max_moves": 7,
+  "par_moves": 7,
+  "target_difficulty": 10,
+  "min_solution_length": 7,
+  "unique_solution": false
+}

@@ -1,0 +1,24 @@
+{
+  "id": "w1_l20",
+  "world": 1,
+  "level_number": 20,
+  "display_name": "Downpour Gauntlet",
+  "hint_text": "Follow the long snake and cool each bottleneck.",
+  "width": 9,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10,  7,  7,  1,  7,  7,
+    12,  1, 10, 10,  7, 10, 10, 10, 13,
+    10,  7,  7,  1,  7, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[8, 2]],
+  "available_cards": [0, 0, 0, 0, 0, 0, 0, 0],
+  "max_moves": 8,
+  "par_moves": 8,
+  "target_difficulty": 10,
+  "min_solution_length": 8,
+  "unique_solution": false
+}
