@@ -32,3 +32,4 @@ tools/godot-mcp-full/
 # PM agent — regenerated from Linear (keep README)
 assignments/generated/*.md
 !assignments/generated/README.md
+/nanobanana-output
