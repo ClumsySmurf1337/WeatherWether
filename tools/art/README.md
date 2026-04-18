@@ -1,6 +1,6 @@
 # Art generation — simple playbook
 
-> **Prompts:** `docs/ASSET_PROMPTS_GEMINI.md` · **Ship filenames:** `docs/ASSET_MANIFEST.md` · **Palette / cleanup:** `docs/ART_DIRECTION.md` §8.  
+> **Prompts:** `docs/ASSET_PROMPTS_GEMINI.md` · **Ship filenames:** `docs/ASSET_MANIFEST.md` · **Full ordered list (names + folders):** `tools/art/GENERATION_QUEUE.md` · **Palette / cleanup:** `docs/ART_DIRECTION.md` §8.  
 > **Secrets:** `.env.local` only (gitignored).
 
 ---
@@ -32,6 +32,8 @@
 
 ## A — Gemini CLI + nanobanana (pixel-friendly, your install)
 
+**Fastest path:** open **`tools/art/GENERATION_QUEUE.md`** and use **§ Simple workflow — what to run in the terminal**. Each row has a **complete** `/generate` line — copy one line, paste in `gemini`, done.
+
 You already installed the extension. In **PowerShell** (repo root optional):
 
 ```powershell
@@ -39,12 +41,12 @@ $env:NANOBANANA_API_KEY = $env:GEMINI_API_KEY   # match the name you use in .env
 gemini
 ```
 
-Inside the CLI, paste prompts from **`ASSET_PROMPTS_GEMINI.md`** (include style anchor + **framing addendum** + negative — see doc section *Framing addendum* so the grass **fills the square**, not a tiny island on a huge canvas).
+If you are **not** using the queue and paste from **`ASSET_PROMPTS_GEMINI.md`** instead, include style anchor + **framing addendum** + negative — see doc section *Framing addendum* so the grass **fills the square**, not a tiny island on a huge canvas.
 
 **Dry grass — retry example** (one line; paste as one `/generate`):
 
 ```text
-/generate "pixel art 16-bit SNES, hard edges, 32 color feel, top-down dry grass tile, yellow-green blades, faint brown soil, tileable edges, sun from top-left. Square 1:1 full-bleed: texture fills entire image edge to edge, no letterboxing, no tiny sprite centered in large empty space, no huge transparent margins. no text no UI." --styles="pixel-art" --count=2 --preview
+/generate "bright indie pixel art, hard edges, 32 color feel, top-down dry grass tile, yellow-green blades, faint brown soil, tileable edges, sun from top-left, vibrant readable colors not retro-console dull. Square 1:1 full-bleed: texture fills entire image edge to edge, no letterboxing, no tiny sprite centered in large empty space, no huge transparent margins. no text no UI." --styles="pixel-art" --count=2 --preview
 ```
 
 More examples:

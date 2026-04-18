@@ -6,6 +6,8 @@
 >
 > **Last updated:** 2026-04-10
 
+**Visual target (read first):** In-game pixel art should match the **bright, saturated, tactile** look of `assets/styleguide/Level Mockup.png` and `assets/styleguide/Referene2.png`, with palette locked to `assets/styleguide/Assets.png`. Do **not** steer generation toward **muted 16-bit console / “SNES era”** aesthetics — that contradicts the canonical mockups. Technical rules (32 colors, hard edges, no-AA) are unchanged; **mood** is modern indie puzzle, not hardware-limited retro.
+
 ---
 
 ## How to use this file
@@ -28,10 +30,12 @@ For **painterly** prompts, expect to generate 2-4 candidates and pick 1. Painter
 ### Pixel art anchor
 
 ```
-pixel art, 16-bit era SNES style, hard-edged, no anti-aliasing, no smoothing,
-limited palette of 32 colors, flat shading with at most 3 value bands,
-clear silhouette, top-down or 3/4 isometric perspective, transparent background,
-single-tile composition, game asset
+pixel art, bright modern indie puzzle game, vibrant readable colors, hard-edged,
+no anti-aliasing, no smoothing, limited palette of 32 colors,
+flat shading with at most 3 value bands, clear silhouette,
+top-down or 3/4 isometric perspective, transparent background,
+single-tile composition, game asset, chunky tactile highlights,
+sun-lit cheerful mood — not muted retro-console dull, not SNES-era emulation
 ```
 
 ### Painterly anchor

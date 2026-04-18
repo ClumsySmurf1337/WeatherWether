@@ -15,6 +15,8 @@ Weather Whether uses **two distinct visual styles**, applied to non-overlapping 
 
 Everything inside a level — tiles, character, weather effects, cards, UI buttons — is **pure pixel art** at integer scale. No anti-aliasing, no soft shadows, no gradients. 32-color palette locked.
 
+**Mood vs. era:** The **visual target** is **bright, saturated, and readable** — modern indie puzzle / “HD pixel” clarity — as shown in `assets/styleguide/Level Mockup.png` and `assets/styleguide/Referene2.png`. That is **not** the same as **muted 16-bit console** or **SNES-era** shorthand; avoid those references in prompts. Technical constraints (palette, snapping, no-AA) stay strict; **lighting and saturation** follow the styleguide PNGs.
+
 ### Style B: Painterly key art (the in-between)
 
 The home hero, world select cards, world map backgrounds, and level complete celebration scenes are **painterly illustrations**. Soft brushstrokes, atmospheric lighting, depth, color grading. Not pixel art.
@@ -190,9 +192,19 @@ Three color-blind palettes (Protanopia / Deuteranopia / Tritanopia) ship in v1. 
 
 ## 7. The styleguide is the source of truth
 
-`assets/styleguide/Assets.png` and `assets/styleguide/Level Mockup.png` are the canonical references. New tile art, card art, and UI art must match the visual feel of those files. If your generated/drawn art looks more polished, more rough, or differently styled — pull it back to match the styleguide.
+These files are the **canonical visual references** (palette + layout + overall brightness):
+
+| File | Role |
+|------|------|
+| `assets/styleguide/Assets.png` | **32-color palette** swatches — quantization target for all pixel sprites |
+| `assets/styleguide/Level Mockup.png` | **Gameplay + UI kit** — grid, cards, buttons, icons, chunky navy chrome, saturated terrain |
+| `assets/styleguide/Referene2.png` | **Full-screen flows** — title, world select, level wireframes; confirms **painterly key art + pixel HUD** split |
+
+New tile art, card art, and UI art must match the **feel** of those PNGs: **bright**, **high-contrast**, **tactile** — not dim retro-console mud. If generated art drifts toward generic “SNES-style” murk or wrong saturation, **re-prompt or redraw** against these references.
 
 When the styleguide and this doc conflict, **the styleguide wins.** Update this doc in the same PR if you find a contradiction.
+
+See also `assets/styleguide/README.md` for a short folder contract.
 
 ---
 
