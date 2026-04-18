@@ -59,3 +59,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 - PR #38 — agent/cursor-lane-2 — WEA-557: implement level select map
 - PR #37 — agent/cursor-lane-1 — WEA-532: wire GameManager UI + logging
 
+
+## 2026-04-18
+- PR #53 — agent/cursor-lane-3 — WEA-619: add W4 levels 16-20
+- PR #52 — agent/cursor-lane-2 — WEA-633: verify display profile settings
+
