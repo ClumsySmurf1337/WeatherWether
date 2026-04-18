@@ -1,0 +1,24 @@
+{
+  "id": "w1_l22",
+  "world": 1,
+  "level_number": 22,
+  "display_name": "Scorched Spur",
+  "hint_text": "Ignore the dead-end spur and stay on the main flow.",
+  "width": 9,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10, 10, 10,
+    10, 10,  7,  1,  7,  7, 10, 10, 10,
+    12,  7,  7,  7, 10,  1, 10,  7, 13,
+    10, 10, 10,  7, 10,  7,  7,  1, 10,
+    10, 10, 10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[8, 2]],
+  "available_cards": [0, 0, 0, 0, 0, 0, 0, 0],
+  "max_moves": 8,
+  "par_moves": 8,
+  "target_difficulty": 10,
+  "min_solution_length": 8,
+  "unique_solution": false
+}
