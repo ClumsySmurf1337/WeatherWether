@@ -6,7 +6,7 @@ signal reorder_requested(from_index: int, to_index: int)
 
 @export var max_slots: int = 6
 @export var empty_hint_text: String = "tap a card, tap a tile"
-@export var slot_size: Vector2 = Vector2(48, 48)
+@export var slot_size: Vector2 = Vector2(UITheme.TOUCH_TARGET_MIN_PX, UITheme.TOUCH_TARGET_MIN_PX)
 
 @onready var _slot_container: HBoxContainer = %QueueSlots
 @onready var _hint_label: Label = %QueueHint
