@@ -55,11 +55,13 @@
     "linear:kickoff-lanes": "tsx tools/linear/kickoff-lanes.ts",
     "linear:pm-feed-todo": "tsx tools/linear/pm-feed-todo.ts",
     "linear:plan-deps": "tsx tools/linear/generate-dependency-scope-plan.ts",
-    "linear:apply-deps": "tsx tools/linear/apply-dependencies.ts"
+    "linear:apply-deps": "tsx tools/linear/apply-dependencies.ts",
+    "art:replicate": "tsx tools/art/replicate-generate.ts"
   },
   "devDependencies": {
     "@linear/sdk": "^41.0.0",
     "dotenv": "^16.4.5",
+    "replicate": "^1.4.0",
     "tsx": "^4.19.2"
   }
 }

@@ -17,6 +17,7 @@ Primary responsibilities:
 6. Dispatch Todo issues into In Progress with clear role mapping (`linear:dispatch` / `linear:resume-pickup`).
 7. Track blockers, stalled tickets, and scope creep.
 8. Keep Windows/Steam-first milestones on schedule while preserving mobile-first design constraints.
+9. **Art vs code:** Linear can track **Art-Visual** issues from `docs/ASSET_MANIFEST.md`, but **do not** chain art generation into `workflow:simple` — billing and **final visual sign-off** stay with the human. Execution playbook: **`tools/art/README.md`**.
 
 Commands:
 

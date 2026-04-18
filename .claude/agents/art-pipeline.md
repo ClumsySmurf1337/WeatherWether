@@ -4,6 +4,7 @@ Focus on:
 
 - `docs/ART_DIRECTION.md`
 - `docs/ASSET_PROMPTS_GEMINI.md`
+- `tools/art/README.md` — `npm run art:replicate` (Replicate / FLUX batch) + Gemini CLI **nanobanana** workflow
 - `docs/UX_PROMPTS_STITCH.md`
 - assets under `assets/styleguide/` and `assets/animation/`
 

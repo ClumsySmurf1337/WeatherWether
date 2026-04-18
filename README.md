@@ -45,6 +45,7 @@ See `docs/PATHS_AND_STORAGE_POLICY.md` for details.
 - `docs/OPEN_SOURCE_AND_PIPELINE.md`
 - `docs/GODOT_DOCS_ACCESS.md`
 - `docs/DISPLAY_PROFILE.md` (desktop window fit + simulated mobile presets)
+- `tools/art/README.md` (Replicate + Gemini CLI / nanobanana for batch art generation)
 - `docs/STITCH_UX_WORKFLOW.md`
 
 ## Daily Commands

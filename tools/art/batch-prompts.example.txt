@@ -1,0 +1,5 @@
+# One prompt per line. Lines starting with # are skipped.
+# Paste bodies from docs/ASSET_PROMPTS_GEMINI.md (full prompt = pixel anchor + body + negative).
+
+# Example — dry grass tile (replace with full style anchor + negative from ASSET_PROMPTS_GEMINI.md):
+# pixel art SNES top-down 16x16 dry grass tile tileable transparent background

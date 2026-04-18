@@ -146,7 +146,7 @@ npm run daily:full:lean           # validate-only tail; no lane prep
 npm run daily:full:apply:lanes    # apply producer + lane prep
 ```
 
-**Cursor / VS Code Tasks** (`.vscode/tasks.json`): **Weather Whether — Daily full (apply + lane prep)**, **Weather Whether — All lane terminals (parallel)**, **Weather Whether — Daily apply:lanes, then parallel lane agents** (daily then lanes), **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)**, **Weather Whether — QA agent (lane PRs)**.
+**Cursor / VS Code Tasks** (`.vscode/tasks.json`): **Weather Whether — Daily full (apply + lane prep)**, **Weather Whether — All lane terminals (parallel)**, **Weather Whether — Daily apply:lanes, then parallel lane agents** (daily then lanes), **Weather Whether — Simple flow: daily+lanes, then QA (steps 1–2)**, **Weather Whether — QA agent (lane PRs)**. **Art (manual, not in simple flow):** **Weather Whether — Art: Replicate dry run (smoke)** and **Art: validate project (after sprites)** — see `tools/art/README.md`.
 
 ---
 

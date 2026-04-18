@@ -61,14 +61,19 @@ After each batch: **Reject-if** checks from the prompt block, then Aseprite clea
 
 ---
 
-## 5. Validation
+## 5. Automation (CLI)
+
+- **Replicate (FLUX, batch file):** `tools/art/README.md` — `npm run art:replicate` with `REPLICATE_API_TOKEN` in `.env.local`.
+- **Gemini CLI + nanobanana:** same README — `/generate`, `/pattern`, etc., with prompts from **`ASSET_PROMPTS_GEMINI.md`**.
+
+## 6. Validation
 
 - **Automated:** `pwsh ./tools/tasks/validate.ps1` (GUT + level validation).
 - **Visual:** Editor run on Windows; set **`WHETHER_DISPLAY_PRESET`** (see **`docs/DISPLAY_PROFILE.md`**) to compare **simulated phone** sizes vs **native** 1080×1920; compare **desktop** HUD layout to `assets/mocks/gameplay_desktop.svg`.
 
 ---
 
-## 6. Related docs
+## 7. Related docs
 
 - `docs/ASSET_PROMPTS_GEMINI.md` — full prompts.
 - `docs/ASSET_MANIFEST.md` — filenames and screen usage.

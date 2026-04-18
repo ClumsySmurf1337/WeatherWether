@@ -216,6 +216,40 @@
         "group": "qa"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Art: Replicate dry run (smoke)",
+      "type": "shell",
+      "command": "npm run art:replicate -- --dry-run --prompt \"smoke test\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "art"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Weather Whether — Art: validate project (after sprites)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -File tools/tasks/validate.ps1",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "group": "art"
+      },
+      "problemMatcher": []
     }
   ]
 }

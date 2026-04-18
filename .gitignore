@@ -9,6 +9,8 @@ dist/
 coverage/
 build/
 tmp/
+art/reference/
+
 logs/
 *.log
 *.tmp
