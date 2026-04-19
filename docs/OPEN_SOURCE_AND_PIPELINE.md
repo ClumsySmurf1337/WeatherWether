@@ -36,7 +36,7 @@ Neither matches weather rules; both inform **structure** for 100+ puzzles.
 
 ## Art generation (canonical)
 
-Hybrid pipeline (**pixel in-level + painterly key art**) is summarized in **`docs/ART_PIPELINE.md`**. Prompts and CLI copy-paste live in **`docs/ASSET_PROMPTS_GEMINI.md`** and **`tools/art/GENERATION_QUEUE.md`**. Do not follow ad-hoc “hybrid illustrated tile” briefs that contradict **`docs/ART_DIRECTION.md`** (e.g. 64×64 painted board tiles).
+Hybrid pipeline (**pixel in-level + painterly key art**) is summarized in **`docs/ART_PIPELINE.md`**. **Platforms:** same assets for **desktop (Steam)** and **mobile**; framing via **`docs/DISPLAY_PROFILE.md`**. **Weather:** manifest **sprite VFX** first; optional **`GPUParticles2D`** layers per **`docs/GAME_DESIGN.md` §17**. Prompts and CLI copy-paste live in **`docs/ASSET_PROMPTS_GEMINI.md`** and **`tools/art/GENERATION_QUEUE.md`**. Do not follow ad-hoc “hybrid illustrated tile” briefs that contradict **`docs/ART_DIRECTION.md`** (e.g. 64×64 painted board tiles).
 
 ## When this file changes
 

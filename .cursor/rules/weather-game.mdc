@@ -12,12 +12,12 @@ Grid puzzle where the player **queues a sequence of weather cards**, then watche
 
 **Authoritative spec:** `docs/GAME_DESIGN.md` v2. Always defer to that doc on disputes.
 
-- Mobile-first. Touch is canonical, mouse/keyboard inherit.
+- Mobile-first. Touch is canonical, mouse/keyboard inherit. **Same art/UI assets** on desktop (Steam) and mobile; window framing via `docs/DISPLAY_PROFILE.md`.
 - Windows/Steam first release lane.
 - Strictly deterministic mechanics. No randomness in puzzle logic.
 - Linear unlock per world (Cut the Rope style).
 - Sequence model: queue → commit → resolve → walk.
-- Pixel art tiles + painterly key art only.
+- Pixel art tiles + painterly key art only. Weather feedback: manifest **sprite VFX** first; optional **`GPUParticles2D`** layers are cosmetic only (`docs/GAME_DESIGN.md` §17).
 - One-time premium purchase. No IAP, no ads, no live service.
 
 ## Visual reference (mocks)
@@ -31,6 +31,7 @@ Mock pack contents:
 - assets/mocks/level_mockup.svg — full gameplay screen layout (HUD, grid,
   queue strip, hand, PLAY SEQUENCE button) at 360x640 mobile aspect ratio.
   Canonical reference for ui/screens/gameplay.tscn.
+- assets/mocks/gameplay_desktop.svg — desktop window chrome placement (logical 1080×1920 with DisplayProfile).
 - assets/mocks/tiles.svg — all 14 v2 terrain types with locked colors and
   the colorblind-safe pattern cue per tile.
 - assets/mocks/cards.svg — all 6 weather cards with locked per-card colors.

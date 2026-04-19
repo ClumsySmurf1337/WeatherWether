@@ -210,6 +210,8 @@ See also `assets/styleguide/README.md` for a short folder contract.
 
 ## 8. Pipeline workflow
 
+**Platforms:** Author **one** sprite set (`docs/ASSET_MANIFEST.md`). **Desktop** and **mobile** use the same PNGs; framing differs via `docs/DISPLAY_PROFILE.md` (windowed 9:16 vs fullscreen). Validate gameplay HUD on both.
+
 1. **Reference generation.** Use prompts in `docs/ASSET_PROMPTS_GEMINI.md` to generate references in Gemini Imagen / Midjourney. Save to `art/reference/YYYY-MM-DD-description.png`. Never ship references.
 2. **Quantize.** Run all AI-generated pixel art through a 32-color palette quantizer (Aseprite "Color Mode > Indexed" or PixelPalette). Verify every pixel is on-palette.
 3. **Hand cleanup.** Open in Aseprite. Remove off-palette pixels. Fix silhouette. Adjust shading bands. This step usually takes longer than the generation.

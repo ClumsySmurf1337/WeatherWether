@@ -555,7 +555,7 @@ Numbers below are starting points. Tune in playtest.
 
 ### Reduced motion mode
 
-If the player enables Reduce Motion in settings, all card placement and weather effect anims drop to 50% duration, particle counts drop 75%, screen shake is disabled, character walk animation skips frame interpolation. Functionality identical.
+If the player enables Reduce Motion in settings, all card placement and weather effect anims drop to 50% duration, particle counts drop 75% (including optional **GPUParticles2D** / ambient weather particles — disable or minimal emission), screen shake is disabled, character walk animation skips frame interpolation. Functionality identical on **mobile and desktop**.
 
 ---
 
@@ -629,7 +629,28 @@ If the producer agent finds itself flagging a feature request that hits this lis
 
 ---
 
-## 17. Glossary for agents
+## 17. Visual pipeline, platforms, and weather presentation
+
+### Platforms and one art DNA
+
+- **Ship order** (§1): Steam first, then Android, then iOS. **Gameplay and art assets are identical** across platforms; only input, storefront, and how the picture is **framed** differ.
+- **Logical UI** is **1080×1920** portrait (`docs/UI_SCREENS.md`). **`docs/DISPLAY_PROFILE.md`** defines behavior:
+  - **Desktop (Windows / Linux / macOS)** — window resized to a **9:16** frame (letterboxed on ultrawide), centered; optional presets for simulating phone sizes. Same assets as mobile; use `assets/mocks/gameplay_desktop.svg` for **where** chrome sits when validating desktop layouts.
+  - **Mobile** — OS fullscreen / safe areas; no forced desktop window logic.
+- **Hybrid look** is fixed in **`docs/ART_DIRECTION.md`** and summarized in **`docs/ART_PIPELINE.md`**: **pixel** board, character, cards, HUD; **painterly** key art between levels. Filenames and folders: **`docs/ASSET_MANIFEST.md`**.
+
+### Weather feedback: sprite VFX + optional particles
+
+- **Terrain and logic** stay **fully deterministic** (§2). Nothing in FX may change the weather matrix outcome.
+- **Primary weather resolve feedback** — **sprite sheets** under `assets/sprites/vfx/` (see manifest): tile-sized / strip animations played during sequence resolution. These are the **authoritative** “what just happened on the board” read.
+- **Supplementary particle layers** (e.g. Godot **`GPUParticles2D`** / **`CPUParticles2D`**) are **encouraged** when performance allows for extra atmosphere (mist, streaks, sparks). They are **cosmetic only**: no gameplay side effects, no reliance on particle positions for logic. The design pillar *“Particle randomness is fine”* (§2) applies here — bounded visual variance only.
+- **Reduce Motion** (§13) must scale or disable heavy particle use **consistently on mobile and desktop** (particle counts, optional emission off), alongside shorter anim durations.
+
+Implementation order for a weather type: ship **manifest VFX** first; add **particles** as polish in engine when ready.
+
+---
+
+## 18. Glossary for agents
 
 When agents read this doc, they should treat these terms as canonical:
 
@@ -648,3 +669,4 @@ When agents read this doc, they should treat these terms as canonical:
 - **Conductive** — Terrain that LIGHTNING chains through: WATER, WET_GRASS, ICE, MUD.
 - **Walkable** — Terrain the character can stand on. See §4.
 - **Insight** — The single idea a level teaches. Used by hint system and level design.
+- **Art pipeline** — Hybrid pixel + painterly rules and paths: `docs/ART_PIPELINE.md`, `docs/ASSET_MANIFEST.md`. **Display** (desktop window vs mobile): `docs/DISPLAY_PROFILE.md`.
