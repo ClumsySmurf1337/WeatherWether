@@ -1,0 +1,24 @@
+{
+  "id": "w2_l06",
+  "world": 2,
+  "level_number": 6,
+  "display_name": "Cooling Channel",
+  "hint_text": "Rain cools scorched ground; save the Sun for cleanup.",
+  "width": 6,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10,
+    12,  1,  7,  7,  1, 13,
+    10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[5, 2]],
+  "available_cards": [0, 0, 1],
+  "max_moves": 3,
+  "par_moves": 2,
+  "target_difficulty": 4,
+  "min_solution_length": 2,
+  "unique_solution": false
+}
