@@ -7,7 +7,7 @@ Do this in order:
      `npm run linear:resume-pickup -- --role={{ROLE}} --apply "--worktree-marker={{WEATHER_LANE_MARKER}}"`  
      Then return to this worktree and re-read `.weather-lane-issue.txt`. If still no issue, say so and stop.
 2. **Read the GDD first:** `docs/GAME_DESIGN.md` (v2) — authoritative mechanics and UX. Do **not** treat `docs/Building Whether_ A Weather-Powered Puzzle Game from Zero to Launch.md` as the rules source; it is legacy / toolkit context only. On any conflict, **GAME_DESIGN.md wins**.
-3. Continue the **reading order** in `.claude/CLAUDE.md` (after the GDD: `docs/UI_SCREENS.md` → `docs/ASSET_MANIFEST.md` → `docs/SPEC_DIFF.md` → `docs/ANIMATION_DIRECTION_2D.md` → `.cursor/rules/weather-game.mdc`). Use `docs/CODE_REWRITE_PLAN.md` when your issue touches file-level rewrite targets.
+3. Continue the **reading order** in `.claude/CLAUDE.md` (after the GDD: `docs/UI_SCREENS.md` → `docs/ASSET_MANIFEST.md` → `docs/SPEC_DIFF.md` → `docs/ANIMATION_DIRECTION_2D.md` → `docs/ART_PIPELINE.md` (if assets) → `.cursor/rules/weather-game.mdc`). Use `docs/CODE_REWRITE_PLAN.md` when your issue touches file-level rewrite targets.
 4. Open **`.claude/agents/{{ROLE}}.md`** — same role contract as Cursor/Claude; follow it for this lane.
 5. Open `docs/CURSOR_PARALLEL_AGENTS.md` — stay inside the file scope for your lane role.
 6. Implement the Linear issue that is **In Progress** (id from step 1 / `.weather-lane-issue.txt`). Use strict GDScript typing and existing project patterns.

@@ -11,7 +11,8 @@ Read in order; they define the v2 sequence model + walking character.
 3. `docs/ASSET_MANIFEST.md` — sprite/audio contract
 4. `docs/SPEC_DIFF.md` — delta vs legacy instant-resolve; file targets in `docs/CODE_REWRITE_PLAN.md`
 5. `docs/ANIMATION_DIRECTION_2D.md` — character and tile animation specs for v2
-6. `.cursor/rules/weather-game.mdc` — runtime and arc rules; defers to `docs/GAME_DESIGN.md` on disputes
+6. `docs/ART_PIPELINE.md` — art generation workflow (pixel vs painterly); optional unless touching assets or `tools/art/`
+7. `.cursor/rules/weather-game.mdc` — runtime and arc rules; defers to `docs/GAME_DESIGN.md` on disputes
 
 For UI layout and sprite reference, use `assets/mocks/README.md` and SVGs there (`level_mockup.svg` is canonical for `ui/screens/gameplay.tscn`). If older docs contradict the v2 list above, **v2 wins** — note the contradiction in the PR for the producer to clean up.
 

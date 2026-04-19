@@ -9,7 +9,8 @@ Read these in order before touching code or Linear. They are the source of truth
 3. `docs/ASSET_MANIFEST.md` — sprite/audio contract
 4. `docs/SPEC_DIFF.md` — what changed vs the legacy instant-resolve model; rewrite direction and backlog context (file-by-file targets: `docs/CODE_REWRITE_PLAN.md`)
 5. `docs/ANIMATION_DIRECTION_2D.md` — character and tile animation specs for v2
-6. `.cursor/rules/weather-game.mdc` — runtime and arc rules (architecture, core loop, product contract); defers to `docs/GAME_DESIGN.md` on disputes
+6. `docs/ART_PIPELINE.md` — art generation workflow (pixel vs painterly); optional unless touching assets or `tools/art/`
+7. `.cursor/rules/weather-game.mdc` — runtime and arc rules (architecture, core loop, product contract); defers to `docs/GAME_DESIGN.md` on disputes
 
 For visual layout reference when implementing UI scenes or character/tile/card
 sprites, see assets/mocks/README.md and the SVGs in assets/mocks/. The

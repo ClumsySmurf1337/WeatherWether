@@ -34,6 +34,10 @@ Neither matches weather rules; both inform **structure** for 100+ puzzles.
 - **CI** runs on **GitHub-hosted runners** (Ubuntu) — you do **not** need Docker on your PC for CI.
 - **Local** Windows path policy and `validate.ps1` stay the truth for day-to-day; keep **Godot 4.6.x** aligned with `project.godot` and CI `GODOT_VERSION`.
 
+## Art generation (canonical)
+
+Hybrid pipeline (**pixel in-level + painterly key art**) is summarized in **`docs/ART_PIPELINE.md`**. Prompts and CLI copy-paste live in **`docs/ASSET_PROMPTS_GEMINI.md`** and **`tools/art/GENERATION_QUEUE.md`**. Do not follow ad-hoc “hybrid illustrated tile” briefs that contradict **`docs/ART_DIRECTION.md`** (e.g. 64×64 painted board tiles).
+
 ## When this file changes
 
 Update **`docs/BLUEPRINT_GAP_AUDIT.md`** if gaps close, and mention any new addon paths in **`README.md`** and **`docs/AGENT_CATALOG.md`**.

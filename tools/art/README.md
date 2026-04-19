@@ -1,6 +1,6 @@
 # Art generation — simple playbook
 
-> **Prompts:** `docs/ASSET_PROMPTS_GEMINI.md` · **Ship filenames:** `docs/ASSET_MANIFEST.md` · **Full ordered list (names + folders):** `tools/art/GENERATION_QUEUE.md` · **Palette / cleanup:** `docs/ART_DIRECTION.md` §8.  
+> **Pipeline (one page):** `docs/ART_PIPELINE.md` · **Prompts:** `docs/ASSET_PROMPTS_GEMINI.md` · **Ship filenames:** `docs/ASSET_MANIFEST.md` · **Full ordered list (names + folders):** `tools/art/GENERATION_QUEUE.md` · **Palette / cleanup:** `docs/ART_DIRECTION.md` §8.  
 > **Secrets:** `.env.local` only (gitignored).
 
 ---

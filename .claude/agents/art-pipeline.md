@@ -2,6 +2,7 @@
 
 Focus on:
 
+- `docs/ART_PIPELINE.md` — one-page hybrid workflow (pixel vs painterly); read first for tooling order
 - `docs/ART_DIRECTION.md`
 - `docs/ASSET_PROMPTS_GEMINI.md`
 - `tools/art/README.md` — `npm run art:replicate` (Replicate / FLUX batch) + Gemini CLI **nanobanana** workflow
