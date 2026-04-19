@@ -11,6 +11,7 @@ signal hint_requested
 enum DeathCause { DROWN, BURN, FALL, ELECTROCUTE, FREEZE }
 
 @onready var _dimmer: ColorRect = $Dimmer
+@onready var _modal_panel: PanelContainer = $ModalCenter/ModalPanel
 @onready var _title_label: Label = %FailTitle
 @onready var _reason_label: Label = %ReasonLabel
 @onready var _icon_label: Label = %DeathIcon
@@ -27,6 +28,7 @@ func _ready() -> void:
 	var dim_color := UITheme.bg_deep
 	dim_color.a = 0.7
 	_dimmer.color = dim_color
+	_apply_modal_panel_style(_modal_panel)
 	UITheme.configure_title_label(_title_label)
 	_title_label.add_theme_color_override(&"font_color", UITheme.accent_danger)
 	UITheme.configure_body_label(_reason_label)
@@ -67,6 +69,27 @@ func _apply_death_copy() -> void:
 			_title_label.text = "OH NO."
 			_reason_label.text = "Sky froze solid."
 			_icon_label.text = "❄"
+
+
+func _apply_modal_panel_style(panel: PanelContainer) -> void:
+	if panel == null:
+		return
+	var style := StyleBoxFlat.new()
+	style.bg_color = UITheme.bg_panel
+	style.border_color = UITheme.accent_danger
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	style.content_margin_left = 24.0
+	style.content_margin_right = 24.0
+	style.content_margin_top = 16.0
+	style.content_margin_bottom = 16.0
+	panel.add_theme_stylebox_override(&"panel", style)
 
 
 func _on_try_again() -> void:

@@ -27,6 +27,7 @@ var _modal_layer: CanvasLayer
 var _modal_host: Control
 var _stack: Array[Control] = []
 var _active_modal: Control = null
+var _modal_stack: Array[Control] = []
 var _transitioning: bool = false
 var _transition_tween: Tween = null
 var _modal_tween: Tween = null
@@ -63,7 +64,7 @@ func _ready() -> void:
 func replace_screen(scene_path: String) -> void:
 	_transitioning = false
 	_clear_transition()
-	dismiss_modal(true)
+	dismiss_modal(true, true)
 	# queue_free only — remove_child first briefly orphans nodes (GUT / orphan count noise).
 	var to_clear: Array[Node] = _host.get_children()
 	for child: Node in to_clear:
@@ -133,35 +134,20 @@ func pop_screen() -> void:
 ## Shows a modal overlay above everything (Level Failed, No Path, Pause).
 ## Returns the instantiated modal Control so the caller can connect signals.
 func show_modal(scene_path: String) -> Control:
-	dismiss_modal(true)
-	var inst: Control = _instantiate_scene(scene_path)
-	if inst == null:
-		return null
-	_set_full_rect(inst)
-	_modal_host.add_child(inst)
-	_modal_host.mouse_filter = Control.MOUSE_FILTER_STOP
-	_active_modal = inst
-	_clear_modal_tween()
-	var height: float = _screen_size().y
-	_apply_offset(inst, Vector2(0.0, height))
-	var duration: float = _scaled_duration(MODAL_DURATION_SEC)
-	if duration <= 0.0:
-		_apply_offset(inst, Vector2.ZERO)
-		return inst
-	_modal_tween = create_tween()
-	_modal_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_modal_tween.tween_method(
-		_apply_offset.bind(inst),
-		Vector2(0.0, height),
-		Vector2.ZERO,
-		duration
-	)
-	return inst
+	return _open_modal(scene_path, false)
+
+
+## Shows a modal overlay above an existing modal (Hint over Level Failed).
+## Keeps the underlying modal visible but non-interactive.
+func show_stacked_modal(scene_path: String) -> Control:
+	return _open_modal(scene_path, true)
 
 
 ## Dismisses the current modal overlay if one is active.
-func dismiss_modal(immediate: bool = false) -> void:
+func dismiss_modal(immediate: bool = false, clear_stack: bool = false) -> void:
 	if _active_modal == null:
+		if clear_stack:
+			_clear_modal_stack()
 		return
 	var modal: Control = _active_modal
 	_active_modal = null
@@ -169,11 +155,13 @@ func dismiss_modal(immediate: bool = false) -> void:
 	_clear_modal_tween()
 	if immediate:
 		_remove_modal(modal)
+		_restore_previous_modal(clear_stack)
 		return
 	var height: float = _screen_size().y
 	var duration: float = _scaled_duration(MODAL_DURATION_SEC)
 	if duration <= 0.0:
 		_remove_modal(modal)
+		_restore_previous_modal(clear_stack)
 		return
 	_modal_tween = create_tween()
 	_modal_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -183,7 +171,7 @@ func dismiss_modal(immediate: bool = false) -> void:
 		Vector2(0.0, height),
 		duration
 	)
-	_modal_tween.finished.connect(_remove_modal.bind(modal))
+	_modal_tween.finished.connect(_on_modal_dismissed.bind(modal, clear_stack))
 
 
 func has_active_modal() -> bool:
@@ -267,7 +255,7 @@ func request_restart_level() -> void:
 
 
 func show_hint_popup() -> void:
-	var modal: Control = show_modal(SCENE_HINT_POPUP)
+	var modal: Control = show_stacked_modal(SCENE_HINT_POPUP) if _active_modal != null else show_modal(SCENE_HINT_POPUP)
 	if modal == null:
 		return
 	var hint_popup: Control = modal
@@ -359,6 +347,71 @@ func _remove_modal(modal: Control) -> void:
 	if modal == null:
 		return
 	modal.queue_free()
+
+
+func _open_modal(scene_path: String, stack: bool) -> Control:
+	if stack and _active_modal != null:
+		_push_modal_stack(_active_modal)
+	else:
+		dismiss_modal(true, true)
+	var inst: Control = _instantiate_scene(scene_path)
+	if inst == null:
+		return null
+	_set_full_rect(inst)
+	_modal_host.add_child(inst)
+	_modal_host.mouse_filter = Control.MOUSE_FILTER_STOP
+	_active_modal = inst
+	_clear_modal_tween()
+	var height: float = _screen_size().y
+	_apply_offset(inst, Vector2(0.0, height))
+	var duration: float = _scaled_duration(MODAL_DURATION_SEC)
+	if duration <= 0.0:
+		_apply_offset(inst, Vector2.ZERO)
+		return inst
+	_modal_tween = create_tween()
+	_modal_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_modal_tween.tween_method(
+		_apply_offset.bind(inst),
+		Vector2(0.0, height),
+		Vector2.ZERO,
+		duration
+	)
+	return inst
+
+
+func _push_modal_stack(modal: Control) -> void:
+	if modal == null:
+		return
+	modal.set_meta(&"previous_mouse_filter", modal.mouse_filter)
+	modal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_modal_stack.append(modal)
+
+
+func _on_modal_dismissed(modal: Control, clear_stack: bool) -> void:
+	_remove_modal(modal)
+	_restore_previous_modal(clear_stack)
+
+
+func _restore_previous_modal(clear_stack: bool) -> void:
+	if clear_stack:
+		_clear_modal_stack()
+		return
+	if _modal_stack.is_empty():
+		return
+	var previous: Control = _modal_stack.pop_back()
+	if previous == null:
+		return
+	var previous_filter: int = int(previous.get_meta(&"previous_mouse_filter", Control.MOUSE_FILTER_STOP))
+	previous.mouse_filter = previous_filter
+	_active_modal = previous
+	_modal_host.mouse_filter = Control.MOUSE_FILTER_STOP
+
+
+func _clear_modal_stack() -> void:
+	for modal: Control in _modal_stack:
+		if modal != null:
+			modal.queue_free()
+	_modal_stack.clear()
 
 
 func _instantiate_scene(scene_path: String) -> Control:
