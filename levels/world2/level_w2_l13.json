@@ -1,0 +1,24 @@
+{
+  "id": "w2_l13",
+  "world": 2,
+  "level_number": 13,
+  "display_name": "Ashfall Chute",
+  "hint_text": "Rain the lower run, then let the sun dry the exit.",
+  "width": 8,
+  "height": 5,
+  "initial_terrain": [
+    10, 10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10, 10,
+    12,  7, 10, 10,  1,  7,  2, 13,
+    10,  1,  7,  7,  7, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10, 10
+  ],
+  "start_position": [0, 2],
+  "goal_positions": [[7, 2]],
+  "available_cards": [0, 0, 0, 0, 0, 1, 1],
+  "max_moves": 7,
+  "par_moves": 5,
+  "target_difficulty": 8,
+  "min_solution_length": 5,
+  "unique_solution": false
+}
