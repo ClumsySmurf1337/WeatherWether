@@ -1,24 +1,66 @@
 {
-  "id": "w4_l13",
-  "world": 4,
-  "level_number": 13,
-  "display_name": "Steam Sweep",
-  "hint_text": "Blow away the steam and fog, then freeze the gap and cool the scorch.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10, 10,
-    12,  8, 11,  7,  1,  1, 13,
-    10, 10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    3,
+    2,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [3, 2, 0],
+  "display_name": "Steam Sweep",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Blow away the steam and fog, then freeze the gap and cool the scorch.",
+  "id": "w4_l13",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    12,
+    8,
+    11,
+    7,
+    1,
+    1,
+    13,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 13,
   "max_moves": 3,
-  "par_moves": 3,
-  "target_difficulty": 6,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 3,
+  "unique_solution": false,
+  "width": 7,
+  "world": 4
 }

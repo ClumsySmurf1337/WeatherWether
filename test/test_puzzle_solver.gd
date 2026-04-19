@@ -227,6 +227,12 @@ func test_difficulty_score_unsolvable_is_zero() -> void:
 	assert_eq(result.difficulty_score(), 0)
 
 
+func test_difficulty_score_unique_solution_adds_bonus() -> void:
+	var base := SolverResult.new(true, [], 5, 10000, 2.0)
+	var unique := SolverResult.new(true, [], 5, 10000, 2.0, true)
+	assert_eq(unique.difficulty_score(), base.difficulty_score() + 1)
+
+
 # ===================================================================
 # Goal predicate: make_path_exists_goal
 # ===================================================================

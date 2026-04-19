@@ -64,6 +64,7 @@ func _validate_level(path: String) -> bool:
   var predicate: Callable = PuzzleSolver.make_path_exists_goal(level.start_position, level.goal_positions)
   var solver := PuzzleSolver.new(level.width, level.height, predicate)
   var result: SolverResult = solver.solve(level.initial_terrain, level.available_cards)
+  result.unique_solution = level.unique_solution
   if not result.is_solvable:
     if _is_allowlisted(level):
       push_warning(
@@ -81,6 +82,22 @@ func _validate_level(path: String) -> bool:
       "validate: %s min_moves=%d exceeds max_moves=%d"
       % [path, result.min_moves, level.max_moves]
     )
+    return false
+
+  var needs_save: bool = false
+  var computed_par_moves: int = result.min_moves
+  var computed_difficulty: int = result.difficulty_score()
+  if level.min_solution_length != result.min_moves:
+    level.min_solution_length = result.min_moves
+    needs_save = true
+  if level.par_moves != computed_par_moves:
+    level.par_moves = computed_par_moves
+    needs_save = true
+  if level.target_difficulty != computed_difficulty:
+    level.target_difficulty = computed_difficulty
+    needs_save = true
+  if needs_save and not LevelLoader.save_to_json(level, path):
+    push_error("validate: failed to write cached solver data for %s" % path)
     return false
 
   return true

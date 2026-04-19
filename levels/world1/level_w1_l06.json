@@ -1,24 +1,60 @@
 {
-  "id": "w1_l06",
-  "world": 1,
-  "level_number": 6,
-  "display_name": "Cooling Lane",
-  "hint_text": "Rain cools scorched ground into mud.",
-  "width": 6,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10,
-    12,  1,  7,  7,  1, 13,
-    10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10
+  "available_cards": [
+    0,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[5, 2]],
-  "available_cards": [0, 0],
+  "display_name": "Cooling Lane",
+  "goal_positions": [
+    [
+      5,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Rain cools scorched ground into mud.",
+  "id": "w1_l06",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    12,
+    1,
+    7,
+    7,
+    1,
+    13,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 6,
   "max_moves": 2,
-  "par_moves": 2,
-  "target_difficulty": 3,
   "min_solution_length": 2,
-  "unique_solution": false
+  "par_moves": 2,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 2,
+  "unique_solution": false,
+  "width": 6,
+  "world": 1
 }

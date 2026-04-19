@@ -1,24 +1,55 @@
 {
-  "id": "w6_l06",
-  "world": 6,
-  "level_number": 6,
-  "display_name": "Gust Through the Haze",
-  "hint_text": "Wind blows fog away.",
-  "width": 5,
-  "height": 5,
-  "initial_terrain": [
-    12,  1,  1,  1, 10,
-    10, 10, 10,  1, 10,
-    10, 11, 11,  1, 10,
-    10,  1, 10, 10, 10,
-    10,  1, 11, 11, 13
+  "available_cards": [
+    3,
+    3
   ],
-  "start_position": [0, 0],
-  "goal_positions": [[4, 4]],
-  "available_cards": [3, 3],
+  "display_name": "Gust Through the Haze",
+  "goal_positions": [
+    [
+      4,
+      4
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Wind blows fog away.",
+  "id": "w6_l06",
+  "initial_terrain": [
+    12,
+    1,
+    1,
+    1,
+    10,
+    10,
+    10,
+    10,
+    1,
+    10,
+    10,
+    11,
+    11,
+    1,
+    10,
+    10,
+    1,
+    10,
+    10,
+    10,
+    10,
+    1,
+    11,
+    11,
+    13
+  ],
+  "level_number": 6,
   "max_moves": 2,
-  "par_moves": 2,
-  "target_difficulty": 3,
   "min_solution_length": 2,
-  "unique_solution": false
+  "par_moves": 2,
+  "start_position": [
+    0,
+    0
+  ],
+  "target_difficulty": 2,
+  "unique_solution": false,
+  "width": 5,
+  "world": 6
 }

@@ -1,24 +1,66 @@
 {
-  "id": "w5_l22",
-  "world": 5,
-  "level_number": 22,
-  "display_name": "Chain Reaction",
-  "hint_text": "Fill the gap with frost, then tame lightning with rain.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10,  1,  3,  3,  3,  1, 10,
-    12,  1,  0,  1,  3,  1, 13,
-    10,  1,  3,  3,  3,  1, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    2,
+    4,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [2, 4, 0],
+  "display_name": "Chain Reaction",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Fill the gap with frost, then tame lightning with rain.",
+  "id": "w5_l22",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    1,
+    3,
+    3,
+    3,
+    1,
+    10,
+    12,
+    1,
+    0,
+    1,
+    3,
+    1,
+    13,
+    10,
+    1,
+    3,
+    3,
+    3,
+    1,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 22,
   "max_moves": 3,
-  "par_moves": 3,
-  "target_difficulty": 9,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 4,
+  "unique_solution": false,
+  "width": 7,
+  "world": 5
 }

@@ -1,24 +1,54 @@
 {
-  "id": "w6_l07",
-  "world": 6,
-  "level_number": 7,
-  "display_name": "Rainfall Reveal",
-  "hint_text": "Rain clears fog too.",
-  "width": 5,
-  "height": 5,
-  "initial_terrain": [
-    12,  1,  1, 10, 10,
-    10, 10,  1, 10, 10,
-    10, 10, 11,  1, 10,
-    10, 10, 10,  1, 10,
-    10, 10, 10,  1, 13
+  "available_cards": [
+    0
   ],
-  "start_position": [0, 0],
-  "goal_positions": [[4, 4]],
-  "available_cards": [0],
+  "display_name": "Rainfall Reveal",
+  "goal_positions": [
+    [
+      4,
+      4
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Rain clears fog too.",
+  "id": "w6_l07",
+  "initial_terrain": [
+    12,
+    1,
+    1,
+    10,
+    10,
+    10,
+    10,
+    1,
+    10,
+    10,
+    10,
+    10,
+    11,
+    1,
+    10,
+    10,
+    10,
+    10,
+    1,
+    10,
+    10,
+    10,
+    10,
+    1,
+    13
+  ],
+  "level_number": 7,
   "max_moves": 1,
-  "par_moves": 1,
-  "target_difficulty": 3,
   "min_solution_length": 1,
-  "unique_solution": true
+  "par_moves": 1,
+  "start_position": [
+    0,
+    0
+  ],
+  "target_difficulty": 2,
+  "unique_solution": true,
+  "width": 5,
+  "world": 6
 }

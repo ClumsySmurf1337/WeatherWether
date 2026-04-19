@@ -1,24 +1,62 @@
 {
-  "id": "w2_l07",
-  "world": 2,
-  "level_number": 7,
-  "display_name": "Zigzag Sear",
-  "hint_text": "Cool the scorched steps before you turn the corner.",
-  "width": 6,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10,
-    10,  1,  7,  1, 10, 10,
-    12,  7, 10,  1, 10, 13,
-    10, 10, 10,  7,  1,  1,
-    10, 10, 10, 10, 10, 10
+  "available_cards": [
+    0,
+    0,
+    0,
+    1
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[5, 2]],
-  "available_cards": [0, 0, 0, 1],
+  "display_name": "Zigzag Sear",
+  "goal_positions": [
+    [
+      5,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Cool the scorched steps before you turn the corner.",
+  "id": "w2_l07",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    1,
+    7,
+    1,
+    10,
+    10,
+    12,
+    7,
+    10,
+    1,
+    10,
+    13,
+    10,
+    10,
+    10,
+    7,
+    1,
+    1,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 7,
   "max_moves": 4,
-  "par_moves": 3,
-  "target_difficulty": 5,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 3,
+  "unique_solution": false,
+  "width": 6,
+  "world": 2
 }

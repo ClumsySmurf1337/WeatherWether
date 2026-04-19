@@ -1,24 +1,61 @@
 {
-  "id": "w5_l03",
-  "world": 5,
-  "level_number": 3,
-  "display_name": "Chainbreaker",
-  "hint_text": "Dry the wet grass to stop the chain, then strike and cool the pool.",
-  "width": 6,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10,
-    12,  2,  3,  1,  1, 13,
-    10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10
+  "available_cards": [
+    1,
+    4,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[5, 2]],
-  "available_cards": [1, 4, 0],
+  "display_name": "Chainbreaker",
+  "goal_positions": [
+    [
+      5,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Dry the wet grass to stop the chain, then strike and cool the pool.",
+  "id": "w5_l03",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    12,
+    2,
+    3,
+    1,
+    1,
+    13,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 3,
   "max_moves": 3,
-  "par_moves": 3,
-  "target_difficulty": 4,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 3,
+  "unique_solution": false,
+  "width": 6,
+  "world": 5
 }
