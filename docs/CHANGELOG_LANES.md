@@ -61,6 +61,8 @@ Entries below are appended when you run **`npm run qa:agent`** (or `qa-lane-pr-b
 
 
 ## 2026-04-18
+- PR #66 — agent/cursor-lane-3 — WEA-607: add heatwave levels 6-10
+- PR #65 — agent/cursor-lane-1 — WEA-640: wire solver into level validation
 - PR #64 — agent/cursor-lane-3 — WEA-605: add W1 levels 21-22
 - PR #63 — agent/cursor-lane-2 — WEA-563: level complete star reveal
 - PR #61 — agent/cursor-lane-3 — WEA-604: add W1-B4 levels 16-20
