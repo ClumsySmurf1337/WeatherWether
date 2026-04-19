@@ -25,7 +25,7 @@ Neither matches weather rules; both inform **structure** for 100+ puzzles.
 | Strict GDScript + `class_name` core | **Partial** — grid, weather, puzzle stubs exist | Extend toward full weather matrix; keep GUT coverage. |
 | JSON / LDtk-driven level loading | **Partial** — `levels/whether.ldtk` present; worlds mostly `.gitkeep` | Flesh levels in LDtk; add **`scripts/level_loader.gd`** (or agreed name) to parse LDtk/export JSON into `GridManager` state. |
 | godot-ldtk-importer addon | **Missing** | Add addon under `addons/` per importer docs; document in README. |
-| Puzzle solver validation | **Stub** — `scripts/puzzle/puzzle_solver.gd`, `validate_all_levels.gd` placeholder | Wire solver to real level format; fail CI on unsolvable campaign levels. |
+| Puzzle solver validation | **Wired** — `validate_all_levels.gd` loads JSON levels and runs the solver (allowlist: `w5_l20`, `w6_l19`) | Keep level JSON in sync; remove allowlist after level fixes. |
 | UI/UX scene iteration with agents | **Improved** — `godot-full` MCP after `setup-godot-mcp-full.ps1` | Use for Control trees, themes, runtime checks; still follow `docs/ART_DIRECTION.md` / `docs/STITCH_UX_WORKFLOW.md`. |
 | Export presets + artifact CI | **Missing** — no `export_presets.cfg`; `build.yml` scaffold | Editor export once → commit preset; extend GitHub Actions (see `BLUEPRINT_GAP_AUDIT.md`). |
 
