@@ -1,24 +1,68 @@
 {
-  "id": "w2_l09",
-  "world": 2,
-  "level_number": 9,
-  "display_name": "Drying Detour",
-  "hint_text": "Sun dries the wet shoulder; rain cools the gate.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10,  2,  1,  7,  1,  1, 10,
-    12,  7, 10,  1, 10,  7, 13,
-    10, 10, 10, 10,  1,  1, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    0,
+    0,
+    0,
+    1,
+    1
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [0, 0, 0, 1, 1],
+  "display_name": "Drying Detour",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Sun dries the wet shoulder; rain cools the gate.",
+  "id": "w2_l09",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    2,
+    1,
+    7,
+    1,
+    1,
+    10,
+    12,
+    7,
+    10,
+    1,
+    10,
+    7,
+    13,
+    10,
+    10,
+    10,
+    10,
+    1,
+    1,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 9,
   "max_moves": 5,
-  "par_moves": 3,
-  "target_difficulty": 6,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 4,
+  "unique_solution": false,
+  "width": 7,
+  "world": 2
 }

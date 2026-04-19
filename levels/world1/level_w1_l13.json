@@ -1,24 +1,69 @@
 {
-  "id": "w1_l13",
-  "world": 1,
-  "level_number": 13,
-  "display_name": "Dead-End Drizzle",
-  "hint_text": "Don't waste rain on the dead end.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10,  7, 10, 10, 10, 10, 10,
-    12,  7, 10,  7,  7,  7, 13,
-    10,  7,  1,  7, 10, 10, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [0, 0, 0, 0, 0, 0],
+  "display_name": "Dead-End Drizzle",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Don't waste rain on the dead end.",
+  "id": "w1_l13",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    7,
+    10,
+    10,
+    10,
+    10,
+    10,
+    12,
+    7,
+    10,
+    7,
+    7,
+    7,
+    13,
+    10,
+    7,
+    1,
+    7,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 13,
   "max_moves": 6,
-  "par_moves": 6,
-  "target_difficulty": 8,
   "min_solution_length": 6,
-  "unique_solution": false
+  "par_moves": 6,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 6,
+  "unique_solution": false,
+  "width": 7,
+  "world": 1
 }

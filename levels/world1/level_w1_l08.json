@@ -1,24 +1,61 @@
 {
-  "id": "w1_l08",
-  "world": 1,
-  "level_number": 8,
-  "display_name": "Switchback Trail",
-  "hint_text": "Cool the upper scorched tiles, then the last one below.",
-  "width": 6,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10,
-    10,  1,  7,  7,  1, 10,
-    12,  1, 10, 10,  7, 13,
-    10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10
+  "available_cards": [
+    0,
+    0,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[5, 2]],
-  "available_cards": [0, 0, 0],
+  "display_name": "Switchback Trail",
+  "goal_positions": [
+    [
+      5,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Cool the upper scorched tiles, then the last one below.",
+  "id": "w1_l08",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    1,
+    7,
+    7,
+    1,
+    10,
+    12,
+    1,
+    10,
+    10,
+    7,
+    13,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 8,
   "max_moves": 3,
-  "par_moves": 3,
-  "target_difficulty": 5,
   "min_solution_length": 3,
-  "unique_solution": false
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 3,
+  "unique_solution": false,
+  "width": 6,
+  "world": 1
 }

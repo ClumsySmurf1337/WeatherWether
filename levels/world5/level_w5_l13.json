@@ -1,24 +1,66 @@
 {
-  "id": "w5_l13",
-  "world": 5,
-  "level_number": 13,
-  "display_name": "Shattered Bridge",
-  "hint_text": "A lightning chain breaks ice; rebuild the bridge after the strike.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10,  1, 10, 10, 10,  1, 10,
-    12,  1,  4,  3,  1,  1, 13,
-    10,  1, 10, 10, 10,  1, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    4,
+    2,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [4, 2, 0],
+  "display_name": "Shattered Bridge",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "A lightning chain breaks ice; rebuild the bridge after the strike.",
+  "id": "w5_l13",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    1,
+    10,
+    10,
+    10,
+    1,
+    10,
+    12,
+    1,
+    4,
+    3,
+    1,
+    1,
+    13,
+    10,
+    1,
+    10,
+    10,
+    10,
+    1,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 13,
   "max_moves": 3,
-  "par_moves": 3,
-  "target_difficulty": 6,
-  "min_solution_length": 3,
-  "unique_solution": false
+  "min_solution_length": 1,
+  "par_moves": 1,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 1,
+  "unique_solution": false,
+  "width": 7,
+  "world": 5
 }

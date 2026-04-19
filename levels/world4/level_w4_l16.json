@@ -1,24 +1,67 @@
 {
-  "id": "w4_l16",
-  "world": 4,
-  "level_number": 16,
-  "display_name": "Furnace Crosswind",
-  "hint_text": "Wind clears the vent, frost bridges it, sun lifts the fog, rain cools the scorch.",
-  "width": 7,
-  "height": 5,
-  "initial_terrain": [
-    10, 10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10, 10,
-    12,  8,  1, 11,  7,  1, 13,
-    10, 10, 10, 10, 10, 10, 10,
-    10, 10, 10, 10, 10, 10, 10
+  "available_cards": [
+    3,
+    2,
+    1,
+    0
   ],
-  "start_position": [0, 2],
-  "goal_positions": [[6, 2]],
-  "available_cards": [3, 2, 1, 0],
+  "display_name": "Furnace Crosswind",
+  "goal_positions": [
+    [
+      6,
+      2
+    ]
+  ],
+  "height": 5,
+  "hint_text": "Wind clears the vent, frost bridges it, sun lifts the fog, rain cools the scorch.",
+  "id": "w4_l16",
+  "initial_terrain": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    12,
+    8,
+    1,
+    11,
+    7,
+    1,
+    13,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "level_number": 16,
   "max_moves": 4,
-  "par_moves": 4,
-  "target_difficulty": 7,
-  "min_solution_length": 4,
-  "unique_solution": false
+  "min_solution_length": 3,
+  "par_moves": 3,
+  "start_position": [
+    0,
+    2
+  ],
+  "target_difficulty": 3,
+  "unique_solution": false,
+  "width": 7,
+  "world": 4
 }
